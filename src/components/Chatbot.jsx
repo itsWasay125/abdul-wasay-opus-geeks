@@ -144,35 +144,20 @@ export default function Chatbot() {
           </button>
         ) : null}
 
+          {/* The same robot the chat panel's header carries, so the button
+              you press and the assistant that opens are visibly one thing.
+              An earlier version drew its own cartoon droid here, which read
+              as a second, unrelated character. */}
           <button
             type="button"
             className="chat-greeter__droid"
             onClick={() => setIsOpen(true)}
             aria-label="Ask any question"
           >
-            <svg viewBox="0 0 64 64" aria-hidden="true">
-              <defs>
-                <linearGradient id="greeterBody" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0" stopColor="#3b2a63" />
-                  <stop offset="1" stopColor="#0b1230" />
-                </linearGradient>
-              </defs>
-              {/* antenna */}
-              <line x1="32" y1="6" x2="32" y2="13" stroke="#00aeef" strokeWidth="2.4" strokeLinecap="round" />
-              <circle cx="32" cy="5" r="3" fill="#00aeef" className="chat-greeter__blip" />
-              {/* head */}
-              <rect x="13" y="13" width="38" height="29" rx="12" fill="url(#greeterBody)" />
-              {/* visor */}
-              <rect x="18" y="20" width="28" height="15" rx="7.5" fill="#0a1836" />
-              <circle cx="26" cy="27.5" r="3" fill="#00aeef" className="chat-greeter__eye" />
-              <circle cx="38" cy="27.5" r="3" fill="#00aeef" className="chat-greeter__eye" />
-              {/* ears */}
-              <rect x="8" y="23" width="4" height="9" rx="2" fill="#633494" />
-              <rect x="52" y="23" width="4" height="9" rx="2" fill="#633494" />
-              {/* shoulders */}
-              <path d="M17 46h30a9 9 0 0 1 9 9v3H8v-3a9 9 0 0 1 9-9z" fill="url(#greeterBody)" />
-              <rect x="27" y="49" width="10" height="3" rx="1.5" fill="#147bc2" />
-            </svg>
+            <span className="chat-greeter__face">
+              <Icon name="bot" size={26} />
+            </span>
+            <span className="chat-greeter__pulse" aria-hidden="true" />
           </button>
 
         </div>
