@@ -107,7 +107,7 @@ export default function SiteLoader() {
     >
       <div className="og-loader__inner">
         <span className="og-loader__mark">
-          <img src="/logo-mark.png" alt="" width="46" height="41" decoding="async" />
+          <img src="/assets/oglogo-mark.webp" alt="" width="46" height="41" decoding="async" />
         </span>
 
         <span className="og-loader__name">Opus Geeks</span>

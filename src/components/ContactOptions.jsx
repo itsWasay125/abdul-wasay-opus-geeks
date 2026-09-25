@@ -52,7 +52,6 @@ export default function ContactOptions() {
             How would you like to <strong>connect?</strong>
           </h2>
         </div>
-        <p>Pick the fastest route for your question. Every channel reaches the same senior product team.</p>
       </div>
 
       <div className="contact-options-panel">

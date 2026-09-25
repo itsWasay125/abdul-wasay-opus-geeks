@@ -92,7 +92,9 @@ export default function Blogs() {
             Opus Geeks Journal
           </p>
           <h1>
-            Insights <strong>&amp; Inspiration</strong>
+            <span className="hero-line">Notes from</span>
+            <span className="hero-line">the people</span>
+            <strong className="hero-line">who build it.</strong>
           </h1>
           <p>
             Welcome to the heart of our blog. Here, we explore into the depths of

@@ -48,8 +48,9 @@ export default function FAQs() {
         <div className="faqs-page__hero-copy">
           <p className="faqs-page__eyebrow"><span /> Frequently asked</p>
           <h1>
-            Answers to questions
-            <strong>about builds, rates, and process.</strong>
+            <span className="hero-line">Answers to questions</span>
+            <strong className="hero-line">about builds, rates,</strong>
+            <strong className="hero-line">and process.</strong>
           </h1>
           <p>
             Everything you need to know about our capabilities, delivery timelines, working model,

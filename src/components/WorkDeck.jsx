@@ -102,11 +102,15 @@ export default function WorkDeck() {
             <span className="wd__dim" aria-hidden="true" />
 
             <div className="wd__body">
-              <span className="wd__index" aria-hidden="true">
-                {String(index + 1).padStart(2, "0")}
-              </span>
 
-              <h3>{stage.stage}</h3>
+              {/* the stage number reads as part of the heading rather than as a
+                  watermark floating in the corner away from it */}
+              <h3>
+                <span className="wd__index" aria-hidden="true">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                {stage.stage}
+              </h3>
               <p className="wd__lead">{stage.lead}</p>
               <p className="wd__line">{stage.line}</p>
 

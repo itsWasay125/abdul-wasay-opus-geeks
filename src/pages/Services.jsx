@@ -24,7 +24,7 @@ export default function Services() {
       <HeroCluster
         eyebrow="Product Teams For Ambitious Builds"
         titleLead="Digital services"
-        titleAccent="built to move business."
+        titleAccent={["built to move", "business."]}
         lead="Strategy, product design, and engineering come together in one senior team. Pick a focused track or let us shape the complete route from first idea to launch."
         primary={{ label: "Start a project", to: "/contact-us" }}
         secondary={{ label: "Explore our work", to: "/portfolio" }}

@@ -16905,9 +16905,16 @@ main>.stats-section {
    layout and inflated the button from 171x50 into a 200x199 disc with the
    label wrapped inside it. Measured, both the button and its row grew.
    Everything except the ripple gets the stacking context. */
+/* The ripple and the click burst are both deliberately out of flow. This
+   rule used to catch them and put them back, and each did its own damage:
+   the ripple is a circle the size of the button, which inflated it into a
+   200x199 disc; the burst is eighteen particles, which laid out in a row and
+   took the button from 171px to 477px wide - past the edge of its own row -
+   for the length of the animation. Everything else still gets the stacking
+   context it needs to sit above the gradient face. */
 .btn-shiny__label,
-.glow-button > *:not(.btn-ripple),
-.nav-cta > *:not(.btn-ripple) {
+.glow-button > *:not(.btn-ripple):not(.burst-particle),
+.nav-cta > *:not(.btn-ripple):not(.burst-particle) {
   position: relative;
   z-index: 1;
 }
@@ -30965,8 +30972,8 @@ main>.stats-section {
    label wrapped inside it. Measured, both the button and its row grew.
    Everything except the ripple gets the stacking context. */
 .btn-shiny__label,
-.glow-button > *:not(.btn-ripple),
-.nav-cta > *:not(.btn-ripple) {
+.glow-button > *:not(.btn-ripple):not(.burst-particle),
+.nav-cta > *:not(.btn-ripple):not(.burst-particle) {
   position: relative;
   z-index: 1;
 }
@@ -38042,4 +38049,287 @@ a.blog-detail-page__toc-cta:hover,
   max-width: 100%;
   min-width: 0;
   box-sizing: border-box;
+}
+
+/* ==========================================================================
+   PAGE BANNERS HOLD THREE LINES AT EVERY WIDTH
+   The h1 on each banner is written to break into three, but its size was a
+   viewport clamp with no relationship to how much room the column has — so
+   on a narrow screen it wrapped to four or five lines and on a wide one it
+   ran to two. Sizing it against the column instead of the viewport keeps the
+   break where it was written, and a max-width in characters stops a long
+   line from stealing a fourth.
+   ========================================================================== */
+
+.rh-hero__title,
+.hero-banner__title,
+.svc-hero h1,
+.blogs-page__hero h1,
+.faqs-page__hero-copy h1,
+.portfolio-hero-white__title,
+.about-page__hero h1 {
+  /* cqi where the container allows it, vw elsewhere */
+  font-size: clamp(2.5rem, 5.4vw, 5rem);
+  line-height: 1.02;
+  text-wrap: balance;
+}
+
+.rh-hero__title { max-width: 15ch; }
+.hero-banner__title { max-width: 16ch; }
+.svc-hero h1 { max-width: 15ch; }
+.blogs-page__hero h1,
+.faqs-page__hero-copy h1,
+.portfolio-hero-white__title { max-width: 18ch; }
+
+@media (max-width: 700px) {
+  .rh-hero__title,
+  .hero-banner__title,
+  .svc-hero h1,
+  .blogs-page__hero h1,
+  .faqs-page__hero-copy h1,
+  .portfolio-hero-white__title,
+  .about-page__hero h1 {
+    font-size: clamp(2.1rem, 9.5vw, 3.2rem);
+  }
+}
+
+/* ==========================================================================
+   WORK DECK — A SMALLER CARD, AND THE NUMBER WITH ITS HEADING
+   ========================================================================== */
+
+.wd__card { min-height: clamp(320px, 44vh, 420px); }
+
+.wd__panel {
+  margin: clamp(12px, 1.2vw, 18px);
+  margin-left: 0;
+  padding: clamp(14px, 1.5vw, 20px);
+  gap: 12px;
+}
+
+.wd__panel-img { max-height: 54%; }
+
+.wd__body { padding: clamp(20px, 2.2vw, 34px); }
+
+.wd__card h3 {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin: 10px 0 6px;
+  font-size: clamp(1.9rem, 2.8vw, 2.9rem);
+}
+
+/* the number is part of the heading now, not a watermark in the corner */
+.wd__card h3 .wd__index {
+  position: static;
+  flex: none;
+  font-size: 0.62em;
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1.4px color-mix(in srgb, var(--wd-color) 62%, transparent);
+}
+
+.wd__lead { font-size: clamp(1.02rem, 1.25vw, 1.2rem); margin-bottom: 10px; }
+.wd__line { font-size: 0.96rem; margin-bottom: 16px; }
+.wd__list li { font-size: 0.93rem; }
+.wd__panel-mark { display: none; }
+
+/* the section gets the same corner marks the others carry */
+.wd { position: relative; overflow: hidden; }
+
+.wd::before,
+.wd::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  pointer-events: none;
+  background: conic-gradient(
+    from 200deg,
+    rgba(99, 52, 148, 0.85),
+    rgba(20, 123, 194, 0.8) 38%,
+    rgba(0, 174, 239, 0.7) 66%,
+    rgba(99, 52, 148, 0.85)
+  );
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - var(--ring-w)), #000 calc(100% - var(--ring-w)));
+  mask: radial-gradient(farthest-side, transparent calc(100% - var(--ring-w)), #000 calc(100% - var(--ring-w)));
+  opacity: 0.26;
+}
+
+.wd::before {
+  --ring-w: clamp(10px, 1.3vw, 18px);
+  top: clamp(-120px, -7vw, -70px);
+  left: clamp(-110px, -6vw, -60px);
+  width: clamp(190px, 24vw, 360px);
+}
+
+.wd::after {
+  --ring-w: clamp(8px, 1vw, 13px);
+  right: clamp(-90px, -5vw, -50px);
+  bottom: clamp(-90px, -5vw, -50px);
+  width: clamp(140px, 18vw, 270px);
+}
+
+.wd > * { position: relative; z-index: 1; }
+
+/* ==========================================================================
+   ABOUT INDUSTRIES — THE SAME MARKS
+   ========================================================================== */
+
+.about-page__industries { position: relative; overflow: hidden; }
+
+.about-page__industries::before,
+.about-page__industries::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  pointer-events: none;
+  background: conic-gradient(
+    from 200deg,
+    rgba(99, 52, 148, 0.85),
+    rgba(20, 123, 194, 0.8) 38%,
+    rgba(0, 174, 239, 0.7) 66%,
+    rgba(99, 52, 148, 0.85)
+  );
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - var(--ring-w)), #000 calc(100% - var(--ring-w)));
+  mask: radial-gradient(farthest-side, transparent calc(100% - var(--ring-w)), #000 calc(100% - var(--ring-w)));
+  opacity: 0.3;
+}
+
+.about-page__industries::before {
+  --ring-w: clamp(10px, 1.3vw, 18px);
+  top: clamp(-120px, -7vw, -70px);
+  left: clamp(-110px, -6vw, -60px);
+  width: clamp(190px, 24vw, 360px);
+}
+
+.about-page__industries::after {
+  --ring-w: clamp(8px, 1vw, 13px);
+  right: clamp(-90px, -5vw, -50px);
+  bottom: clamp(-90px, -5vw, -50px);
+  width: clamp(140px, 18vw, 270px);
+}
+
+.about-page__industries > * { position: relative; z-index: 1; }
+
+/* ==========================================================================
+   CONTACT OPTIONS — THE HEADING CENTRES
+   Its standfirst is gone, so the heading is the whole block and sits on the
+   section's own axis rather than at the left of a two-column head.
+   ========================================================================== */
+
+.contact-options-section .contact-options-heading {
+  display: block;
+  text-align: center;
+  max-width: 24ch;
+  margin-inline: auto;
+}
+
+.contact-options-section .contact-options-heading .eyebrow {
+  justify-content: center;
+  display: flex;
+}
+
+/* ==========================================================================
+   HOME BRIEF — THE POINTS LOSE THEIR RULES
+   Four short lines with a hairline under each read as a table with nothing
+   in its columns. A brand dot carries them instead.
+   ========================================================================== */
+
+.home-brief__points {
+  border-top: 0;
+  padding-top: 8px;
+  gap: 14px;
+}
+
+.home-brief__points li {
+  border-bottom: 0;
+  padding: 0;
+  grid-template-columns: 8px minmax(0, 1fr);
+  align-items: start;
+  gap: 13px;
+}
+
+.home-brief__points li svg { display: none; }
+
+.home-brief__points li::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  margin-top: 8px;
+  border-radius: 50%;
+  background: var(--brand-grad, linear-gradient(118deg, #633494, #147bc2 46%, #00aeef));
+}
+
+/* ==========================================================================
+   CHATBOT PANEL TYPE
+   ========================================================================== */
+
+.chatbot-action-btn { color: #000000 !important; }
+
+.chatbot-header-text h3 {
+  font-size: 1.8rem;
+  letter-spacing: 0.7px !important;
+}
+
+.chatbot-header-text span { font-size: 0.9rem; }
+
+/* the services grid sits behind the hero content, never over it */
+.svc-grid {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.hero-cluster,
+.svc-hero { position: relative; isolation: isolate; }
+
+.hero-cluster__inner,
+.svc-hero__inner { position: relative; z-index: 2; }
+
+/* Each banner heading is authored as three blocks, so its shape is the same
+   at every width instead of wrapping to two on a desktop and five on a
+   phone. `hero-line` is what makes each one its own line.
+
+   !important because several banners set their own display on the elements
+   these sit on - the portfolio title makes its <strong> inline-block, which
+   put two of its three lines side by side. */
+h1 .hero-line,
+.hero-line {
+  display: block !important;
+  width: auto;
+}
+
+/* ==========================================================================
+   WORK DECK PANEL — PACKED, NOT SPREAD
+   `justify-content: space-between` pushed the illustration to the top and
+   the list to the bottom, so the card grew to 761px with a void between
+   them. The panel packs from the top and the card is sized by what is in it.
+   ========================================================================== */
+
+.wd__panel {
+  justify-content: flex-start;
+  gap: 14px;
+}
+
+.wd__panel-img {
+  max-height: min(240px, 34vh);
+  align-self: center;
+  width: auto;
+  max-width: 100%;
+}
+
+.wd__list { gap: 10px; }
+.wd__list li { font-size: 0.9rem; line-height: 1.45; }
+
+.wd__body { justify-content: center; }
+
+/* the card is as tall as its content needs, with a floor rather than a target */
+.wd__card { min-height: 0; }
+
+@media (min-width: 901px) {
+  .wd__card { min-height: clamp(300px, 38vh, 400px); }
 }

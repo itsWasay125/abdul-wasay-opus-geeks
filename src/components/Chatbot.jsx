@@ -128,13 +128,13 @@ export default function Chatbot() {
 
   return (
     <>
-      {/* The greeter. A small droid leans in beside the trigger a few
-          seconds after the page settles and asks once. It is drawn, not
-          rendered - an inline SVG and two CSS animations, so it costs
-          nothing next to the WebGL droid in the banner. It asks once per
-          session and never again after the chat has been opened. */}
-      {greeting && !isOpen ? (
-        <div className="chat-greeter">
+      {/* The droid is the trigger. It replaced a text pill that read "Ask
+          Opus" - the droid says what it is for instead, with a bubble that
+          arrives a few seconds after the page settles and can be dismissed.
+          It is drawn, not rendered: an inline SVG and two CSS animations, so
+          it costs nothing next to the WebGL droid in the banner. */}
+      <div className="chat-greeter">
+        {greeting && !isOpen ? (
           <button
             type="button"
             className="chat-greeter__bubble"
@@ -142,6 +142,7 @@ export default function Chatbot() {
           >
             Ask any question
           </button>
+        ) : null}
 
           <button
             type="button"
@@ -174,28 +175,8 @@ export default function Chatbot() {
             </svg>
           </button>
 
-          <button
-            type="button"
-            className="chat-greeter__dismiss"
-            onClick={() => setGreeting(false)}
-            aria-label="Dismiss"
-          >
-            ×
-          </button>
         </div>
-      ) : null}
 
-      {/* Floating Trigger Island */}
-      <button
-        type="button"
-        className="chatbot-trigger"
-        onClick={() => setIsOpen(true)}
-        aria-label="Open Ask Opus AI Assistant"
-      >
-        <span className="chatbot-trigger-dot" aria-hidden="true" />
-        <Icon name="bot" size={16} />
-        <span>Ask Opus</span>
-      </button>
 
       {/* Background Overlay */}
       <div

@@ -33,7 +33,10 @@ let lastT = 0;
 let loopId = 0;
 let listening = false;
 
-const MAX_BOOST = 1.35; // smooth gentle increase on scroll without jank or runaway speed
+/* How much faster a row runs at full scroll velocity. At 1.35 the reaction
+   was barely perceptible; 2.6 reads as the rows responding to the scroll
+   without ever outrunning the eye. */
+const MAX_BOOST = 2.6;
 
 function ease() {
   velocity += (target - velocity) * 0.08;

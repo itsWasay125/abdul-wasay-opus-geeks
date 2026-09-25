@@ -4,6 +4,7 @@ import Icon from "./Icon";
 import ShinyButton from "./ShinyButton";
 import GlowButton from "./GlowButton";
 import "./HeroCluster.css";
+import InteractiveGrid from "./InteractiveGrid";
 
 /* "Ideas engineered into digital reality" hero.
 
@@ -213,6 +214,18 @@ export default function HeroCluster({
 
   return (
     <section className="hero-cluster" ref={rootRef}>
+      {/* The same reactive grid the home and about heroes carry, at a coarser
+          pitch and in the violet end of the ramp - so the services pages feel
+          like one family without reading as a copy of the homepage. */}
+      <InteractiveGrid
+        className="svc-grid"
+        gridSize={76}
+        gridColor="rgba(99, 52, 148, 0.06)"
+        effectColor="rgba(99, 52, 148, 0.2)"
+        glowRadius={26}
+        fadeIntensity={44}
+        fadeColor="#ffffff"
+      />
       <div className="hero-cluster__inner">
         <div className="hero-cluster__copy">
           <p className="hero-cluster__eyebrow" ref={setCopyRef(0)}>
@@ -220,8 +233,16 @@ export default function HeroCluster({
           </p>
 
           <h1 className="hero-cluster__title" ref={setCopyRef(1)}>
-            <span>{titleLead}</span>
-            <strong>{titleAccent}</strong>
+            <span className="hero-line">{titleLead}</span>
+            {Array.isArray(titleAccent) ? (
+              titleAccent.map((line) => (
+                <strong className="hero-line" key={line}>
+                  {line}
+                </strong>
+              ))
+            ) : (
+              <strong className="hero-line">{titleAccent}</strong>
+            )}
           </h1>
 
           <p className="hero-cluster__lead" ref={setCopyRef(2)}>

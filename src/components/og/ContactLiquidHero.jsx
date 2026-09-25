@@ -41,7 +41,9 @@ export default function ContactLiquidHero() {
         </div>
 
         <h1 id="og-hero-title" className="og-hero__title">
-          Tell us what you are <span className="og-hero__title-accent">building.</span>
+          <span className="hero-line">Tell us what</span>
+          <span className="hero-line">you are</span>
+          <span className="hero-line og-hero__title-accent">building.</span>
         </h1>
 
         <p className="og-hero__sub">

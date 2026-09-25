@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import PageHero from "../components/PageHero";
 import Icon from "../components/Icon";
 import { servicePages } from "../data/servicePages";
+import InteractiveGrid from "../components/InteractiveGrid";
 
 export default function ServiceDetail({ service }) {
   const slug = service.path.split("/").pop();
@@ -75,6 +76,17 @@ export default function ServiceDetail({ service }) {
   return (
     <main className={`svc-page svc-page--${page.theme}`}>
       <section className="svc-hero">
+        {/* Same grid as the services index, so a service page and the page
+            that lists them share a background. */}
+        <InteractiveGrid
+          className="svc-grid"
+          gridSize={76}
+          gridColor="rgba(99, 52, 148, 0.06)"
+          effectColor="rgba(99, 52, 148, 0.2)"
+          glowRadius={26}
+          fadeIntensity={44}
+          fadeColor="#ffffff"
+        />
         <div className="svc-hero__inner">
           <div className="svc-hero__copy">
             <p className="svc-kicker">
@@ -83,7 +95,21 @@ export default function ServiceDetail({ service }) {
               <span>{page.kicker}</span>
             </p>
             <h1>
-              {page.titleTop} <strong>{page.titleAccent}</strong>
+              <span className="hero-line">{page.titleTop}</span>
+              {String(page.titleAccent).split(" ").length > 2 ? (
+                (() => {
+                  const words = String(page.titleAccent).split(" ");
+                  const half = Math.ceil(words.length / 2);
+                  return (
+                    <>
+                      <strong className="hero-line">{words.slice(0, half).join(" ")}</strong>
+                      <strong className="hero-line">{words.slice(half).join(" ")}</strong>
+                    </>
+                  );
+                })()
+              ) : (
+                <strong className="hero-line">{page.titleAccent}</strong>
+              )}
             </h1>
             <p className="svc-hero__intro">{page.intro}</p>
             <div className="svc-hero__actions">
