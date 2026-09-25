@@ -4472,6 +4472,7 @@
   .industry-stage__metrics {
     display: none;
   }
+  #about-opus h2 {text-align: center !important;}
 
   .industry-stage__label strong {
     letter-spacing: 0.8px;

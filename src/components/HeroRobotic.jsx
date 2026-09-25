@@ -4,6 +4,7 @@ import ShinyButton from "./ShinyButton";
 import GlowButton from "./GlowButton";
 import InteractiveGrid from "./InteractiveGrid";
 import "./HeroRobotic.css";
+import Typewriter from "./Typewriter";
 
 /* Robotic-hand hero: a pre-rendered CGI hand holds a service object that keeps
    transforming into the next discipline.
@@ -68,7 +69,6 @@ const HAND = `${ASSETS}/01_robotic_hand.webp`;
    a hole in the middle of it. */
 const ROTATING_WORDS = ["Reality.", "Products.", "Platforms.", "Launches."];
 
-const WORD_HOLD = 2.3; // seconds each word stays
 
 const HOLD = 2.8; // seconds a slide stays put
 const SWAP = 0.9; // seconds the transformation takes
@@ -111,7 +111,6 @@ export default function HeroRobotic({
   const imgRefs = useRef([]);
   const railRefs = useRef([]);
   const goToRef = useRef(null);
-  const wordRefs = useRef([]);
 
   const setCopyRef = (index) => (el) => {
     copyRefs.current[index] = el;
@@ -190,45 +189,8 @@ export default function HeroRobotic({
          gsap.delayedCall rather than setTimeout so the chain belongs to the
          context; the recursive call is created after the context has finished
          recording, so it is tracked by hand and killed in the cleanup. */
-      const words = wordRefs.current.filter(Boolean);
+      /* the rotating word is typed by <Typewriter>, not animated here */
       let wordCall = null;
-
-      if (words.length > 1) {
-        gsap.set(words, { yPercent: 155, opacity: 0 });
-        gsap.set(words[0], { yPercent: 0, opacity: 1 });
-
-        let wordIndex = 0;
-        const cycle = () => {
-          const current = words[wordIndex];
-          wordIndex = (wordIndex + 1) % words.length;
-          const next = words[wordIndex];
-
-          gsap.to(current, {
-            yPercent: -155,
-            opacity: 0,
-            duration: 0.34,
-            ease: "power3.in",
-            overwrite: "auto",
-          });
-
-          gsap.fromTo(
-            next,
-            { yPercent: 155, opacity: 0 },
-            {
-              yPercent: 0,
-              opacity: 1,
-              duration: 0.46,
-              delay: 0.34,
-              ease: "power3.out",
-              overwrite: "auto",
-            },
-          );
-
-          wordCall = gsap.delayedCall(WORD_HOLD, cycle);
-        };
-
-        wordCall = gsap.delayedCall(WORD_HOLD + 0.8, cycle);
-      }
 
       /* ---------- idle float (own wrappers, so nothing collides) ---------- */
       const idle = [
@@ -505,16 +467,10 @@ export default function HeroRobotic({
                   ))}
                 </span>
                 <span className="rh-hero__flip">
-                  {ROTATING_WORDS.map((word, i) => (
-                    <em
-                      key={word}
-                      ref={(el) => {
-                        wordRefs.current[i] = el;
-                      }}
-                    >
-                      {word}
-                    </em>
-                  ))}
+                  {/* typed and backspaced; the sizer beside it holds the width */}
+                  <em>
+                    <Typewriter words={ROTATING_WORDS} />
+                  </em>
                 </span>
               </span>
               <span className="sr-only">Reality.</span>

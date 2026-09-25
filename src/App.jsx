@@ -9,6 +9,7 @@ import ScrollProvider from "./components/ScrollProvider";
 import StatsSection from "./components/StatsSection";
 import Homepage from "./pages/Homepage";
 import { useFitHeadings } from "./hooks/useFitHeadings";
+import SiteLoader from "./components/SiteLoader";
 
 /* Every route but the homepage is split out.
 
@@ -63,6 +64,8 @@ function SiteLayout() {
 export default function App() {
   return (
     <ScrollProvider>
+      {/* plays once per real page load, never on in-app navigation */}
+      <SiteLoader />
       {/* mounted above the router, so it runs on a real page load and never on
           an in-app navigation */}
 

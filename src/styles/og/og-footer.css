@@ -466,3 +466,50 @@
   color: transparent;
   opacity: 0.22;
 }
+
+/* ==========================================================================
+   THE SIGNATURE, AGAIN
+   It was "Opus Geeks" set in Bebas at 194px inside a box 110px tall with
+   overflow hidden - the top and bottom of every letter were cut off - at
+   0.22 opacity on a near-black footer, where it barely read at all.
+
+   It is the actual wordmark now, not a typeface standing in for it: the
+   logo's own letterforms used as a mask over the brand gradient, so it
+   takes the ramp the rest of the site uses and stays sharp at any width
+   (the mask is exported at 2400px). The box takes the wordmark's own
+   proportions, 2400x262, so nothing can be clipped.
+   ========================================================================== */
+
+.og-footer__signature {
+  display: block;
+  width: 100%;
+  height: auto;
+  padding: clamp(28px, 4vw, 56px) var(--og-gutter, clamp(20px, 4vw, 44px)) clamp(20px, 2.6vw, 36px);
+  overflow: visible;
+  line-height: 0;
+}
+
+.og-footer__signature-mark {
+  display: block;
+  width: 100%;
+  max-width: 1360px;
+  margin-inline: auto;
+  aspect-ratio: 2400 / 262;
+  background: linear-gradient(96deg, #633494 0%, #147bc2 48%, #00aeef 100%);
+  -webkit-mask: url("/assets/logo/wordmark-mask.webp") center / contain no-repeat;
+  mask: url("/assets/logo/wordmark-mask.webp") center / contain no-repeat;
+  opacity: 0.9;
+}
+
+/* The old `.og-footer__signature span` rule (from when this was text) also
+   matched the mask element: it clipped the background to *text* - and the
+   element has no text, so the gradient painted nowhere - and held it at
+   0.22 opacity. Reset at a specificity that beats it. */
+.og-footer__signature .og-footer__signature-mark {
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  color: inherit;
+  font-size: 0;
+  opacity: 0.9;
+  white-space: normal;
+}

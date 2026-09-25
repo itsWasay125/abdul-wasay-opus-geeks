@@ -38418,3 +38418,105 @@ h1 .hero-line,
 .rh-hero__title .rh-hero__flip {
   font-size: inherit !important;
 }
+
+/* The banner stats are gone from the services and portfolio heroes. */
+.hero-cluster__stats,
+.portfolio-hero-white__stats { display: none !important; }
+
+/* ==========================================================================
+   CONTACT OPTIONS — ONE LINE
+   The heading was held to 24ch, which broke "How would you like to connect?"
+   into four lines. It runs the full width on one line; the size comes down
+   with the viewport so it still fits on a phone rather than wrapping.
+   ========================================================================== */
+
+.contact-options-section .contact-options-heading {
+  max-width: none !important;
+  width: 100%;
+}
+
+/* !important because the shared "one h2 size" rule sets every section heading
+   to 40px on phones with !important, and at 40px this line is ~440px wide. */
+#contact-options-title {
+  white-space: nowrap;
+  max-width: none;
+  font-size: min(var(--section-h2-size, 3.6rem), 6.4vw) !important;
+}
+
+/* ==========================================================================
+   TYPED WORDS
+   The caret blinks while a word holds and stays solid while it types, which
+   is how a real cursor behaves. The sizer (every word, invisible, stacked in
+   one cell) gives the slot the width of the longest word, so the heading
+   never reflows as a word types out or erases.
+   ========================================================================== */
+
+.typewriter { white-space: nowrap; }
+
+.typewriter__caret {
+  display: inline-block;
+  width: 0.07em;
+  height: 0.82em;
+  margin-left: 0.06em;
+  vertical-align: -0.04em;
+  background: currentColor;
+  border-radius: 1px;
+  animation: caretBlink 1s steps(1) infinite;
+}
+
+/* inside a gradient-clipped word the caret has no colour of its own */
+.rh-hero__flip .typewriter__caret,
+.og-hero__title-accent .typewriter__caret { background: #147bc2; }
+
+@keyframes caretBlink { 50% { opacity: 0; } }
+
+/* The flip layer stays absolutely positioned over the invisible sizer (see
+   HeroRobotic.css) - making it relative put the typed word after the sizer,
+   a full word-width to the right of "into". The typed word sits in the
+   <em> the gradient is drawn on, at the start of the slot. */
+.rh-hero__flip .typewriter { display: inline; }
+
+.type-slot { display: inline-grid; text-align: left; }
+.type-slot > * { grid-area: 1 / 1; }
+.type-slot__sizer { visibility: hidden; display: grid; }
+.type-slot__sizer > span { grid-area: 1 / 1; white-space: nowrap; }
+
+@media (prefers-reduced-motion: reduce) {
+  .typewriter__caret { animation: none; }
+}
+
+/* ==========================================================================
+   WORK DECK — TIME TO LOOK AT EACH STAGE
+   Measured: each card was fully visible and uncovered for 250-450px of
+   scroll before the next one slid over it - a single flick of the wheel, so
+   the illustrations went past before they could be read. The scroll
+   distance between one card parking and the next arriving is the gap in
+   this column, so the gap is what buys each card its dwell; the padding at
+   the end holds the last one on screen before the section moves on.
+   Desktop only: below 900px the cards are an ordinary column.
+   ========================================================================== */
+
+@media (min-width: 901px) {
+  .wd__stack {
+    gap: clamp(220px, 36vh, 400px);
+    padding-bottom: clamp(220px, 34vh, 380px);
+  }
+}
+
+/* the eyebrow-and-title wrapper inside the heading was capped at 720px, and
+   the one-line title is ~790px at desktop size, so its end was cut off */
+.contact-options-section .contact-options-heading > div {
+  max-width: none !important;
+  width: 100%;
+}
+
+/* The shared mobile rule sizes `h2 strong` on its own (40px !important), so
+   the accent word stayed 40px while the rest of this one-line title came
+   down to 25px. The title is one size, and its line box matches it. */
+#contact-options-title strong,
+#contact-options-title span,
+#contact-options-title em {
+  font-size: inherit !important;
+}
+
+#contact-options-title { line-height: 1.05 !important; }

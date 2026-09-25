@@ -115,8 +115,9 @@ export default function SiteFooter() {
       </section>
 
       {/* ── SIGNATURE ──────────────────────────────────────────────────── */}
+      {/* The sign-off is the real wordmark, drawn in the brand ramp. */}
       <div className="og-footer__signature" aria-hidden="true">
-        <span>Opus Geeks</span>
+        <span className="og-footer__signature-mark" />
       </div>
 
       <div className="og-footer__legal og-shell">
@@ -142,7 +143,6 @@ function OfficeCard({ office }) {
       <header className="og-office__head">
         <span className="og-eyebrow">{office.kind}</span>
         <span className="og-office__status" data-live={isOpen ? "true" : "false"}>
-          <span className="og-pulse__dot" data-live={isOpen ? "true" : "false"} />
           {isOpen ? "Open now" : "Closed"}
         </span>
       </header>

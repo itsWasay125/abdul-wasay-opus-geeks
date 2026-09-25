@@ -13,11 +13,11 @@ const contactOptions = [
   },
   {
     title: "Email Us",
-    description: "hello@opusgeeks.com",
+    description: "contact@opusgeeks.com",
     detail: "Best for documents, proposals, and detailed questions.",
     icon: "mail",
     color: "#818cf8",
-    href: "mailto:hello@opusgeeks.com",
+    href: "mailto:contact@opusgeeks.com",
     action: "Send An Email",
   },
   {

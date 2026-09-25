@@ -183,7 +183,6 @@ function OfficePulse() {
       href={CONTACT.phoneHref}
       title={isOpen ? `Call the studio — open now` : `Call the studio — currently outside studio hours`}
     >
-      <span className="og-pulse__dot" data-live={isOpen ? "true" : "false"} aria-hidden="true" />
       <span className="og-pulse__time">{CONTACT.phone}</span>
     </a>
   );

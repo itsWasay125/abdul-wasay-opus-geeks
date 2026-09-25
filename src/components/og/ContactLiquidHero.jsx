@@ -2,6 +2,10 @@ import { Link } from "react-router-dom";
 import { ArrowUpRight, Sparkles } from "lucide-react";
 import LiquidGlassBackground from "./LiquidGlassBackground";
 import { CONTACT } from "../../data/site";
+import Typewriter from "../Typewriter";
+
+/* what the contact banner types after "Tell us what you are" */
+const CONTACT_WORDS = ["building.", "designing.", "launching.", "scaling."];
 
 /**
  * Contact Us banner — the refractive liquid-glass hero.
@@ -41,9 +45,18 @@ export default function ContactLiquidHero() {
         </div>
 
         <h1 id="og-hero-title" className="og-hero__title">
-          <span className="hero-line">Tell us what</span>
-          <span className="hero-line">you are</span>
-          <span className="hero-line og-hero__title-accent">building.</span>
+          <span className="hero-line">Tell us what you are</span>
+          <span className="hero-line og-hero__title-accent">
+            {/* the sizer holds every word invisibly, so the line keeps the width
+                of the longest while the typed one grows and shrinks */}
+            <span className="type-slot">
+              <span className="type-slot__sizer" aria-hidden="true">
+                {CONTACT_WORDS.map((w) => <span key={w}>{w}</span>)}
+              </span>
+              <Typewriter words={CONTACT_WORDS} className="type-slot__live" />
+            </span>
+            <span className="sr-only">building.</span>
+          </span>
         </h1>
 
         <p className="og-hero__sub">
