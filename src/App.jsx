@@ -8,6 +8,7 @@ import HomeBrief from "./components/og/HomeBrief";
 import ScrollProvider from "./components/ScrollProvider";
 import StatsSection from "./components/StatsSection";
 import Homepage from "./pages/Homepage";
+import { useFitHeadings } from "./hooks/useFitHeadings";
 
 /* Every route but the homepage is split out.
 
@@ -32,6 +33,8 @@ const LegalPage = lazy(() => import("./pages/LegalPage"));
 
 function SiteLayout() {
   const { pathname } = useLocation();
+  /* every page banner stays on three lines - see the hook */
+  useFitHeadings(pathname);
   const hideGlobalStats = pathname.startsWith("/contact-us") || pathname.startsWith("/faqs");
   /* Portfolio opens on the lit studio stage — a dark band — so the resting
      header drops its light plate there and inverts its type. */

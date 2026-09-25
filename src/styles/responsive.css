@@ -4415,11 +4415,20 @@
 
   /* home page */
 
-  .rh-hero__title,
+  /* The heading takes a starting size here; the lines and the rotating word
+     inherit it. This used to pin all three at 3.5rem !important, which is
+     what stopped the heading from ever shrinking to fit a narrow phone:
+     useFitHeadings could resize the h1, but every line inside it was held
+     at 56px by this rule, and 56px "ideas that matter" does not fit 312px. */
+  .rh-hero__title {
+    font-size: 3.5rem;
+    line-height: 1.05 !important;
+  }
+
   .rh-hero__title .rh-hero__line,
   .rh-hero__title em {
-    font-size: 3.5rem !important;
-    line-height: 1.05 !important;
+    font-size: inherit !important;
+    line-height: inherit !important;
   }
 
   p {
@@ -5309,23 +5318,6 @@
 
 
 }
-/* ==========================================================================
-   ABOUT BANNER — THE ROTATOR TAKES ITS OWN LINE ON A PHONE
-   The row is `nowrap` so "BEHIND" and the animated word share a line. There
-   is no room for that at phone width: the longest phrase ran past the right
-   edge and the rotator's own `overflow: hidden` then sliced it in half.
-   Below this width the rotator wraps onto a line of its own, which makes the
-   heading four lines instead of three and keeps every word whole.
-   ========================================================================== */
-
-@media (max-width: 700px) {
-  .hero-banner__title-row {
-    flex-wrap: wrap;
-    row-gap: 0;
-  }
-
-  .hero-banner__title-row .hero-banner__rotator {
-    flex: 1 1 100%;
-    min-width: 100%;
-  }
-}
+/* The About banner used to wrap its rotator onto a fourth line below 700px so
+   the longest phrase would not be clipped. useFitHeadings now shrinks the
+   heading until every line fits, so it stays on three. */

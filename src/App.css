@@ -38333,3 +38333,88 @@ h1 .hero-line,
 @media (min-width: 901px) {
   .wd__card { min-height: clamp(300px, 38vh, 400px); }
 }
+
+/* ==========================================================================
+   THE THREE FIXES THE LAST PASS INTRODUCED
+
+   1. The banner headings are authored as three lines, so a `max-width` on
+      the heading can only ever break one of them in half - which is what it
+      did: at 80px, "ideas that matter" did not fit 480px and the homepage
+      banner ran to four lines. The authored lines are the control; the
+      column and the font clamp are what keep them inside the page.
+
+   2. `.wd { overflow: hidden }` was added to clip the corner rings. Hidden
+      makes the section a scroll container, and the cards inside it are
+      `position: sticky` - so they started sticking to the section instead
+      of the viewport and the pile stopped forming. Same mistake as the
+      portfolio gallery. `clip` clips without creating a scroll container.
+
+   3. The stage number was 0.62em against its heading - 29px next to 46px -
+      which read as a footnote rather than as part of the line.
+   ========================================================================== */
+
+.rh-hero__title,
+.hero-banner__title,
+.svc-hero h1,
+.blogs-page__hero h1,
+.faqs-page__hero-copy h1,
+.portfolio-hero-white__title,
+.about-page__hero h1 {
+  max-width: none;
+}
+
+.wd {
+  overflow: visible;
+  overflow-x: clip;
+}
+
+.wd__card h3 .wd__index {
+  font-size: 0.9em;
+  -webkit-text-stroke: 2px color-mix(in srgb, var(--wd-color) 68%, transparent);
+}
+
+/* A banner heading is never wider than the column it sits in. At 360px the
+   homepage h1 was 345px wide starting 24px in, which put its right edge 9px
+   past the viewport before a single glyph was drawn. */
+.rh-hero__title,
+.hero-banner__title,
+.hero-cluster__title,
+.svc-hero h1,
+.blogs-page__hero h1,
+.faqs-page__hero-copy h1,
+.portfolio-hero-white__title,
+.og-hero__title {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* The homepage hero's inner grid measured 393px on a 360px screen. Grid and
+   flex children default to `min-width: auto`, which lets them grow to the
+   min-content width of whatever is inside - here the rotating word's sizer,
+   which holds every word so the line never shifts. That pushed the column,
+   and the heading in it, 33px past the right edge. */
+.rh-hero__inner {
+  max-width: 100%;
+  min-width: 0;
+}
+
+.rh-hero__copy,
+.rh-hero__title,
+.rh-hero__line {
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* The homepage hero's lines carried their own font-size (3.5rem, !important,
+   on the rotator's <em> and on the lines), so shrinking the heading changed
+   nothing inside it: the h1 went to 18px while every line stayed 56px, and
+   the fitter could only run to its floor. The lines follow the heading now;
+   the heading is the one size that is set. */
+.rh-hero__title .rh-hero__line,
+.rh-hero__title .rh-hero__line em,
+.rh-hero__title .rh-hero__rotator,
+.rh-hero__title .rh-hero__rotator em,
+.rh-hero__title .rh-hero__rotator-sizer,
+.rh-hero__title .rh-hero__flip {
+  font-size: inherit !important;
+}
