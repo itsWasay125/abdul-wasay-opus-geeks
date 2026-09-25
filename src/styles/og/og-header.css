@@ -851,35 +851,43 @@ body[data-drawer-open="true"] .chatbot-trigger,
 }
 
 /* ==========================================================================
-   THE MEGA PANEL MATCHES THE BAR IT HANGS FROM
-   Pinned, the header bar is a dark translucent pill. The panel under it
-   stayed white, so the two read as two different components that happened
-   to touch. The panel is themed off the same state now: it only has to
-   redefine the surface and ink tokens, because everything inside it is
-   already drawn from those.
+   THE MEGA PANEL IS THE HEADER, CONTINUED
+   Two earlier passes lived here: one themed the panel to the pinned bar's
+   near-black, the next put it in the brand ramp to see how that looked. Both
+   read as a separate dark component hanging off a white header.
+
+   It takes the header's own surface and shadow now, so the bar and the panel
+   are one piece of furniture rather than two that happen to touch.
    ========================================================================== */
 
-.og-header[data-pinned="true"] .og-mega {
-  --og-surface: rgba(8, 13, 22, 0.94);
-  --og-surface-2: rgba(255, 255, 255, 0.06);
-  --og-bg-raise: rgba(255, 255, 255, 0.05);
-  --og-veil: rgba(8, 13, 22, 0.86);
-  --og-ink: #ffffff;
-  --og-ink-rest: #d7dEEC;
-  --og-ink-2: #aab6cd;
-  --og-ink-3: #8b98b4;
-  --og-ink-4: #6f7c99;
-  --og-line: rgba(255, 255, 255, 0.12);
-  --og-line-2: rgba(255, 255, 255, 0.18);
-  --og-line-3: rgba(255, 255, 255, 0.26);
+.og-mega__inner,
+.og-header[data-pinned="true"] .og-mega__inner {
+  background: #ffffff;
+  border-color: rgba(15, 23, 42, 0.1);
+  box-shadow: 0 24px 60px -20px rgba(11, 18, 48, 0.22);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 
-.og-header[data-pinned="true"] .og-mega__inner {
-  border-color: rgba(255, 255, 255, 0.14);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+/* Everything inside reads from these, so the panel only has to restate the
+   light surface and ink for the whole subtree to follow. */
+.og-mega,
+.og-header[data-pinned="true"] .og-mega {
+  --og-surface: #ffffff;
+  --og-surface-2: #f5f8ff;
+  --og-bg-raise: #f6f9ff;
+  --og-veil: rgba(255, 255, 255, 0.86);
+  --og-ink: #0b1230;
+  --og-ink-rest: #2a3555;
+  --og-ink-2: #44507a;
+  --og-ink-3: #6f7b9d;
+  --og-ink-4: #93a0bd;
+  --og-line: rgba(14, 30, 72, 0.1);
+  --og-line-2: rgba(14, 30, 72, 0.16);
+  --og-line-3: rgba(14, 30, 72, 0.24);
 }
+
+.og-mega__item:hover { background: #f5f8ff; }
 
 /* ── the aside foot ─────────────────────────────────────────────────── */
 
@@ -922,109 +930,3 @@ body[data-drawer-open="true"] .chatbot-trigger,
   margin-top: 1px;
   color: var(--og-brand-lift, #00aeef);
 }
-
-/* ==========================================================================
-   THE PANEL IN THE BRAND, NOT IN NEUTRAL BLACK
-   It was matched to the pinned bar's near-black. This puts the Opus Geeks
-   ramp behind it instead — violet through blue, deep enough that white type
-   and the work thumbnails still carry. The bar above stays as it is, so the
-   two read as one component with the panel as its lit face.
-   ========================================================================== */
-
-.og-header[data-pinned="true"] .og-mega__inner,
-.og-mega__inner {
-  background: rgba(8, 13, 22, 0.96) !important;
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border-color: rgba(255, 255, 255, 0.12);
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
-}
-
-.og-mega,
-.og-header[data-pinned="true"] .og-mega {
-  --og-surface: rgba(8, 13, 22, 0.96);
-  --og-surface-2: rgba(255, 255, 255, 0.07);
-  --og-bg-raise: rgba(255, 255, 255, 0.06);
-  --og-veil: rgba(8, 13, 22, 0.88);
-  --og-ink: #ffffff;
-  --og-ink-rest: #dbe3f2;
-  --og-ink-2: #b4c0da;
-  --og-ink-3: #93a1c0;
-  --og-ink-4: #7484a6;
-  --og-line: rgba(255, 255, 255, 0.13);
-  --og-line-2: rgba(255, 255, 255, 0.2);
-  --og-line-3: rgba(255, 255, 255, 0.3);
-}
-
-/* The panel items hover */
-.og-mega__item:hover { background: rgba(255, 255, 255, 0.08); }
-
-/* Header CTA styled as btn-glow */
-.og-header__cta.btn-glow,
-.og-header__cta.og-btn,
-.og-btn--solid.og-header__cta,
-.og-header__cta {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  min-height: 38px !important;
-  height: 38px !important;
-  padding: 0 18px !important;
-  border: 1px solid rgba(0, 128, 198, 0.32) !important;
-  border-radius: 999px !important;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(243, 248, 255, 0.92)) !important;
-  color: #0b1e42 !important;
-  font-family: "Poppins", sans-serif;
-  font-size: 0.76rem !important;
-  font-weight: 700 !important;
-  letter-spacing: 0.02em;
-  text-transform: capitalize !important;
-  text-decoration: none;
-  box-shadow: 0 4px 16px rgba(0, 128, 198, 0.12);
-  transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1) !important;
-}
-
-.og-header__cta::after,
-.og-header__cta.btn-glow::after,
-.og-header__cta::before,
-.og-header__cta.btn-glow::before {
-  display: none !important;
-  content: none !important;
-}
-
-.og-header__cta.btn-glow:is(:hover, :focus-visible),
-.og-header__cta.og-btn:is(:hover, :focus-visible),
-.og-btn--solid.og-header__cta:is(:hover, :focus-visible),
-.og-header__cta:is(:hover, :focus-visible) {
-  background: linear-gradient(118deg, #6d28d9, #2563eb 46%, #06b6d4) !important;
-  color: #ffffff !important;
-  border-color: transparent !important;
-  transform: translateY(-2px) !important;
-  box-shadow: 0 12px 28px rgba(0, 128, 198, 0.45) !important;
-}
-
-.og-header__cta svg,
-.og-btn--solid.og-header__cta svg {
-  width: 14px !important;
-  height: 14px !important;
-  color: #0080c6 !important;
-  transition: transform 0.5s ease, color 0.5s ease !important;
-}
-
-.og-header__cta:is(:hover, :focus-visible) svg,
-.og-btn--solid.og-header__cta:is(:hover, :focus-visible) svg {
-  color: #ffffff !important;
-  transform: translate(2px, -2px) !important;
-}
-
-@media (max-width: 980px) {
-  .og-header__cta,
-  .og-header__cta.btn-glow,
-  .og-header__cta.og-btn,
-  .og-btn--solid.og-header__cta {
-    display: none !important;
-  }
-}
-
