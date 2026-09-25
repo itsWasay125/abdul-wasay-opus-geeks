@@ -60,13 +60,17 @@ export default function StoryShowcase({
           ))}
         </div>
 
-        {linkTo && linkLabel ? (
-          <Link className="ghost-link story-showcase__link" to={linkTo}>
-            <Icon name={linkIcon} />
-            {linkLabel}
-          </Link>
-        ) : null}
       </div>
+
+      {/* Outside the copy column and its own grid row, so it centres on the
+          full width of the section (copy + stage) rather than only on the
+          copy column's half. */}
+      {linkTo && linkLabel ? (
+        <Link className="ghost-link story-showcase__link" to={linkTo}>
+          <Icon name={linkIcon} />
+          {linkLabel}
+        </Link>
+      ) : null}
 
       <div className="story-showcase__stage">
         <div className="story-showcase__screen">

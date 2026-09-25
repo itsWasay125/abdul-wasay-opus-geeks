@@ -9,10 +9,11 @@ const teamMembers = [
   { id: 1, name: "Mohammad Mohsin Anjum", role: "Project Manager", email: "mohsin@opusgeeks.com", gradient: "linear-gradient(135deg, #7c3aed, #5b21b6)", avatar: "/assets/team/abdul-wasay.jpg" },
   { id: 2, name: "Sami Zafar", role: "Backend Lead", email: "sami@opusgeeks.com", gradient: "linear-gradient(135deg, #2563eb, #4338ca)", avatar: "/assets/team/hassan-khan.jpg" },
   { id: 3, name: "Abdul Qadeer", role: "Mobile Developer Lead", email: "qadeer@opusgeeks.com", gradient: "linear-gradient(135deg, #f59e0b, #d97706)", avatar: "/assets/team/zain-malik.jpg" },
-  { id: 4, name: "Haris Asif Siddiqui", role: "Front End & CMS Lead", email: "haris@opusgeeks.com", gradient: "linear-gradient(135deg, #06b6d4, #0891b2)", avatar: "/assets/team/haris-asif.jpg" },
+  { id: 4, name: "Haris Asif Siddiqui", role: "Front End & CMS Lead", email: "haris@opusgeeks.com", gradient: "linear-gradient(135deg, #06b6d4, #0891b2)", avatar: "/assets/team/omar-sheikh.jpg" },
     { id: 5, name: "Ehtisham Ahmed", role: "UI/UX Designer", email: "ehtisham@opusgeeks.com", gradient: "linear-gradient(135deg, #0ea5e9, #4f46e5)", avatar: "/assets/team/ehtisham-ahmed.jpg" },
   { id: 6, name: "Abdullah Ahmed", role: "Sales Lead", email: "abdullah@opusgeeks.com", gradient: "linear-gradient(135deg, #10b981, #059669)", avatar: "/assets/team/bilal-qureshi.jpg" },
   { id: 7, name: "Mazaain Hasan", role: "Business Development Lead", email: "mazaain@opusgeeks.com", gradient: "linear-gradient(135deg, #8b5cf6, #6d28d9)", avatar: "/assets/team/mazaain-hasan.jpg" },
+  { id: 8, name: "Salman Khan", role: "Senior Software Engineer", email: "salman@opusgeeks.com", gradient: "linear-gradient(135deg, #ec4899, #be185d)" },
 ];
 
 function getInitials(name) {

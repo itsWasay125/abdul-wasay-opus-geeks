@@ -12616,6 +12616,10 @@ main .services-vvip__capabilities .service-card :is(h3, h4) {
   z-index: 1;
   display: grid;
   grid-template-columns: minmax(0, 0.9fr) minmax(390px, 1.1fr);
+  /* dense: the link spans both columns and has to fall to its own row, which
+     bumps the stage after it in DOM order to a third row unless the packer
+     is told to backfill row 1's empty second cell instead. */
+  grid-auto-flow: row dense;
   align-items: center;
   gap: clamp(34px, 5vw, 72px);
 }
@@ -26686,6 +26690,10 @@ main .services-vvip__capabilities .service-card :is(h3, h4) {
   z-index: 1;
   display: grid;
   grid-template-columns: minmax(0, 0.9fr) minmax(390px, 1.1fr);
+  /* dense: the link spans both columns and has to fall to its own row, which
+     bumps the stage after it in DOM order to a third row unless the packer
+     is told to backfill row 1's empty second cell instead. */
+  grid-auto-flow: row dense;
   align-items: center;
   gap: clamp(34px, 5vw, 72px);
 }
@@ -37867,10 +37875,13 @@ a.blog-detail-page__toc-cta:hover,
   transform: none !important;
 }
 
+/* No hover: these are a plain list of disciplines, not a control - a
+   colour shift on hover read as broken interactivity for text that does
+   nothing when clicked. */
 .theme-light .team-section .team-section__signals span:hover,
 .team-section .team-section__signals span:hover {
   transform: none !important;
-  color: #0b1230 !important;
+  color: #44507a !important;
 }
 
 .theme-light .team-section .team-section__signals span i,
@@ -38585,13 +38596,21 @@ h1 .hero-line,
   filter: blur(60px);
 }
 
-/* "Meet Opus Geeks" sits on the centre line of its column */
+/* "Meet Opus Geeks" moved out of the copy column (StoryShowcase.jsx) so it
+   can centre on the full row - copy + stage - rather than only on the
+   copy column's half. As a bare grid child it was auto-placed into column 1
+   of a new row instead of spanning both, which is what actually needs the
+   explicit span below. */
 .home-about .story-showcase__link {
+  grid-column: 1 / -1;
   display: flex;
   width: fit-content;
-  margin-inline: auto;
-  align-self: center;
+  margin: clamp(28px, 4vw, 44px) auto 0;
   justify-self: center;
+}
+
+@media (max-width: 860px) {
+  .home-about .story-showcase__link { margin-top: clamp(20px, 6vw, 32px); }
 }
 
 /* ==========================================================================

@@ -376,3 +376,34 @@
   min-width: 0;
   box-sizing: border-box;
 }
+
+/* ==========================================================================
+   THE DIALOG'S SCROLLBAR, IN THE BRAND RATHER THAN THE OS DEFAULT
+   The card scrolls when the form is taller than 88vh. Left unstyled that is
+   a flat grey Windows scrollbar sitting inside a white, brand-gradient card -
+   the one thing on the dialog that looked like it belonged to a different
+   page. Thin, transparent track, brand-blue thumb - the same treatment the
+   FAQ/story lists already use.
+   ========================================================================== */
+
+.pmodal__card {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 128, 198, 0.32) transparent;
+}
+
+.pmodal__card::-webkit-scrollbar {
+  width: 6px;
+}
+
+.pmodal__card::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.pmodal__card::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgba(0, 128, 198, 0.32);
+}
+
+.pmodal__card::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 128, 198, 0.5);
+}

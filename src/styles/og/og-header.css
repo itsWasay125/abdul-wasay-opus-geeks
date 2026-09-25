@@ -1005,3 +1005,8 @@ body[data-drawer-open="true"] .chatbot-trigger,
   .og-header .og-mark img { height: 28px; }
   .og-header .og-wordmark__img { height: 15px; }
 }
+
+/* header CTA gets a guaranteed tap target */
+.og-header__cta.btn-glow {
+  min-height: 44px;
+}
