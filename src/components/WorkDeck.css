@@ -122,7 +122,7 @@
   /* the settle shrinks it toward its own top edge, so it reads as receding
      into the pile rather than sliding away */
   transform-origin: center top;
-  will-change: transform;
+  /* promoted only while the deck is on screen - see .wd--live below */
   /* declared, not left at `none`: GSAP reads an absent filter as zero and the
      card scrubs to black instead of dimming */
   filter: brightness(1);
@@ -223,7 +223,7 @@
   opacity: 0;
   background: #0b1230;
   pointer-events: none;
-  will-change: opacity;
+  /* promoted only while the deck is on screen - see .wd--live below */
 }
 
 /* ---- the deliverables panel ----
@@ -383,3 +383,17 @@
 @media (prefers-reduced-motion: reduce) {
   .wd__card { position: static; transform: none !important; filter: none !important; }
 }
+
+/* ==========================================================================
+   LAYERS ONLY WHILE THE DECK IS ON SCREEN
+   The five cards and their five dims used to be promoted permanently
+   (will-change). Being sticky, and early in paint order, they made Chrome
+   give everything painted after them that overlaps them a layer of its
+   own: measured at the testimonials, the whole <html> content became a
+   second 1440x13900 layer and the testimonials section a 1440x3979 one -
+   ~268MB of layer texture at 1x, four times that on a Retina Mac. The
+   promotion now exists only while the deck is within a screen of view.
+   ========================================================================== */
+
+.wd--live .wd__card { will-change: transform; }
+.wd--live .wd__dim { will-change: opacity; }

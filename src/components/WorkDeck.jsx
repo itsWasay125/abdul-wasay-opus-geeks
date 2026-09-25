@@ -29,6 +29,19 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function WorkDeck() {
   const stackRef = useRef(null);
+  const sectionRef = useRef(null);
+
+  /* the cards are layer-promoted only while the deck is near the viewport */
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") return undefined;
+    const io = new IntersectionObserver(
+      ([entry]) => el.classList.toggle("wd--live", entry.isIntersecting),
+      { rootMargin: "100% 0px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
   const cardRefs = useRef([]);
 
   useEffect(() => {
@@ -73,7 +86,7 @@ export default function WorkDeck() {
   }, []);
 
   return (
-    <section id="work-deck" className="wd theme-light" aria-labelledby="wd-title">
+    <section id="work-deck" ref={sectionRef} className="wd theme-light" aria-labelledby="wd-title">
       <span className="wd__aura wd__aura--one" aria-hidden="true" />
       <span className="wd__aura wd__aura--two" aria-hidden="true" />
 

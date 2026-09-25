@@ -538,3 +538,10 @@
 @media (max-width: 560px) {
   .chat-greeter__droid { width: 52px; height: 52px; border-radius: 16px; }
 }
+
+/* The droid is on screen on every page, so its bob and pulse were the one
+   animation that never stopped anywhere on the site. Four breaths to catch
+   the eye, then it rests; hovering it wakes the pulse again. */
+.chat-greeter__droid { animation-iteration-count: 4; }
+.chat-greeter__pulse { animation-iteration-count: 4; }
+.chat-greeter__droid:hover .chat-greeter__pulse { animation-iteration-count: infinite; }
