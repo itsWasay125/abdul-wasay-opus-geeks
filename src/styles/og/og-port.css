@@ -1,0 +1,592 @@
+/* ==========================================================================
+   PORT ADJUSTMENTS
+   Everything in this folder came across from the other Opus Geeks build. This
+   sheet is the only place that knows it was a port: it loads last and carries
+   the corrections this project needs — the typeface swap, the studio banner
+   hardware, and the handful of places where a dark-theme section had to learn
+   to sit on a light page.
+
+   Nothing here should be merged back into the sheets above it; keeping the
+   deltas in one file is what makes the next re-sync cheap.
+   ========================================================================== */
+
+/* ── TYPE ────────────────────────────────────────────────────────────────
+   The sheets above were set in Archivo (a normal-width face with real
+   weights) and Jost. This project ships Bebas Neue + Poppins only, and Bebas
+   is a single-weight all-caps condensed display face. Three things have to be
+   corrected wherever a heading landed on it:
+
+     · weight is meaningless — 800 and 400 render identically, so the visual
+       hierarchy has to come from size and colour instead;
+     · it is already uppercase, so `text-transform` is a no-op and the tight
+       negative tracking those headlines carried (-0.035em) closes the
+       counters up into a block;
+     · its cap height fills far more of the em box, so a 1.02 line-height
+       that was comfortable in Archivo collides.                          */
+.og-footer__head,
+.og-hero__title,
+.og-convergence-stage__title,
+.og-about-features__title,
+.og-about-features__item-title,
+.og-clients__title,
+.og-clients__author-name {
+  font-family: var(--og-display);
+  font-weight: 400;
+  letter-spacing: 0.005em;
+  line-height: 1.06;
+}
+
+/* Bebas has no lowercase, so a <strong> inside a heading cannot be
+   distinguished by case or weight — it is distinguished by the brand ramp. */
+.og-footer__head strong,
+.og-about-features__title-grad,
+.og-toolkit-section__title-grad,
+.og-clients__title-grad {
+  background: var(--og-brand-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* Eyebrows and readouts keep Poppins: Bebas at 11-13px with 0.12em tracking
+   is unreadable. */
+.og-eyebrow,
+.og-pulse,
+.og-skip {
+  font-family: var(--og-sans);
+  font-weight: 600;
+}
+
+/* ── HERO ENTRANCE ───────────────────────────────────────────────────────
+   The source used motion/react for a six-element stagger. One keyframe and a
+   `--i` index does the same job without the library. */
+.og-hero__rise {
+  opacity: 0;
+  transform: translateY(18px);
+  animation: og-hero-rise 620ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: calc(var(--i, 0) * 90ms);
+}
+
+@keyframes og-hero-rise {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* The copy must never sit behind a blurred pane — that was the complaint.
+   These three carried a backdrop-filter that softened the text in front of
+   them on Chromium whenever the layers composited together. */
+.og-hero__vip-badge,
+.og-hero__status-pill,
+.og-hero__quantum-hint,
+.og-hero__scroll-cue,
+.og-hero__metrics {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.og-hero__title,
+.og-hero__sub {
+  position: relative;
+  z-index: 3;
+}
+
+.og-hero__footer a {
+  text-decoration: none;
+  transition: border-color 220ms var(--og-ease), color 220ms var(--og-ease);
+}
+.og-hero__footer a:hover {
+  border-color: var(--og-mark-cyan);
+  color: #0080c6;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .og-hero__rise {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+  .og-hero__scroll-bar {
+    animation: none;
+  }
+}
+
+/* ==========================================================================
+   LIGHT-PAGE CORRECTIONS
+   This site is light. The header and the ported sections were authored for a
+   dark page, so anything that assumed a dark ground is re-pointed here.
+   ========================================================================== */
+
+/* The header rests over whatever hero is beneath it and only becomes a dark
+   glass capsule once pinned; at rest on a light page it needs its own
+   hairline and a light plate, or the nav floats on nothing. */
+.og-header[data-pinned="false"] .og-header__bar {
+  background: rgba(255, 255, 255, 0.72);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  backdrop-filter: blur(14px) saturate(160%);
+  border-bottom-color: rgba(15, 23, 42, 0.08);
+}
+.og-header[data-pinned="false"] .og-pulse {
+  border-color: rgba(15, 23, 42, 0.12);
+  color: #475569;
+}
+.og-header[data-pinned="false"] .og-pulse__time {
+  color: #0f172a;
+}
+.og-header[data-pinned="false"] .og-burger span {
+  background: #0f172a;
+}
+
+/* A hero that starts under a transparent header must not start under the bar
+   itself. Every page's first section gets the header's height back. */
+.page-shell-offset {
+  padding-top: var(--og-header-h);
+}
+
+/* The mega panel and the drawer are dark surfaces in a light shell — they are
+   correct as authored, they just need to win over App.css's link colour. */
+.og-mega a,
+.og-drawer a {
+  text-decoration: none;
+}
+
+/* ── metrics row ─────────────────────────────────────────────────────────
+   Four metrics and three dividers are seven grid children; in the four
+   columns it was given, the last three wrapped onto a second line. A row is
+   what it always wanted to be. */
+.og-hero__metrics {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.og-hero__metric {
+  flex: 1 1 0;
+  min-width: 0;
+}
+.og-hero__metric-divider {
+  flex: 0 0 1px;
+  margin: 0;
+}
+
+@media (max-width: 860px) {
+  .og-hero__metrics {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .og-hero__metric {
+    flex: 1 1 42%;
+  }
+}
+
+/* ==========================================================================
+   TOOLKIT
+   ========================================================================== */
+
+/* Poppins sets wider than the Archivo these pills were measured against, so
+   "CMS & E-Commerce" was landing on its own ellipsis. The column gets the
+   difference back rather than the label getting smaller. */
+.og-convergence-stack {
+  width: 284px;
+}
+
+.og-convergence-node__label {
+  font-size: 0.88rem;
+}
+
+@media (max-width: 1080px) {
+  .og-convergence-stack {
+    width: 100%;
+  }
+}
+
+/* ==========================================================================
+   PRE-EXISTING DARK ISLANDS
+   Not part of the port — found while auditing contrast across every page
+   after it. Same root cause as the ported sections: App.css repaints all
+   headings and paragraphs on an inner page with `!important`, which is right
+   for the light sections it was written for and wrong for the dark ones that
+   were left standing. Three of those were unreadable.
+   ========================================================================== */
+
+/* Services: eight capability cards in white theme */
+main .services-vvip__capabilities .service-card :is(h3, h4) {
+  color: #0b1230 !important;
+  font-size: clamp(1.25rem, 1.4vw, 1.45rem) !important;
+  font-weight: 800 !important;
+}
+main .services-vvip__capabilities .service-card p {
+  color: #475569 !important;
+  font-size: 0.94rem !important;
+  line-height: 1.68 !important;
+}
+
+/* Heading has no background plate */
+.services-vvip__capability-head {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: 0 !important;
+}
+
+/* FAQs hero card: the card itself was converted to a light surface in the
+   light-theme pass, but the "FAQ" lockup and its two labels inside it kept
+   their dark-theme colours — white on white, and a pale blue on white. */
+.faqs-page__answer-core strong {
+  color: var(--ink) !important;
+  text-shadow: 0 0 30px rgba(37, 99, 235, 0.22) !important;
+}
+.faqs-page__answer-core span,
+.faqs-page__answer-core small {
+  color: rgba(37, 99, 235, 0.68) !important;
+}
+
+/* Active nav item on the light resting bar. og-header.css paints it with
+   `--og-ink`, which is the dark theme's near-white — so on a light page the
+   current page was the one link you could not read. */
+.og-header[data-pinned="false"] .og-link.is-active .og-link__slide::before {
+  color: #05080e;
+}
+
+/* While the mobile drawer is open the bar sits on top of it, so the light
+   resting plate has to go or it reads as a grey strip across a dark sheet. */
+.og-header[data-drawer="open"] .og-header__bar {
+  background: transparent;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  border-bottom-color: transparent;
+}
+.og-header[data-drawer="open"] .og-link__slide::before {
+  color: rgba(226, 236, 248, 0.72);
+}
+.og-header[data-drawer="open"] .og-wordmark,
+.og-header[data-drawer="open"] .og-link__slide::after {
+  color: #ffffff;
+}
+.og-header[data-drawer="open"] .og-burger span {
+  background: #ffffff;
+}
+
+/* ── homepage CTA form ───────────────────────────────────────────────────
+   The field's placeholder was below the contrast floor and the submit still
+   wore the old purple gradient, which is the one button on the page that did
+   not belong to either of the two button systems. */
+.cta-email-form input::placeholder {
+  color: #94a3b8;
+  opacity: 1;
+}
+.cta-email-form button {
+  background: var(--og-brand-grad) !important;
+  color: #ffffff;
+}
+
+/* ==========================================================================
+   SITE-WIDE 3D CTA
+   The spline banner came across as a homepage feature about 3D. It is now the
+   closing call to action on every page, so the deltas are: it flows into the
+   footer instead of sitting on the page as its own slab, it speaks the site's
+   button language, and it carries one line about the droid where four spec
+   chips used to be.
+   ========================================================================== */
+
+.og-spline-card__title {
+  font-family: var(--og-display);
+  font-weight: 400;
+  letter-spacing: 0.005em;
+  line-height: 1.06;
+  font-size: clamp(2.1rem, 1rem + 2.6vw, 3.4rem);
+}
+
+.og-spline-card__title-accent {
+  background: var(--og-brand-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.og-spline-card__badge,
+.og-spline-card__droid {
+  font-family: var(--og-sans);
+}
+
+.og-spline-card__badge {
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+}
+
+.og-spline-card__desc {
+  color: #475569;
+  margin-bottom: 18px;
+}
+
+/* ── what the droid is ───────────────────────────────────────────────────
+   Replaces the four spec chips. It also carries the interaction hint that
+   used to float over the scene as a pill, so nothing was lost by removing
+   that overlay. */
+.og-spline-card__droid {
+  display: flex;
+  gap: 10px;
+  max-width: 470px;
+  margin: 0 0 28px;
+  padding: 13px 15px;
+  border: 1px solid rgba(15, 23, 42, 0.09);
+  border-left: 2px solid var(--og-mark-cyan);
+  border-radius: 10px;
+  background: #ffffff;
+  box-shadow: 0 10px 24px -16px rgba(11, 18, 48, 0.3);
+  color: #475569;
+  font-size: 0.83rem;
+  line-height: 1.6;
+}
+
+.og-spline-card__droid strong {
+  color: #0b1230;
+  font-weight: 700;
+}
+
+.og-spline-card__droid-dot {
+  flex: none;
+  width: 7px;
+  height: 7px;
+  margin-top: 7px;
+  border-radius: 50%;
+  background: var(--og-mark-cyan);
+  box-shadow: 0 0 10px var(--og-mark-cyan);
+  animation: og-breathe 2.6s var(--og-ease-io) infinite;
+}
+
+/* ── buttons ─────────────────────────────────────────────────────────── */
+.og-spline-card__actions {
+  gap: 14px;
+}
+
+/* ── the scene ───────────────────────────────────────────────────────── */
+.og-spline-holder,
+.og-spline-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.og-spline-loader-wrap,
+.og-spline-fallback {
+  min-height: 0;
+}
+
+@media (max-width: 960px) {
+  .og-spline-card__droid {
+    max-width: none;
+  }
+  .og-spline-card__actions {
+    width: 100%;
+  }
+  .og-spline-card__actions .og-btn {
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .og-spline-card__droid-dot {
+    animation: none;
+  }
+}
+
+/* The Spline camera is fixed and the canvas crops to its box, so the droid is
+   framed by how much room the viewport gets. At the ported 520px it was a
+   head-and-shoulders crop with the arms cut off; a little more height and
+   width shows the figure. */
+.og-spline-card,
+.og-spline-card__grid,
+.og-spline-card__viewport {
+  min-height: 580px;
+}
+
+.og-spline-card__viewport {
+  flex: 0 0 53%;
+  max-width: 53%;
+}
+.og-spline-card__content {
+  flex: 1 1 47%;
+  max-width: 47%;
+}
+
+/* The scene met the copy column at a hard vertical edge. This fades its left
+   side into the card so the droid reads as standing inside it. */
+.og-spline-card__mask {
+  background:
+    linear-gradient(90deg, #f7fafe 0%, rgba(247, 250, 254, 0.6) 9%, transparent 26%),
+    radial-gradient(circle at 60% 50%, transparent 62%, rgba(244, 248, 255, 0.72) 100%);
+}
+
+@media (max-width: 960px) {
+  .og-spline-card,
+  .og-spline-card__grid {
+    min-height: 0;
+  }
+  .og-spline-card__content,
+  .og-spline-card__viewport {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+  .og-spline-card__viewport {
+    height: 420px;
+    min-height: 420px;
+  }
+  .og-spline-card__mask {
+    background: radial-gradient(circle at 50% 46%, transparent 62%, rgba(244, 248, 255, 0.8) 100%);
+  }
+}
+
+/* Blogs pagination. The pills kept their dark-theme fill — a 44%-opaque navy,
+   which over the light page renders as pale grey — and their near-white
+   numerals with it, so the page numbers were white on near-white. */
+.blogs-page__pagination a {
+  border-color: rgba(37, 99, 235, 0.22);
+  background: #ffffff;
+  color: var(--ink-2);
+}
+.blogs-page__pagination a:hover,
+.blogs-page__pagination a.is-active {
+  border-color: transparent;
+  background: var(--og-brand-grad);
+  color: #ffffff;
+  box-shadow: 0 10px 24px -8px rgba(23, 134, 207, 0.55);
+}
+
+/* The KHI readout label sat at --og-ink-3 against the pinned bar's dark
+   glass, which is close enough in value to disappear. */
+.og-header[data-pinned="true"] .og-pulse__label {
+  color: rgba(226, 236, 248, 0.72);
+}
+
+/* ==========================================================================
+   SPLINE CTA BANNER — WHITE THEME
+   This band was painted near-black to blend into the footer below it. The
+   site is white throughout now, so it takes the page's ground instead and
+   keeps only a soft brand wash. The footer keeps its own dark treatment, so
+   the fade at the bottom edge is what stops the two meeting on a hard cut.
+   ========================================================================== */
+.og-spline-banner-section {
+  background:
+    radial-gradient(60% 50% at 50% 0%, rgba(20, 123, 194, 0.07), transparent 70%),
+    linear-gradient(180deg, #ffffff 0%, #f6f9fe 100%);
+}
+
+.og-spline-banner-section :is(h2, h3) {
+  color: #0b1230;
+}
+
+.og-spline-banner-section :is(p, li) {
+  color: #39456e;
+}
+
+/* ==========================================================================
+   ABOUT PAGE — STICKY CONTEXT
+   `position: sticky` does nothing inside an ancestor that clips in both axes,
+   and .about-page in App.css sets `overflow: hidden` — which is what pinned
+   the feature section's 3D canvas card to the top of its runway instead of
+   letting it travel. `clip` on one axis and `visible` on the other is the one
+   pairing the spec allows, and it keeps the horizontal guard the original
+   rule was there for.
+   ========================================================================== */
+.about-page {
+  overflow-x: clip;
+  overflow-y: visible;
+}
+
+/* App.css's inner-page rule repaints every eyebrow brand-blue; these two are
+   already brand-blue and only need to win the cascade, not change value. */
+main .og-about-features .og-about-features__eyebrow,
+main .og-clients .og-clients__eyebrow {
+  color: #0080c6 !important;
+}
+
+/* ==========================================================================
+   FOOTER
+   og-type.css did not come across (it sets Archivo at real weights, which
+   this project has no use for), so the one heading that relied on it for its
+   size and colour states them itself.
+   ========================================================================== */
+.og-footer__head {
+  font-size: clamp(2.4rem, 1.2rem + 3.4vw, 4.2rem);
+  line-height: 1.02;
+  color: var(--og-ink);
+}
+
+/* ==========================================================================
+   CLOSING CTA — LAYOUT DELTAS
+   These three have to live here rather than in App.css: og-spline-banner.css
+   loads after App.css, so its own `flex-wrap: wrap` and `right: 20px` win
+   there regardless of order within App.css itself.
+   ========================================================================== */
+
+/* The two actions are one row. They fit — the copy column is 54% of a
+   1240px card — and stacking them made the card look like a form. */
+.og-spline-card__actions {
+  flex-wrap: nowrap;
+  gap: 14px;
+}
+
+.og-spline-card__actions .og-btn { white-space: nowrap; }
+
+/* the droid moved to the left of the card, so its hint pill moved with it */
+.og-spline-card__hint {
+  right: auto;
+  left: 20px;
+}
+
+/* two lines, like every other h2 on the site */
+.og-spline-card__title {
+  max-width: none;
+  font-size: clamp(1.8rem, 0.9rem + 1.9vw, 2.7rem);
+  text-wrap: balance;
+}
+
+@media (max-width: 960px) {
+  .og-spline-card__actions { flex-wrap: wrap; }
+  .og-spline-card__hint { right: 20px; left: auto; }
+}
+
+/* The copy column carries a headline, a paragraph and two actions on one
+   line; 54% left the second action hanging over the card edge. */
+.og-spline-card__viewport { flex: 0 0 42%; max-width: 42%; }
+.og-spline-card__content { flex: 1 1 58%; max-width: 58%; }
+
+.og-spline-card__actions .og-btn {
+  padding-inline: clamp(18px, 1.6vw, 26px);
+  font-size: 0.94rem;
+}
+
+@media (max-width: 960px) {
+  .og-spline-card__viewport,
+  .og-spline-card__content { flex: 0 0 100%; max-width: 100%; }
+}
+
+/* One size for every section heading on the site — see --h2-size in App.css. */
+@media (min-width: 901px) {
+  .og-footer__head,
+  .og-spline-card__title { font-size: var(--h2-size); line-height: 1.06; }
+}
+
+/* The header readout is a link now, so it needs to look like one on hover.
+   Nothing else about the slot changes. */
+.og-pulse--call {
+  text-decoration: none;
+  transition: color 220ms var(--og-ease), border-color 220ms var(--og-ease), background 220ms var(--og-ease);
+}
+
+.og-pulse--call .og-pulse__time {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.og-pulse--call:hover,
+.og-pulse--call:focus-visible {
+  color: var(--og-brand-lift);
+  border-color: var(--og-brand-line);
+}
+
+.og-pulse--call:hover .og-pulse__time,
+.og-pulse--call:focus-visible .og-pulse__time { color: inherit; }

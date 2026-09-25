@@ -1,0 +1,219 @@
+/* ==========================================================================
+   OPUS GEEKS — CORE DESIGN TOKENS
+   Single dark theme. The 3D and canvas work is lit for one environment, so
+   the site commits to that environment rather than trying to serve two.
+
+   The ground is not neutral black — every surface carries a blue cast pulled
+   from the logo, so the page reads as deep blue-black rather than flat black.
+   ========================================================================== */
+
+:root {
+  /* ── BRAND ─────────────────────────────────────────────────────────────
+     `brand` is the UI blue used across opusgeeks.com. The three `mark-*`
+     stops are sampled straight out of the logo PNG, so the gradient here is
+     literally the logo's own ramp — violet at the top-left of the O, through
+     blue, to cyan at the tail of the G.                                   */
+  --og-brand:        #1786CF;
+  --og-brand-lift:   #4FB2F0;
+  --og-brand-deep:   #0F6FB0;
+
+  --og-mark-violet:  #623595;
+  --og-mark-blue:    #0080C6;
+  --og-mark-cyan:    #00ADEE;
+  --og-brand-grad:   linear-gradient(122deg, var(--og-mark-violet) 0%, var(--og-mark-blue) 52%, var(--og-mark-cyan) 100%);
+
+  --og-brand-wash:   rgba(23, 134, 207, 0.14);
+  --og-brand-line:   rgba(23, 134, 207, 0.34);
+  --og-brand-glow:   rgba(23, 134, 207, 0.42);
+
+  /* ── ELEVATION ───────────────────────────────────────────────────────── */
+  --og-shadow-1:  0 1px 2px rgba(0, 0, 0, 0.5);
+  --og-shadow-2:  0 10px 30px -12px rgba(0, 0, 0, 0.8);
+  --og-shadow-3:  0 26px 70px -24px rgba(0, 0, 0, 0.9);
+
+  /* ── TYPE ──────────────────────────────────────────────────────────────
+     Archivo carries the editorial voice, Jost the geometric labels and
+     buttons, JetBrains Mono the technical readouts.                     */
+  /* PORTED: this site ships Bebas Neue + Poppins only, so the three type roles
+     map onto those two faces. Archivo / Jost / JetBrains Mono are not loaded
+     here and must not be reintroduced. */
+  --og-sans:    "Poppins", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --og-display: "Bebas Neue", "Poppins", ui-sans-serif, system-ui, sans-serif;
+  --og-mono:    ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+
+  /* Display scale. Sizes were specified in px; they are expressed here as
+     rem with a fluid floor so a 70px headline does not overflow a phone. */
+  --og-t-mega:  clamp(3rem, 1.1rem + 7.4vw, 7.5rem);   /* → 120px */
+  --og-t-h2:    clamp(2.25rem, 1.15rem + 3.6vw, 4.375rem); /* → 70px */
+  --og-t-h3:    clamp(1.5rem, 1.1rem + 1.6vw, 2.25rem);    /* → 36px */
+  --og-t-lg:    clamp(1.25rem, 1.05rem + 0.9vw, 1.625rem); /* → 26px */
+  --og-t-body:  1.125rem;    /* 18px */
+  --og-t-md:    1.0625rem;   /* 17px */
+  --og-t-sm:    0.9375rem;   /* 15px */
+  --og-t-xs:    0.8125rem;   /* 13px */
+  --og-t-micro: 0.6875rem;   /* 11px */
+  --og-t-eyebrow: 1.125rem;  /* 18px */
+
+  --og-lh-body: 1.6667;      /* 30px at 18px */
+
+  /* ── GEOMETRY ────────────────────────────────────────────────────────── */
+  --og-r-xs: 4px;
+  --og-r-sm: 8px;
+  --og-r-md: 12px;
+  --og-r-lg: 18px;
+  --og-r-pill: 999px;
+
+  /* ── SPACING SCALE ──────────────────────────────────────────────────
+     Sections were each choosing their own clamp() and had drifted far too
+     airy. These three are the only vertical rhythm values a section should
+     use, so tightening the design is a one-line change here.            */
+  --og-section-y: clamp(40px, 5vw, 76px);   /* top/bottom of a section   */
+  --og-head-gap:  clamp(20px, 2.4vw, 34px); /* section head → its content */
+  --og-stack:     clamp(12px, 1.4vw, 18px); /* between stacked elements   */
+
+  --og-gutter: clamp(20px, 4vw, 44px);
+  --og-max: 1400px;
+  --og-header-h: 68px;
+
+  /* ── MOTION ──────────────────────────────────────────────────────────── */
+  --og-ease:   cubic-bezier(0.22, 1, 0.36, 1);
+  --og-ease-io: cubic-bezier(0.65, 0, 0.35, 1);
+  --og-fast:   160ms;
+  --og-base:   320ms;
+  --og-slow:   620ms;
+
+  /* ── LAYERS ──────────────────────────────────────────────────────────── */
+  --og-z-drawer: 950;
+  --og-z-mega:   960;
+  --og-z-header: 1000;
+  --og-z-boot:   1100;
+}
+
+/* ── DEFAULT DARK THEME TOKENS ── */
+:root, .theme-dark {
+  --og-bg:        #05080E;
+  --og-bg-sunk:   #020407;
+  --og-bg-raise:  #0A101A;
+  --og-surface:   #0E1622;
+  --og-surface-2: #141E2C;
+  --og-veil:      rgba(5, 8, 14, 0.72);
+
+  --og-aura-blue:   radial-gradient(circle, rgba(23,134,207,0.16) 0%, transparent 70%);
+  --og-aura-violet: radial-gradient(circle, rgba(98,53,149,0.15) 0%, transparent 70%);
+  --og-aura-cyan:   radial-gradient(circle, rgba(0,173,238,0.12) 0%, transparent 70%);
+
+  --og-ink:       #EEF3F8;
+  --og-ink-rest:  #C3D1E0;
+  --og-ink-2:     #A3B1C2;
+  --og-ink-3:     #6C7C90;
+  --og-ink-4:     #445366;
+  --og-ink-flip:  #05080E;
+
+  --og-line:      rgba(130, 175, 220, 0.12);
+  --og-line-2:    rgba(130, 175, 220, 0.20);
+  --og-line-3:    rgba(130, 175, 220, 0.32);
+
+  --og-live:      #38D39F;
+  --og-idle:      #6C7C90;
+
+  /* ── COMPATIBILITY TOKENS ── */
+  --bg-primary: var(--og-bg);
+  --bg-surface: var(--og-surface);
+  --bg-card: var(--og-surface);
+  --bg-elevated: var(--og-surface-2);
+  --text-primary: var(--og-ink);
+  --text-secondary: var(--og-ink-2);
+  --text-muted: var(--og-ink-3);
+  --text-subtle: var(--og-ink-4);
+  --border-subtle: var(--og-line-2);
+  --border-strong: var(--og-line-3);
+  --border-bright: rgba(130, 175, 220, 0.5);
+  
+  color-scheme: dark;
+}
+
+/* ── LIGHT THEME TOKENS ── */
+.og-theme-light {
+  --og-bg:        #FFFFFF;
+  --og-bg-sunk:   #F5F7FA;
+  --og-bg-raise:  #FFFFFF;
+  --og-surface:   #F8FAFC;
+  --og-surface-2: #F1F5F9;
+  --og-veil:      rgba(255, 255, 255, 0.85);
+
+  --og-aura-blue:   radial-gradient(circle, rgba(23,134,207,0.06) 0%, transparent 70%);
+  --og-aura-violet: radial-gradient(circle, rgba(98,53,149,0.05) 0%, transparent 70%);
+  --og-aura-cyan:   radial-gradient(circle, rgba(0,173,238,0.04) 0%, transparent 70%);
+
+  --og-ink:       #05080E;
+  --og-ink-rest:  #0F172A;
+  --og-ink-2:     #334155;
+  --og-ink-3:     #64748B;
+  --og-ink-4:     #94A3B8;
+  --og-ink-flip:  #FFFFFF;
+
+  --og-line:      rgba(15, 23, 42, 0.08);
+  --og-line-2:    rgba(15, 23, 42, 0.14);
+  --og-line-3:    rgba(15, 23, 42, 0.25);
+
+  --og-live:      #10B981;
+  --og-idle:      #94A3B8;
+
+  /* ── COMPATIBILITY TOKENS ── */
+  --bg-primary: var(--og-bg);
+  --bg-surface: var(--og-surface);
+  --bg-card: var(--og-surface);
+  --bg-elevated: var(--og-surface-2);
+  --text-primary: var(--og-ink);
+  --text-secondary: var(--og-ink-2);
+  --text-muted: var(--og-ink-3);
+  --text-subtle: var(--og-ink-4);
+  --border-subtle: var(--og-line-2);
+  --border-strong: var(--og-line-3);
+  --border-bright: rgba(15, 23, 42, 0.4);
+  
+  color-scheme: light;
+}
+
+/* ── PRIMITIVES ─────────────────────────────────────────────────────────── */
+/* One measure for the whole site: the same content width and the same side
+   gutter every App.css section uses, so the page's left edge never moves. */
+.og-shell {
+  width: min(100% - 48px, var(--page-max, 1340px));
+  margin-inline: auto;
+  padding-inline: 0;
+}
+
+/* Section label. Geometric, wide-tracked, set in Jost. */
+.og-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--og-display);
+  font-size: var(--og-t-eyebrow);
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  color: var(--og-ink-3);
+}
+
+.og-rule {
+  height: 1px;
+  border: 0;
+  background: var(--og-line);
+}
+
+.og-focus:focus-visible,
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--og-brand-lift);
+  outline-offset: 3px;
+  border-radius: var(--og-r-xs);
+}
+
+/* Base section wrapper to apply themes */
+.theme-section {
+  background-color: var(--og-bg);
+  color: var(--og-ink);
+  transition: background-color var(--og-slow) var(--og-ease), color var(--og-slow) var(--og-ease);
+}

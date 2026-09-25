@@ -1,0 +1,468 @@
+/* ==========================================================================
+   OPUS GEEKS — SITE FOOTER
+   Editorial close: oversized statement, a live globe, two real offices,
+   then the wordmark used as a signature.
+   ========================================================================== */
+
+.og-footer {
+  position: relative;
+  background: var(--og-bg);
+  border-top: 1px solid var(--og-line);
+  overflow: hidden;
+}
+
+/* Two ambient washes: brand blue behind the globe, violet low and left.
+   They are what stop a page this dark from reading as flat black. */
+.og-footer::before {
+  content: "";
+  position: absolute;
+  top: -14%;
+  right: -8%;
+  width: min(860px, 78vw);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--og-aura-blue);
+  pointer-events: none;
+}
+
+.og-footer::after {
+  content: "";
+  position: absolute;
+  bottom: 4%;
+  left: -14%;
+  width: min(680px, 66vw);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--og-aura-violet);
+  pointer-events: none;
+}
+
+.og-footer > * {
+  position: relative;
+}
+
+/* ── EYEBROW WITH RULE ──────────────────────────────────────────────────── */
+.og-eyebrow__rule {
+  display: none;
+}
+
+/* ── SIGNATURE LOCKUP SIZE (footer sets its own wordmark scale) ─────────── */
+.og-footer .og-wordmark__name {
+  font-size: 30px;
+}
+
+/* ── TOP: PITCH + GLOBE ─────────────────────────────────────────────────── */
+.og-footer__top {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  align-items: center;
+  gap: clamp(28px, 4vw, 56px);
+  padding-block: var(--og-section-y);
+}
+
+/* Size, weight and case come from the global h2 rule (70px / 600 /
+   capitalize) — this only positions it. */
+.og-footer__head {
+  margin: var(--og-stack) 0 0;
+}
+
+.og-footer__sub {
+  margin-top: var(--og-stack);
+  max-width: 48ch;
+  font-size: var(--og-t-body);
+  line-height: var(--og-lh-body);
+  color: var(--og-ink-2);
+}
+
+.og-footer__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: clamp(20px, 2.4vw, 28px);
+}
+
+/* ── GLOBE ──────────────────────────────────────────────────────────────── */
+.og-footer__globe {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.og-globe {
+  position: relative;
+  width: 100%;
+  max-width: 460px;
+  aspect-ratio: 1;
+}
+
+/* A thin orbit ring just outside the sphere. The canvas insets its own limb
+   by 26px, so sitting this at the box edge places it clear of the globe —
+   pure CSS, and it never touches the render loop. */
+.og-globe__ring {
+  position: absolute;
+  inset: 0;
+  border: 1px dashed var(--og-line-2);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: og-orbit 64s linear infinite;
+}
+
+@keyframes og-orbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.og-globe__hint {
+  font-family: var(--og-mono);
+  font-size: var(--og-t-micro);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--og-ink-4);
+  user-select: none;
+}
+.og-globe__hint span {
+  margin-right: 6px;
+}
+
+/* ── OFFICES ────────────────────────────────────────────────────────────── */
+.og-footer__offices {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  padding: 0;
+  border-block: 1px solid var(--og-line);
+  background: var(--og-line);
+}
+
+.og-office {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: clamp(24px, 2.6vw, 34px) var(--og-gutter);
+  background: var(--og-bg);
+  transition: background-color var(--og-base) var(--og-ease);
+}
+.og-office:hover {
+  background: var(--og-bg-raise);
+}
+
+.og-office__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.og-office__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--og-mono);
+  font-size: var(--og-t-micro);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--og-ink-3);
+}
+.og-office__status[data-live="true"] {
+  color: var(--og-live);
+}
+
+.og-office__city {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  font-family: var(--og-sans);
+  font-size: var(--og-t-lg);
+  font-weight: 620;
+  letter-spacing: -0.03em;
+  color: var(--og-ink);
+}
+.og-office__city span {
+  font-size: var(--og-t-xs);
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--og-ink-3);
+}
+
+.og-office__address {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-style: normal;
+  font-size: var(--og-t-sm);
+  line-height: 1.55;
+  color: var(--og-ink-2);
+}
+
+.og-office__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid var(--og-line);
+  font-family: var(--og-mono);
+  font-size: var(--og-t-micro);
+  letter-spacing: 0.08em;
+  color: var(--og-ink-4);
+}
+.og-office__clock {
+  font-size: var(--og-t-xs);
+  font-variant-numeric: tabular-nums;
+  color: var(--og-ink);
+}
+
+/* ── DIRECTORY ──────────────────────────────────────────────────────────── */
+.og-footer__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) repeat(3, minmax(0, 1fr));
+  gap: clamp(28px, 4vw, 56px);
+  padding-block: var(--og-section-y);
+}
+
+.og-footer__blurb {
+  margin-top: 18px;
+  max-width: 34ch;
+  font-size: 18px;
+  line-height: 30px;
+  color: var(--og-ink-2);
+}
+
+.og-footer__phone {
+  display: inline-block;
+  margin-top: 18px;
+  font-family: var(--og-mono);
+  font-size: var(--og-t-sm);
+  letter-spacing: 0.02em;
+  color: var(--og-ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--og-line-2);
+  padding-bottom: 3px;
+  transition: color var(--og-fast) var(--og-ease), border-color var(--og-fast) var(--og-ease);
+}
+.og-footer__phone:hover {
+  color: var(--og-brand-lift);
+  border-color: var(--og-brand-line);
+}
+
+.og-footer__coltitle {
+  margin: 0 0 18px;
+  font-family: var(--og-mono);
+  font-size: 32px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+.og-footer__links {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.og-footer__links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 18px;
+  line-height: 30px;
+  color: var(--og-ink-2);
+  text-decoration: none;
+  transition: color var(--og-fast) var(--og-ease), transform var(--og-base) var(--og-ease);
+}
+.og-footer__links a:hover {
+  color: var(--og-ink);
+  transform: translateX(3px);
+}
+/* only the trailing arrow is revealed on hover — scoped with > so it cannot
+   also hide the social brand marks, which live inside .og-footer__sockey */
+.og-footer__links a > svg {
+  opacity: 0;
+  transition: opacity var(--og-fast) var(--og-ease);
+  color: var(--og-brand-lift);
+}
+.og-footer__links a:hover > svg {
+  opacity: 1;
+}
+
+.og-footer__sockey {
+  display: inline-grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  flex: none;
+  border: 1px solid var(--og-line);
+  border-radius: var(--og-r-xs);
+  color: var(--og-ink-3);
+  transition: border-color var(--og-fast) var(--og-ease), color var(--og-fast) var(--og-ease),
+    background-color var(--og-fast) var(--og-ease);
+}
+
+.og-footer__sockey svg {
+  width: 15px;
+  height: 15px;
+  display: block;
+}
+
+.og-footer__links--social a:hover .og-footer__sockey {
+  background: rgba(255, 255, 255, 0.06);
+}
+.og-footer__links a:hover .og-footer__sockey {
+  border-color: var(--og-brand-line);
+  color: var(--og-brand-lift);
+}
+
+/* ── SIGNATURE ──────────────────────────────────────────────────────────
+   The wordmark set enormous and cropped at the baseline. Outlined rather
+   than filled so it sits behind everything as a watermark, not a headline. */
+.og-footer__signature {
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  height: clamp(44px, 8vw, 110px);
+  margin-top: 8px;
+  user-select: none;
+  pointer-events: none;
+}
+.og-footer__signature span {
+  display: block;
+  font-family: var(--og-sans);
+  font-size: clamp(4.5rem, 17.2vw, 17rem);
+  font-weight: 700;
+  line-height: 0.78;
+  letter-spacing: -0.055em;
+  white-space: nowrap;
+  color: transparent;
+  background: var(--og-brand-grad);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  /* Bright enough to be the last thing you see, still clearly a watermark.
+     The gradient drifts so the name is never a dead block of colour. */
+  opacity: 0.55;
+  filter: saturate(1.15);
+  animation: og-signature 14s linear infinite;
+}
+
+@keyframes og-signature {
+  from {
+    background-position: 0% 0;
+  }
+  to {
+    background-position: 200% 0;
+  }
+}
+
+/* ── LEGAL ──────────────────────────────────────────────────────────────── */
+.og-footer__legal {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+  padding-block: 24px 30px;
+  border-top: 1px solid var(--og-line);
+  font-size: var(--og-t-xs);
+  color: var(--og-ink-3);
+}
+.og-footer__legal p {
+  margin: 0;
+}
+.og-footer__legalnav {
+  display: flex;
+  gap: 22px;
+}
+.og-footer__legalnav a {
+  color: var(--og-ink-3);
+  text-decoration: none;
+  transition: color var(--og-fast) var(--og-ease);
+}
+.og-footer__legalnav a:hover {
+  color: var(--og-ink);
+}
+
+/* ── RESPONSIVE ─────────────────────────────────────────────────────────── */
+@media (max-width: 1080px) {
+  .og-footer__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .og-footer__brand {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 900px) {
+  .og-footer__top {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 44px;
+  }
+  .og-footer__globe {
+    order: -1;
+  }
+  .og-globe {
+    max-width: 340px;
+  }
+  .og-footer__offices {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .og-footer__grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 34px;
+  }
+  .og-footer__legal {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .og-footer__legalnav {
+    gap: 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .og-globe__ring {
+    animation: none;
+  }
+}
+
+/* ==========================================================================
+   THE SIGNATURE
+   It was set to fill the footer's width, which on a wide screen ran the
+   name past both edges and clipped it to "pus Geek". It is sized to fit
+   instead: `clamp` on the viewport so it stays large without ever being
+   wider than the space it has, and the ramp reads across the whole word
+   rather than across a crop of it.
+   ========================================================================== */
+
+.og-footer__signature {
+  display: block;
+  width: 100%;
+  padding-inline: var(--og-gutter, clamp(20px, 4vw, 44px));
+  overflow: hidden;
+  text-align: center;
+  line-height: 0.82;
+}
+
+.og-footer__signature span {
+  display: block;
+  width: 100%;
+  font-family: "Bebas Neue", sans-serif;
+  /* 13.5vw keeps both words on one line down to 360px */
+  font-size: clamp(3rem, 13.5vw, 13rem);
+  letter-spacing: 0.012em;
+  white-space: nowrap;
+  background: linear-gradient(96deg, #633494 0%, #147bc2 46%, #00aeef 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  opacity: 0.22;
+}

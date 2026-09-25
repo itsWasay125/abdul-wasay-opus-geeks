@@ -1,0 +1,208 @@
+/* ==========================================================================
+   HERO CLUSTER — "Ideas engineered into digital reality"
+   2.5D layered-parallax hero built from flat mockup PNGs. Reuses the site's
+   existing brand tokens (--brand-grad, --ink, --line-ink, Bebas/Poppins) so
+   it drops into any light-themed page without its own design system.
+   ========================================================================== */
+
+.hero-cluster {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(120% 90% at 60% 0%, #ffffff 45%, #f4f7fc 100%);
+  border-bottom: 1px solid var(--line-ink);
+}
+
+.hero-cluster__inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 0.98fr) minmax(360px, 0.92fr);
+  align-items: center;
+  gap: clamp(28px, 4vw, 64px);
+  max-width: 1320px;
+  margin-inline: auto;
+  padding: clamp(140px, 16vw, 176px) max(24px, calc((100vw - 1320px) / 2)) clamp(64px, 8vw, 96px);
+}
+
+/* ---- copy column ---- */
+
+.hero-cluster__eyebrow {
+  margin: 0 0 18px;
+  color: var(--brand-blue);
+  font-family: "Poppins", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.hero-cluster__title {
+  margin: 0;
+  color: var(--ink);
+  font-family: "Bebas Neue", sans-serif;
+  font-size: clamp(2.6rem, 4.6vw, 4.4rem);
+  line-height: 1.02;
+  letter-spacing: 0.01em;
+  text-transform: none;
+}
+
+.hero-cluster__title span,
+.hero-cluster__title strong {
+  display: block;
+}
+
+.hero-cluster__lead {
+  max-width: 480px;
+  margin: 22px 0 0;
+  color: var(--ink-2);
+  font-size: 1.02rem;
+  line-height: 1.7;
+}
+
+.hero-cluster__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 18px;
+  margin-top: 30px;
+}
+
+.hero-cluster__stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  margin-top: 42px;
+}
+
+.hero-cluster__stats span {
+  display: grid;
+  gap: 6px;
+  padding: 0 26px;
+  border-left: 1px solid var(--line-ink);
+}
+
+.hero-cluster__stats span:first-child {
+  padding-left: 0;
+  border-left: 0;
+}
+
+.hero-cluster__stats strong {
+  background: var(--brand-grad);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-family: "Bebas Neue", sans-serif;
+  font-size: clamp(1.9rem, 2.6vw, 2.5rem);
+  line-height: 1;
+  letter-spacing: 0.01em;
+}
+
+.hero-cluster__stats small {
+  color: var(--ink-3);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* ---- visual cluster ---- */
+
+.hero-cluster__visual {
+  position: relative;
+  /* matches 01's 437×448 aspect so the cube fills the box exactly; capped at
+     540 because the source is modest-res and pushes soft beyond that */
+  width: min(540px, 100%);
+  aspect-ratio: 437 / 448;
+  margin-inline: auto;
+  perspective: 1200px;
+}
+
+.hc-layer {
+  position: absolute;
+  will-change: transform;
+}
+
+.hc-layer__float {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  will-change: transform, opacity;
+}
+
+.hc-layer img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+}
+
+/* back → front */
+
+.hc-particles {
+  inset: -12%;
+  z-index: 1;
+  opacity: 0.7;
+  /* the source crop slices through particles at its own edges — fading the rim
+     dissolves those half-shapes instead of leaving them on a hard cut line */
+  -webkit-mask-image: radial-gradient(ellipse at center, #000 52%, transparent 86%);
+  mask-image: radial-gradient(ellipse at center, #000 52%, transparent 86%);
+}
+
+/* the pre-composed cube: panels, angles and brand plate are baked in, so this
+   one layer is the whole centrepiece and simply fills the visual area. It
+   carries its own lighting, so no drop-shadow — which also keeps a filter off
+   the largest, most-animated element in the section. */
+.hc-cube {
+  inset: 0;
+  z-index: 2;
+}
+
+.hc-cubes {
+  top: -5%;
+  left: -7%;
+  width: 25%;
+  z-index: 3;
+  filter: drop-shadow(0 14px 24px rgba(15, 30, 70, 0.18));
+}
+
+.hc-glow-cube {
+  right: -2%;
+  bottom: 7%;
+  width: 16%;
+  z-index: 4;
+  opacity: 0.92;
+  filter: drop-shadow(0 12px 22px rgba(15, 30, 70, 0.16));
+}
+
+/* ---- responsive ---- */
+
+@media (max-width: 1080px) {
+  .hero-cluster__inner {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+    text-align: center;
+    padding-top: clamp(128px, 20vw, 160px);
+  }
+  .hero-cluster__lead { margin-inline: auto; }
+  .hero-cluster__actions { justify-content: center; }
+  .hero-cluster__stats { justify-content: center; }
+  .hero-cluster__visual { margin-top: 12px; width: min(440px, 86vw); }
+}
+
+@media (max-width: 640px) {
+  .hero-cluster__visual { width: min(340px, 92vw); }
+  .hero-cluster__stats span { padding: 0 16px; }
+  /* at phone width the negative offsets would push the accents past the
+     section edge and get clipped, so tuck them back inside the box */
+  .hc-cubes { top: -2%; left: 0; width: 22%; }
+  .hc-glow-cube { right: 2%; bottom: 8%; width: 15%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hc-layer,
+  .hc-layer__float {
+    will-change: auto;
+  }
+}

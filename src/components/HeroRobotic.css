@@ -1,0 +1,564 @@
+/* ==========================================================================
+   ROBOTIC HAND HERO
+   White ground, ambient blue/violet wash, a pre-rendered CGI hand holding a
+   service object that keeps transforming.
+
+   Geometry rule: .rh-stage IS the hand image's box. It anchors to the hero's
+   right boundary and everything else in the scene is positioned as a % of it,
+   so the object stays locked above the palm at every viewport width. Tune the
+   composition from the custom properties on .rh-scene / .rh-stage — measured
+   from the hand PNG's alpha, where the palm cup sits at x 60-80% / y ~45% and
+   the forearm only occupies y > 58% at the far-right edge.
+   ========================================================================== */
+
+.rh-hero {
+  --rh-violet: #633494;
+  --rh-blue: #147bc2;
+  --rh-cyan: #00aeef;
+  --rh-grad: linear-gradient(112deg, var(--rh-violet) 0%, var(--rh-blue) 52%, var(--rh-cyan) 100%);
+  --rh-gutter: max(24px, calc((100vw - 1320px) / 2));
+
+  position: relative;
+  /* the hero clips the artwork that intentionally runs past it; nothing inside
+     the scene clips, so there is no rectangular cut inside the composition */
+  overflow: hidden;
+  min-height: clamp(700px, 90vh, 920px);
+  background: #fff;
+  isolation: isolate;
+}
+
+/* Ambient illumination: one soft tint over the object only. The reference has
+   no haze behind the hand — the blue/violet there belongs to the artwork's own
+   lighting — so there is deliberately no glow layer over the hand region. */
+.rh-hero__wash {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(34% 30% at 62% 28%, rgba(20, 123, 194, 0.08), transparent 72%),
+    linear-gradient(180deg, #ffffff 0%, #fbfcfe 100%);
+}
+
+/* The reactive grid sits under the wash, which softens it into the white.
+
+   Only the rail column is cleared. An earlier pass masked the copy column
+   too, which killed the texture behind the headline for no reason - the
+   complaint was never the grid, it was that a lit cell came up behind the
+   Web / App / Game labels and read as a blue box printed over them. So the
+   mask now takes out just the right-hand strip the rail stands in. */
+.rh-hero__grid {
+  z-index: 0;
+  -webkit-mask-image: linear-gradient(90deg, #000 0 74%, transparent 88%);
+  mask-image: linear-gradient(90deg, #000 0 74%, transparent 88%);
+}
+
+/* stacked hero: the rail moves under the copy, so there is no column to
+   clear and the grid runs the full width again */
+@media (max-width: 1024px) {
+  .rh-hero__grid {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+}
+
+/* the rail sits on its own plate so a lit cell can never come up through a
+   label, at any width */
+.rh-rail {
+  border-radius: 14px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.82) 18%, rgba(255, 255, 255, 0.92) 100%);
+  padding: 10px 6px 10px 18px;
+}
+
+@media (max-width: 1024px) {
+  .rh-rail { background: none; padding-block: 0; }
+}
+/* ---- scene: full-bleed overlay, independent of the text grid ---- */
+
+/* Every figure below is measured off the supplied reference composition:
+   the hand renders at 64.5% of viewport width with its forearm flush to the
+   right edge, its top edge sits 18.9% down the hero, and the object's artwork
+   is 61.5% of the hand's width centred at 47.6% / 14.6% of it. */
+.rh-scene {
+  /* also capped against viewport height — the object sits high in the stage,
+     so a stage sized only by vw would push it under the header on short screens */
+  --stage-w: clamp(520px, min(64.5vw, 116vh), 1080px);
+
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* this box IS the hand image; everything else is a % of it */
+.rh-stage {
+  position: absolute;
+  /* forearm flush with the hero's right boundary, as in the reference */
+  right: 0;
+  /* puts the stage's top edge at 18.9% of the hero height, so the fingers land
+     in the lower-middle rather than down at the bottom edge */
+  bottom: calc(81.1% - var(--stage-w));
+  width: var(--stage-w);
+  aspect-ratio: 1;
+}
+
+.rh-hand {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+}
+
+.rh-hand__float {
+  will-change: transform;
+}
+
+.rh-hand img {
+  display: block;
+  width: 100%;
+  height: auto;
+  /* the artwork is meant to run past the hero edge — never shrink it to fit */
+  max-width: none;
+}
+
+/* The transforming object, locked above the palm in stage coordinates, so it
+   tracks the hand at every width. --obj-w is the image BOX; the artwork inside
+   fills ~88% of it, which lands the visible width on the reference's 61.5% of
+   the hand (≈440-515px on a 1440-1920 desktop). */
+.rh-object {
+  /* 57%/18% lands the artwork's top edge at the reference's y-110 and its
+     visible width at ~465px on a 1440 desktop. The service PNGs are squarer
+     than the reference's wide cube, so matching its width exactly would push
+     their taller artwork up under the fixed header. */
+  --obj-w: 57%;
+  --obj-x: 52%;
+  --obj-y: 18%;
+
+  position: absolute;
+  top: var(--obj-y);
+  left: var(--obj-x);
+  width: var(--obj-w);
+  transform: translate(-50%, -50%);
+}
+
+.rh-object__parallax,
+.rh-object__float {
+  will-change: transform;
+}
+
+/* both buffers occupy the same grid cell, so the outgoing and incoming images
+   share one anchor instead of being stacked with position:absolute guesswork */
+.rh-object__float {
+  display: grid;
+}
+
+.rh-object__frame {
+  grid-area: 1 / 1;
+  will-change: transform, opacity;
+}
+
+.rh-object__frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+  transform: translate(var(--slide-x, 0), var(--slide-y, 0)) scale(var(--slide-scale, 1));
+}
+
+/* ---- service rail: its own overlay, above the scene ---- */
+
+.rh-rail {
+  position: absolute;
+  top: 42%;
+  right: clamp(16px, 2vw, 40px);
+  z-index: 3;
+  transform: translateY(-50%);
+}
+
+.rh-rail ul {
+  display: grid;
+  gap: clamp(11px, 1.4vh, 17px);
+  margin: 0;
+  padding: 0 0 0 16px;
+  list-style: none;
+  border-left: 1px solid rgba(14, 30, 72, 0.14);
+}
+
+.rh-rail button {
+  display: block;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #8e9bb4;
+  font-family: "Poppins", sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  /* tracking pulled back from 0.2em: at 1rem the old value ran the longest
+     label past the hero right gutter */
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color 300ms ease, letter-spacing 300ms ease;
+}
+
+.rh-rail button:hover {
+  color: #33405c;
+}
+
+.rh-rail button.is-active {
+  background: var(--rh-grad);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  letter-spacing: 0.11em;
+}
+
+/* No box on these. The old 2px outline + 4px offset drew a blue rectangle over
+   the label on every click, and Safari/iOS painted its own tap highlight on top
+   - between them the labels looked broken and felt unclickable. Keyboard focus
+   is still obvious, it is just shown on the text instead of around it. */
+.rh-rail button {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.rh-rail button:focus-visible {
+  outline: none;
+  color: var(--rh-blue);
+  text-decoration: underline;
+  text-underline-offset: 5px;
+  text-decoration-thickness: 2px;
+}
+
+/* the active label paints with -webkit-text-fill-color, which wins over the
+   color property, so its focus state is carried by the underline alone */
+.rh-rail button.is-active:focus-visible {
+  text-decoration-color: var(--rh-blue);
+}
+
+/* ---- content ---- */
+
+/* max-width + auto margins already produce the gutter; adding --rh-gutter as
+   padding on top of that would inset the copy twice and push it into the hand */
+.rh-hero__inner {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  min-height: inherit;
+  max-width: 1320px;
+  margin-inline: auto;
+  padding: clamp(120px, 12vw, 152px) 24px clamp(84px, 9vw, 112px);
+  pointer-events: none;
+}
+
+/* capped so the headline never runs under the fingertips at any width */
+.rh-hero__copy {
+  width: min(540px, 100%);
+  pointer-events: auto;
+}
+
+.rh-hero__eyebrow {
+  margin: 0 0 22px;
+  color: #5c6b86;
+  font-family: "Poppins", sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+/* Bebas is the site's display face for every h1 — it is condensed, so it needs
+   a larger size and looser tracking than the Poppins setting it replaces. */
+.rh-hero__title {
+  margin: 0;
+  font-family: "Bebas Neue", sans-serif;
+  font-size: clamp(3.9rem, 6.6vw, 6.9rem);
+  font-weight: 400;
+  line-height: 0.98;
+  letter-spacing: 0.01em;
+  text-transform: none;
+  color: #0b1020;
+}
+
+.rh-hero__line {
+  display: block;
+}
+
+.rh-hero__title em {
+  font-style: normal;
+  background: var(--rh-grad);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.rh-hero__lead {
+  max-width: 440px;
+  margin: 26px 0 0;
+  color: #4a5670;
+  font-size: 1.05rem;
+  line-height: 1.72;
+}
+
+.rh-hero__actions {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 16px;
+  margin-top: 36px;
+}
+
+/* ---- counter ---- */
+
+.rh-hero__counter {
+  position: absolute;
+  bottom: clamp(30px, 4vw, 52px);
+  left: max(24px, calc((100vw - 1320px) / 2 + 24px));
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: #93a0b8;
+  font-family: "Poppins", sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.rh-hero__counter strong {
+  color: #0b1020;
+  font-size: 1.05rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.rh-hero__counter span {
+  width: 62px;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(14, 30, 72, 0.4), rgba(14, 30, 72, 0.06));
+}
+
+/* ---- responsive ----------------------------------------------------------
+   Down to 1024 the hand keeps its right-edge anchor and only the stage shrinks.
+   Below that the hero stacks: copy first, then the scene as a flow block. */
+
+@media (max-width: 1280px) {
+  .rh-scene {
+    --stage-w: clamp(520px, min(62vw, 96vh), 900px);
+  }
+  .rh-rail {
+    right: max(14px, calc((100vw - 1320px) / 2));
+  }
+  .rh-rail button {
+    font-size: 0.62rem;
+    letter-spacing: 0.16em;
+  }
+}
+
+/* Stacked: the hero becomes a column and the scene moves into flow AFTER the
+   copy. The scene crops the hand's empty top padding with its own height while
+   the stage keeps its % geometry, so the object stays above the palm. */
+@media (max-width: 1024px) {
+  .rh-hero {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+  /* the scene goes last so the hand's crop lands on the hero's own bottom edge
+     and reads as bleed, rather than as a cut line with content beneath it */
+  .rh-hero__inner {
+    order: 1;
+    padding-bottom: clamp(8px, 2vw, 20px);
+  }
+  .rh-rail {
+    order: 2;
+  }
+  .rh-hero__counter {
+    order: 3;
+  }
+  .rh-scene {
+    order: 4;
+  }
+
+  .rh-hero__copy {
+    width: 100%;
+    max-width: 620px;
+  }
+
+  .rh-scene {
+    /* vw, not % — this variable also feeds a height calc below, where a
+       percentage would resolve against height and invalidate it */
+    --stage-w: min(760px, 108vw);
+    position: relative;
+    inset: auto;
+    /* 0.93 against the -0.16 drop below keeps the (now larger) object's top
+       edge inside the block while still cutting the wrist off at the bottom */
+    height: calc(var(--stage-w) * 0.93);
+    overflow: hidden;
+  }
+  /* still anchored right and overhanging, so the forearm runs off the viewport
+     rather than ending on a vertical cut line mid-screen */
+  .rh-stage {
+    right: -6%;
+    bottom: calc(var(--stage-w) * -0.16);
+  }
+
+  .rh-hero__counter {
+    position: relative;
+    bottom: auto;
+    left: auto;
+    margin: 0 24px 22px;
+    align-self: flex-start;
+  }
+
+  /* horizontal, scrollable service nav below the copy */
+  .rh-rail {
+    position: relative;
+    top: auto;
+    right: auto;
+    transform: none;
+    margin: 20px 0 16px;
+    padding-inline: 24px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .rh-rail::-webkit-scrollbar {
+    display: none;
+  }
+  .rh-rail ul {
+    grid-auto-flow: column;
+    justify-content: start;
+    gap: 20px;
+    padding: 0;
+    border-left: 0;
+  }
+}
+
+@media (max-width: 720px) {
+  .rh-hero__copy {
+    text-align: center;
+    align-items: center;
+    margin-inline: auto;
+  }
+  .rh-hero__eyebrow {
+    text-align: center;
+    justify-content: center;
+    margin-inline: auto;
+  }
+  .rh-hero__title {
+    text-align: center;
+    justify-content: center;
+  }
+  .rh-hero__line {
+    justify-content: center;
+    text-align: center;
+  }
+  .rh-hero__lead {
+    font-size: 1rem;
+    text-align: center;
+    margin-inline: auto;
+  }
+  .rh-hero__actions {
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-inline: auto;
+    width: 100%;
+  }
+  .rh-hero__actions .btn-shiny,
+  .rh-hero__actions .btn-glow {
+    width: 100%;
+    max-width: 320px;
+    justify-content: center;
+  }
+  /* 1rem is the desktop size; at phone width seven uppercase labels at that
+     size overflow a horizontal scroller nobody knows is there */
+  .rh-rail button { font-size: 0.82rem; letter-spacing: 0.06em; }
+  .rh-rail button.is-active { letter-spacing: 0.08em; }
+
+  .rh-rail ul {
+    justify-content: center;
+  }
+
+  .rh-scene {
+    --stage-w: min(620px, 122vw);
+  }
+}
+
+@media (max-width: 420px) {
+  .rh-scene {
+    --stage-w: 132vw;
+  }
+  .rh-object {
+    --obj-w: 48%;
+  }
+  .rh-hero__title {
+    font-size: clamp(2.4rem, 11vw, 3.4rem);
+  }
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  .rh-hand,
+  .rh-hand__float,
+  .rh-object__parallax,
+  .rh-object__float,
+  .rh-object__frame {
+    will-change: auto;
+  }
+  .rh-rail button {
+    transition: none;
+  }
+}
+
+/* ---- headline word flip ----
+   Two layers in the same box. The sizer holds every word stacked in one grid
+   cell and is never painted, so the box is exactly as wide as the longest of
+   them - no measuring in JavaScript, and nothing to re-measure when Bebas
+   finally lands or the viewport changes. The flip layer sits on top of it,
+   masked, and the words slide through. */
+.rh-hero__rotator {
+  position: relative;
+  display: inline-block;
+  vertical-align: bottom;
+  /* The headline runs at line-height 0.98, which is shorter than Bebas draws:
+     the mask was slicing the tops off the caps on a phone. The box is opened
+     to 1.16 and the extra height taken straight back off as margin, so the
+     glyphs clear and the line sits exactly where it did. */
+  line-height: 1.16;
+  margin-block: -0.09em;
+}
+
+.rh-hero__rotator-sizer {
+  display: inline-grid;
+  visibility: hidden;
+}
+
+.rh-hero__rotator-sizer em {
+  grid-area: 1 / 1;
+  justify-self: start;
+  font-style: normal;
+  white-space: nowrap;
+}
+
+/* overflow:hidden is what turns the vertical slide into a masked reveal
+   rather than words flying past the rest of the headline */
+.rh-hero__flip {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  overflow: hidden;
+}
+
+.rh-hero__flip em {
+  grid-area: 1 / 1;
+  justify-self: start;
+  font-style: normal;
+  white-space: nowrap;
+  will-change: transform, opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rh-hero__flip em { will-change: auto; }
+}

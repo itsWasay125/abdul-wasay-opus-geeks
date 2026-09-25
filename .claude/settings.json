@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Get-Process -Name node -ErrorAction SilentlyContinue)",
+      "Bash(sed -i '1654s/.*/  .three-d-scroll-trigger__block { gap: 12px; padding-right: 12px; }/' src/App.css)",
+      "Bash(sed -i '759,762d' src/App.css)",
+      "Bash(sed -i '1647,1648d' src/App.css)",
+      "Bash(sed -n '1640,1660p' src/App.css)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/)",
+      "PowerShell($chrome = \"$env:LOCALAPPDATA\\\\ms-playwright\\\\chromium-1223\\\\chrome-win\\\\chrome.exe\"; if \\(-not \\(Test-Path $chrome\\)\\) { ls \"$env:LOCALAPPDATA\\\\ms-playwright\\\\chromium-1223\" } else { & $chrome --headless=new --disable-gpu-sandbox --no-sandbox --hide-scrollbars --window-size=1600,900 --virtual-time-budget=9000 --screenshot=\"d:\\\\opus-geeks\\\\opus-geeks-3d\\\\screenshots\\\\hero-nebula.png\" \"http://localhost:3000/\" 2>$null; ls \"d:\\\\opus-geeks\\\\opus-geeks-3d\\\\screenshots\\\\hero-nebula.png\" })",
+      "PowerShell($chrome = \"$env:LOCALAPPDATA\\\\ms-playwright\\\\chromium-1223\\\\chrome-win64\\\\chrome.exe\"; & $chrome --headless=new --no-sandbox --hide-scrollbars --window-size=1600,900 --virtual-time-budget=9000 --screenshot=\"d:\\\\opus-geeks\\\\opus-geeks-3d\\\\screenshots\\\\hero-nebula.png\" \"http://localhost:3000/\" 2>$null; ls \"d:\\\\opus-geeks\\\\opus-geeks-3d\\\\screenshots\\\\hero-nebula.png\" | Select-Object Length, LastWriteTime)",
+      "Bash(npm i *)",
+      "Bash(node tmp/shot.mjs)",
+      "Bash(node tmp/shot2.mjs 3003)",
+      "Bash(awk 'NR>=71 && NR<=200 {print NR\": \"$0}' \"d:/opus-geeks/opus-geeks-3d/src/data/content.js\")",
+      "Bash(node -e \"const p=require\\('playwright-core'\\);console.log\\('exec:', p.chromium.executablePath\\(\\)\\)\")",
+      "Bash(node -e \"const s=require\\('fs'\\).statSync\\('public/logo.png'\\); console.log\\('size',s.size\\)\")",
+      "Bash(node -e \"const b=require\\('fs'\\).readFileSync\\('public/logo.png'\\); console.log\\('w',b.readUInt32BE\\(16\\),'h',b.readUInt32BE\\(20\\)\\)\")",
+      "Bash(cd \"d:/opus-geeks/opus-geeks-3d\" && ls screenshots tmp 2>/dev/null | head -40; echo \"---scripts---\"; ls *.cjs *.mjs *.js 2>/dev/null; echo \"---chromium---\"; ls ~/AppData/Local/ms-playwright 2>/dev/null || echo \"no playwright browsers\")",
+      "Read(//c/Users/Abdul Wasay/AppData/Local/ms-playwright/**)"
+    ]
+  }
+}

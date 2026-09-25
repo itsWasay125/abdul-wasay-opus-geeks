@@ -1,0 +1,397 @@
+/* ==========================================================================
+   OPUS GEEKS — LIQUID GLASS HERO BANNER  (WHITE THEME)
+   Aligned to Opus Geeks design tokens & the Lightswind Pro WebGL spec:
+   - Diagonal Refractive Rods (~45° top-left to bottom-right)
+   - Daylight vertical ramp (pale blue top, white bottom) — see the shader's
+     `backdrop()` in LiquidGlassBackground.jsx, which carries the same ramp
+   - Brand-tinted diagonal light beam core
+   - Interactive Cursor Deflection + Chromatic Dispersion + Blur
+   - Integrated studio performance metrics
+
+   Everything here used to be authored for a near-black banner. The site is
+   white throughout, so the plates, type and glints are light-theme native
+   rather than dark surfaces painted over afterwards.
+   ========================================================================== */
+
+.og-hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: calc(var(--og-header-h, 68px) + 24px) 0 clamp(40px, 5vw, 72px);
+  background: linear-gradient(180deg, #eef4fd 0%, #f7fbff 56%, #ffffff 100%);
+  overflow: hidden;
+}
+
+/* ── WebGL Liquid Glass Background Canvas Layer ── */
+.og-hero--liquid-glass .og-liquid-glass {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.og-hero--liquid-glass .og-liquid-glass__canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+}
+
+/* ── Contrast Scrim: keeps the copy readable over the bright beam ── */
+.og-hero__scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 66% 60% at 50% 46%, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.58) 58%, rgba(255, 255, 255, 0.1) 100%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.28) 52%, rgba(255, 255, 255, 0.72) 100%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* ── Hero Foreground Content Layer ── */
+.og-hero__panel {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  background: transparent;
+  padding: 0 var(--og-gutter, clamp(20px, 4vw, 44px));
+  pointer-events: none;
+}
+
+.og-hero__panel * {
+  pointer-events: auto;
+}
+
+/* ── Status Bar: Authority & Global Studio Tag ── */
+.og-hero__status-bar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: clamp(18px, 2.5vw, 26px);
+}
+
+.og-hero__vip-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 18px;
+  border-radius: var(--og-r-pill, 999px);
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 10px 26px -12px rgba(11, 18, 48, 0.2);
+  font-family: var(--og-sans);
+  font-size: var(--og-t-xs, 0.8125rem);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #334155;
+}
+
+.og-hero__vip-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--og-mark-cyan, #00ADEE);
+  box-shadow: 0 0 0 4px rgba(0, 173, 238, 0.16);
+  animation: og-vip-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes og-vip-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.55; transform: scale(1.3); }
+}
+
+.og-hero__vip-brand {
+  font-weight: 800;
+  color: #0b1230;
+}
+
+.og-hero__vip-sep {
+  color: rgba(15, 23, 42, 0.26);
+}
+
+.og-hero__vip-est {
+  color: #64748b;
+}
+
+.og-hero__status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 14px;
+  border-radius: var(--og-r-pill, 999px);
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 8px 20px -12px rgba(11, 18, 48, 0.2);
+  font-family: var(--og-sans);
+  font-size: var(--og-t-micro, 0.6875rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #475569;
+  text-transform: uppercase;
+}
+
+.og-hero__status-pulse {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.18);
+}
+
+/* ── Hero Main Title ── */
+.og-hero__title {
+  /* Three lines is the budget for every h1 banner on the site; at 16ch this
+     one was landing on four. */
+  max-width: 24ch;
+  margin-inline: auto;
+  font-family: var(--og-display);
+  font-size: clamp(2.6rem, 0.9rem + 5.6vw, 5rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.04;
+  color: #0b1230;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+/* Brand gradient accent matching the logo ramp */
+.og-hero__title-accent {
+  display: inline-block;
+  background: var(--og-brand-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* ── Hero Authoritative Pitch ── */
+.og-hero__sub {
+  max-width: 64ch;
+  margin: clamp(18px, 2.5vw, 24px) auto 0;
+  font-family: var(--og-sans);
+  font-size: clamp(1.05rem, 1.35vw, 1.25rem);
+  line-height: var(--og-lh-body, 1.6667);
+  color: #475569;
+  font-weight: 450;
+  letter-spacing: -0.01em;
+}
+
+/* ── Dual Action CTAs (using the og-btn system) ── */
+.og-hero__actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: clamp(26px, 3.5vw, 36px);
+}
+
+.og-hero__actions .og-btn--ghost {
+  background-color: #ffffff;
+  box-shadow: inset 0 0 0 1px rgba(0, 128, 198, 0.24), 0 10px 26px -12px rgba(11, 18, 48, 0.22);
+  color: #0b1230;
+}
+.og-hero__actions .og-btn--ghost:hover {
+  background-color: #ffffff;
+  box-shadow: inset 0 0 0 1px rgba(0, 173, 238, 0.6), 0 14px 30px -12px rgba(0, 128, 198, 0.32);
+  color: #0080c6;
+}
+
+/* ── Studio Performance Proof Matrix ── */
+.og-hero__metrics {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  align-items: center;
+  max-width: 980px;
+  margin: clamp(36px, 5vw, 56px) auto 0;
+  padding: 18px 24px;
+  border: 1px solid rgba(15, 23, 42, 0.09);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: 0 18px 44px -22px rgba(11, 18, 48, 0.24);
+}
+
+.og-hero__metric {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 6px 12px;
+}
+
+.og-hero__metric-num {
+  font-family: var(--og-display);
+  font-size: clamp(1.4rem, 2.3vw, 2.1rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #0b1230;
+  line-height: 1.1;
+}
+
+.og-hero__metric-sym {
+  color: #0080c6;
+  font-weight: 700;
+  margin-left: 2px;
+}
+
+.og-hero__metric-desc {
+  margin-top: 4px;
+  font-family: var(--og-sans);
+  font-size: var(--og-t-micro, 0.6875rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
+.og-hero__metric-divider {
+  width: 1px;
+  height: 38px;
+  background: linear-gradient(180deg, transparent 0%, rgba(15, 23, 42, 0.16) 50%, transparent 100%);
+  margin: 0 auto;
+}
+
+/* ── Footer Meta & Ambient Scroll Cue ── */
+.og-hero__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 980px;
+  margin: 24px auto 0;
+  padding: 0 8px;
+  font-family: var(--og-sans);
+  font-size: var(--og-t-xs, 0.8125rem);
+  letter-spacing: 0.08em;
+  color: #64748b;
+}
+
+.og-hero__quantum-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: var(--og-r-pill, 999px);
+  background: #ffffff;
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  box-shadow: 0 8px 20px -12px rgba(11, 18, 48, 0.2);
+  font-weight: 600;
+  color: #334155;
+}
+
+.og-hero__quantum-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #0080c6;
+  box-shadow: 0 0 0 4px rgba(0, 128, 198, 0.14);
+}
+
+.og-hero__scroll-cue {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: var(--og-r-pill, 999px);
+  background: #ffffff;
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  box-shadow: 0 8px 20px -12px rgba(11, 18, 48, 0.2);
+  font-weight: 700;
+  color: #0b1230;
+}
+
+.og-hero__scroll-text {
+  font-size: var(--og-t-micro, 0.6875rem);
+  letter-spacing: 0.12em;
+}
+
+.og-hero__scroll-bar {
+  width: 24px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--og-mark-violet), var(--og-mark-cyan));
+  animation: og-scroll-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes og-scroll-pulse {
+  0%, 100% { width: 16px; opacity: 0.4; }
+  50% { width: 32px; opacity: 1; }
+}
+
+/* ── Responsive Adaptations ── */
+@media (max-width: 860px) {
+  .og-hero__metrics {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px 0;
+    padding: 18px 16px;
+  }
+  .og-hero__metric-divider {
+    display: none;
+  }
+  .og-hero__footer {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+}
+
+@media (max-width: 580px) {
+  .og-hero__title {
+    font-size: 2.5rem;
+  }
+  .og-hero__status-bar {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .og-hero__actions {
+    flex-direction: column;
+    width: 100%;
+  }
+  .og-hero__actions .og-btn {
+    width: 100%;
+  }
+  .og-hero__metrics {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* ==========================================================================
+   THE GLASS WAS BEING PAINTED OUT
+   Two things were cancelling it. The banner's own ground is a near-white
+   ramp (#eef4fd -> #ffffff), so the refractive rods had almost nothing to
+   bend; and `.og-hero__scrim` then laid white at up to 0.90 alpha over the
+   whole canvas to protect the copy. White at 0.9 over white leaves white -
+   the effect was there the entire time, with a sheet over it.
+
+   The ground carries brand colour now, so the rods have something to
+   distort, and the scrim is a soft pool behind the text rather than a sheet
+   across the banner.
+   ========================================================================== */
+
+.og-hero {
+  background:
+    radial-gradient(70% 55% at 18% 8%, rgba(99, 52, 148, 0.16), transparent 62%),
+    radial-gradient(64% 58% at 88% 22%, rgba(0, 174, 239, 0.18), transparent 64%),
+    radial-gradient(90% 70% at 50% 102%, rgba(20, 123, 194, 0.14), transparent 66%),
+    linear-gradient(180deg, #e4edfb 0%, #eef5fe 48%, #f8fbff 100%);
+}
+
+.og-hero__scrim {
+  background:
+    radial-gradient(ellipse 46% 40% at 50% 46%, rgba(255, 255, 255, 0.74) 0%, rgba(255, 255, 255, 0.34) 56%, rgba(255, 255, 255, 0) 100%);
+}
+
+/* The canvas sat under the scrim at full strength and still lost. Lifting it
+   a little is what makes the rods read as glass rather than as haze. */
+.og-hero--liquid-glass .og-liquid-glass__canvas {
+  opacity: 1;
+  mix-blend-mode: multiply;
+}

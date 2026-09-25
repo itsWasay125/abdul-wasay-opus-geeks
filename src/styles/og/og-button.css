@@ -1,0 +1,160 @@
+/* ==========================================================================
+   OPUS GEEKS — BUTTONS
+
+   Built on the structure of the reference pen: a pill, a gradient plate that
+   fades in on top (::before), and a blurred copy of that gradient bleeding
+   out from underneath (::after) on a separate Z plane. Two differences:
+
+     · The gradient is the Opus Geeks logo ramp (violet → blue → cyan), not
+       the reference's pink, so the button belongs to this brand.
+     · The face is set in Jost, self-hosted. The reference pulls Bw Modelica
+       from a personal domain — that is someone else's licensed font on
+       someone else's bandwidth, so it is not something to ship.
+
+   The lift is a small scale, not the reference's 1.35. At 1.35 a header
+   button would cover the nav beside it.
+   ========================================================================== */
+
+.og-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  padding: 1.1rem 2.2rem;
+  border: 0;
+  border-radius: var(--og-r-pill);
+
+  /* buttons stay in the body face - Bebas Neue is too condensed at button size */
+  font-family: var(--og-sans);
+  font-size: var(--og-t-md);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  color: #fff;
+
+  background-color: var(--og-surface-2);
+  cursor: pointer;
+  isolation: isolate;
+  transform-style: preserve-3d;
+  transition: transform 600ms var(--og-ease), color 400ms var(--og-ease);
+}
+
+/* The gradient face. */
+.og-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: var(--og-brand-grad);
+  opacity: 0;
+  transition: opacity 400ms var(--og-ease);
+}
+
+/* The bloom underneath — pushed back on its own Z plane so it reads as light
+   escaping from behind the pill rather than as a drop shadow. */
+.og-btn::after {
+  content: "";
+  position: absolute;
+  left: 10%;
+  bottom: -4px;
+  width: 80%;
+  height: 55%;
+  z-index: -2;
+  border-radius: inherit;
+  background: var(--og-brand-grad);
+  filter: blur(16px);
+  opacity: 0;
+  transform: translateZ(-1px);
+  transition: opacity 600ms var(--og-ease);
+}
+
+/* This used to be `scale(1.06)`. Scaling a pill scales its border, its text
+   and its shadow with it, so the whole thing went soft and wobbled - which is
+   the odd feeling on hover. It lifts and deepens instead: the button comes
+   toward you without any of it resampling. */
+.og-btn:hover,
+.og-btn:focus-visible {
+  transform: translateY(-3px);
+  box-shadow:
+    0 18px 34px -14px rgba(0, 128, 198, 0.55),
+    0 0 0 1px rgba(0, 128, 198, 0.22);
+}
+.og-btn:hover::before,
+.og-btn:focus-visible::before {
+  opacity: 1;
+}
+.og-btn:hover::after,
+.og-btn:focus-visible::after {
+  opacity: 0.95;
+}
+.og-btn:active {
+  transform: translateY(-1px);
+}
+
+.og-btn svg {
+  flex: none;
+  transition: transform 500ms var(--og-ease);
+}
+.og-btn:hover svg {
+  transform: translate(3px, -3px);
+}
+
+/* ── VARIANTS ───────────────────────────────────────────────────────────── */
+
+/* Primary — already carries the brand colour at rest. */
+.og-btn--solid {
+  background-color: var(--og-brand);
+}
+
+/* Quiet — a hairline that fills with the gradient on hover. */
+.og-btn--ghost {
+  background-color: transparent;
+  box-shadow: inset 0 0 0 1px var(--og-line-2);
+  color: var(--og-ink);
+}
+.og-btn--ghost:hover,
+.og-btn--ghost:focus-visible {
+  color: #fff;
+  box-shadow: inset 0 0 0 1px transparent;
+}
+
+/* Compact — the header. A smaller lift, because it sits in a tight row. */
+.og-btn--sm {
+  padding: 0.75rem 1.35rem;
+  font-size: var(--og-t-sm);
+  gap: 7px;
+}
+.og-btn--sm:hover,
+.og-btn--sm:focus-visible {
+  transform: scale(1.04);
+}
+
+/* Gooey / Glow tactile variant */
+.og-btn--gooey {
+  box-shadow: 0 4px 20px rgba(0, 128, 198, 0.35);
+}
+.og-btn--gooey:hover {
+  box-shadow: 0 8px 30px rgba(98, 53, 149, 0.45), 0 0 20px rgba(0, 173, 238, 0.5);
+}
+
+.og-btn--block {
+  width: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .og-btn,
+  .og-btn::before,
+  .og-btn::after,
+  .og-btn svg {
+    transition-duration: 1ms;
+  }
+  .og-btn:hover,
+  .og-btn:focus-visible {
+    transform: none;
+  }
+}

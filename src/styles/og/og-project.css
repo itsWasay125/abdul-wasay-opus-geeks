@@ -1,0 +1,291 @@
+/* ==========================================================================
+   THE BRIEF FORM AND ITS DIALOG
+   One stylesheet for both places the form appears: the modal the header CTA
+   opens, and the section under the homepage CTA.
+   ========================================================================== */
+
+.pform {
+  display: grid;
+  gap: 18px;
+  width: 100%;
+}
+
+.pform__row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.pform__field {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+
+.pform__field > span {
+  color: var(--og-ink-3, #6f7b9d);
+  font-family: var(--og-sans, "Poppins", sans-serif);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.pform__field :is(input, select, textarea) {
+  width: 100%;
+  min-height: 52px;
+  padding: 14px 16px;
+  border: 1px solid rgba(14, 30, 72, 0.14);
+  border-radius: 13px;
+  background: #ffffff;
+  color: #0b1230;
+  font-family: var(--og-sans, "Poppins", sans-serif);
+  font-size: 0.98rem;
+  transition: border-color 220ms ease, box-shadow 220ms ease;
+}
+
+.pform__field textarea {
+  min-height: 0;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.pform__field :is(input, select, textarea):focus {
+  outline: none;
+  border-color: rgba(0, 128, 198, 0.5);
+  box-shadow: 0 0 0 4px rgba(0, 128, 198, 0.12);
+}
+
+.pform__field ::placeholder { color: #9aa6c0; }
+
+.pform__foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 4px;
+}
+
+.pform__promise {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0;
+  color: var(--og-ink-3, #6f7b9d);
+  font-size: 0.86rem;
+}
+
+.pform__promise svg { flex: none; color: #0080c6; }
+
+.pform__send { flex: none; }
+
+.pform__sent {
+  margin: 0;
+  padding: 13px 16px;
+  border: 1px solid rgba(0, 128, 198, 0.24);
+  border-radius: 13px;
+  background: rgba(0, 128, 198, 0.07);
+  color: #0b1230;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+@media (max-width: 720px) {
+  .pform__row { grid-template-columns: minmax(0, 1fr); }
+  .pform__foot { flex-direction: column; align-items: stretch; }
+  .pform__send { width: 100%; justify-content: center; }
+}
+
+/* ── the dialog ─────────────────────────────────────────────────────────── */
+
+.pmodal {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  display: grid;
+  place-items: center;
+  padding: clamp(16px, 4vw, 40px);
+  background: rgba(7, 11, 28, 0.62);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  /* the depth the card arrives through */
+  perspective: 1400px;
+  animation: pmodalVeil 260ms ease both;
+}
+
+@keyframes pmodalVeil {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.pmodal__card {
+  position: relative;
+  width: min(760px, 100%);
+  max-height: min(88vh, 900px);
+  overflow-y: auto;
+  padding: clamp(26px, 3.4vw, 44px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 24px;
+  background:
+    radial-gradient(90% 70% at 0% 0%, rgba(99, 52, 148, 0.09), transparent 62%),
+    radial-gradient(80% 70% at 100% 4%, rgba(0, 174, 239, 0.1), transparent 64%),
+    #ffffff;
+  box-shadow: 0 50px 110px -40px rgba(7, 11, 28, 0.6);
+  /* the 3D: it arrives from behind the page, tipped back, and settles flat */
+  animation: pmodalCard 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  transform-origin: 50% 0%;
+}
+
+@keyframes pmodalCard {
+  from { opacity: 0; transform: translate3d(0, 26px, -220px) rotateX(14deg); }
+  to { opacity: 1; transform: translate3d(0, 0, 0) rotateX(0deg); }
+}
+
+.pmodal__close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid rgba(14, 30, 72, 0.12);
+  border-radius: 50%;
+  background: #ffffff;
+  color: #44507a;
+  cursor: pointer;
+  transition: color 200ms ease, border-color 200ms ease, background 200ms ease;
+}
+
+.pmodal__close:hover {
+  border-color: rgba(0, 128, 198, 0.4);
+  background: rgba(0, 128, 198, 0.07);
+  color: #0080c6;
+}
+
+.pmodal__head { margin: 0 0 26px; }
+
+.pmodal__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 12px;
+  color: #0080c6;
+  font-family: var(--og-sans, "Poppins", sans-serif);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.pmodal__eyebrow span {
+  width: 22px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--brand-grad, linear-gradient(118deg, #633494, #147bc2 46%, #00aeef));
+}
+
+.pmodal__head h2 {
+  margin: 0;
+  color: #0b1230;
+  font-family: "Bebas Neue", sans-serif;
+  font-size: clamp(2rem, 3.4vw, 2.9rem);
+  line-height: 1.04;
+}
+
+.pmodal__head h2 strong {
+  background: var(--brand-grad, linear-gradient(118deg, #633494, #147bc2 46%, #00aeef));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.pmodal__lead {
+  max-width: 52ch;
+  margin: 12px 0 0;
+  color: #475569;
+  font-size: 0.98rem;
+  line-height: 1.7;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pmodal,
+  .pmodal__card { animation: none; }
+}
+
+/* ── the homepage section ───────────────────────────────────────────────── */
+
+.home-brief {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(64px, 7vw, 104px) max(24px, calc((100vw - var(--page-max)) / 2));
+  background:
+    radial-gradient(60% 50% at 6% 0%, rgba(99, 52, 148, 0.07), transparent 62%),
+    radial-gradient(56% 52% at 96% 100%, rgba(0, 174, 239, 0.08), transparent 64%),
+    linear-gradient(180deg, #ffffff 0%, #f6f9ff 52%, #ffffff 100%);
+  border-top: 1px solid rgba(14, 30, 72, 0.08);
+}
+
+.home-brief__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 0.86fr) minmax(0, 1.14fr);
+  align-items: start;
+  gap: clamp(30px, 4vw, 70px);
+}
+
+.home-brief__copy h2 {
+  margin: 14px 0 0;
+  color: #0b1230;
+  font-family: "Bebas Neue", sans-serif;
+  font-size: var(--section-h2-size, clamp(2.2rem, 3.8vw, 3.6rem));
+  line-height: 1.04;
+}
+
+.home-brief__copy h2 strong {
+  background: var(--brand-grad, linear-gradient(118deg, #633494, #147bc2 46%, #00aeef));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.home-brief__lead {
+  max-width: 44ch;
+  margin: 18px 0 0;
+  color: #475569;
+  font-size: 1rem;
+  line-height: 1.75;
+}
+
+.home-brief__points {
+  display: grid;
+  gap: 12px;
+  margin: 26px 0 0;
+  padding: 24px 0 0;
+  border-top: 1px solid rgba(14, 30, 72, 0.1);
+  list-style: none;
+}
+
+.home-brief__points li {
+  display: grid;
+  grid-template-columns: 17px minmax(0, 1fr);
+  align-items: start;
+  gap: 11px;
+  color: #44507a;
+  font-size: 0.93rem;
+  line-height: 1.55;
+}
+
+.home-brief__points svg { margin-top: 2px; color: #0080c6; }
+
+.home-brief__panel {
+  padding: clamp(24px, 2.6vw, 38px);
+  border: 1px solid rgba(14, 30, 72, 0.1);
+  border-radius: 22px;
+  background: #ffffff;
+  box-shadow: 0 30px 70px -36px rgba(17, 40, 100, 0.3);
+}
+
+@media (max-width: 960px) {
+  .home-brief__inner { grid-template-columns: minmax(0, 1fr); }
+}

@@ -1,0 +1,395 @@
+/* ==========================================================================
+   ABOUT PORTAL
+   Replaces .about-page__manifesto on the About page. Copy left, a real
+   three.js portal right, on the site's own off-white ground.
+
+   The gutter maths, the ink colours and the brand ramp are the project's
+   existing tokens — this section does not introduce a second design system,
+   it only introduces a second column.
+   ========================================================================== */
+
+.about-portal {
+  position: relative;
+  z-index: 1;
+  min-height: 92vh;
+  padding: clamp(72px, 8vw, 112px) max(24px, calc((100vw - var(--page-max)) / 2));
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 78% 40%, rgba(37, 99, 235, 0.07), transparent 46%),
+    radial-gradient(circle at 12% 12%, rgba(99, 52, 148, 0.05), transparent 38%),
+    linear-gradient(180deg, #ffffff 0%, #f7faff 58%, #ffffff 100%);
+}
+
+.about-portal__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 46fr) minmax(0, 54fr);
+  align-items: center;
+  gap: clamp(28px, 4vw, 64px);
+  width: 100%;
+  min-height: inherit;
+}
+
+/* ── LEFT ─────────────────────────────────────────────────────────────── */
+
+.about-portal__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 22px;
+  color: var(--brand-blue);
+  font-family: "Poppins", sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.about-portal__eyebrow span {
+  width: 34px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--brand-grad);
+}
+
+.about-portal__title {
+  margin: 0 0 26px;
+  color: var(--ink);
+  font-family: "Bebas Neue", sans-serif;
+  font-size: clamp(2.9rem, 4.6vw, 4.6rem);
+  font-weight: 400;
+  line-height: 1.02;
+  letter-spacing: 0.004em;
+}
+
+/* Each line is its own clipped window so the reveal slides type up from
+   behind the line above instead of fading a whole block. */
+.about-portal__line {
+  display: block;
+  overflow: hidden;
+}
+/* each line is one phrase and stays one phrase - "More Than A" was breaking
+   mid-line at some widths and reading as three ragged rows */
+.about-portal__line > span {
+  display: block;
+  white-space: nowrap;
+  will-change: transform;
+}
+
+@media (max-width: 420px) {
+  /* below this a nowrap line would run off the screen, so it is allowed to
+     wrap again and the size comes down to meet it */
+  .about-portal__line > span { white-space: normal; }
+  .about-portal__title { font-size: clamp(2.4rem, 11vw, 3rem); }
+}
+
+.about-portal__title-grad {
+  background: linear-gradient(104deg, #633494 0%, #147bc2 52%, #00aeef 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.about-portal__body {
+  max-width: 50ch;
+  margin: 0 0 clamp(30px, 3.4vw, 44px);
+  color: var(--ink-2);
+  font-family: "Poppins", sans-serif;
+  font-size: clamp(0.98rem, 1.05vw, 1.08rem);
+  line-height: 1.75;
+}
+
+.about-portal__features {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0;
+  margin: 0;
+  padding: 26px 0 0;
+  border-top: 1px solid var(--line-ink);
+  list-style: none;
+}
+
+.about-portal__features li {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-right: 16px;
+}
+.about-portal__features li + li {
+  padding-left: 16px;
+  border-left: 1px solid var(--line-ink);
+}
+
+.about-portal__feature-num {
+  font-family: "Poppins", sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  background: var(--brand-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.about-portal__feature-label {
+  display: flex;
+  flex-direction: column;
+  font-family: "Poppins", sans-serif;
+  font-size: 0.86rem;
+  line-height: 1.35;
+}
+.about-portal__feature-label strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+.about-portal__feature-label em {
+  color: var(--ink-2);
+  font-style: normal;
+  font-weight: 400;
+}
+
+/* ── RIGHT ────────────────────────────────────────────────────────────── */
+
+.about-portal__stage {
+  position: relative;
+  min-height: min(760px, 78vh);
+  /* The scene is not a boxed illustration: it bleeds past the grid column to
+     the section's right edge so it reads as part of the page. */
+  margin-right: calc(-1 * max(24px, (100vw - 1180px) / 2));
+}
+
+.about-portal__canvas {
+  position: absolute;
+  inset: 0;
+  touch-action: pan-y;
+}
+
+.about-portal__canvas canvas {
+  display: block;
+  outline: none;
+}
+
+/* ── the words inside the ring ────────────────────────────────────────── */
+
+.about-portal__portal-html {
+  pointer-events: none;
+  user-select: none;
+}
+
+.about-portal__portal-text {
+  display: grid;
+  gap: 0.02em;
+  margin: 0;
+  color: #0b1230;
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 2.35rem;
+  font-weight: 400;
+  line-height: 1.02;
+  letter-spacing: 0.035em;
+  text-align: center;
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-shadow: 0 1px 14px rgba(255, 255, 255, 0.85);
+}
+
+/* ── RESPONSIVE ───────────────────────────────────────────────────────── */
+
+@media (max-width: 1080px) {
+  .about-portal__inner {
+    grid-template-columns: minmax(0, 45fr) minmax(0, 55fr);
+    gap: 24px;
+  }
+  .about-portal__stage {
+    min-height: min(620px, 62vh);
+  }
+  .about-portal__portal-text {
+    font-size: 1.9rem;
+  }
+}
+
+@media (max-width: 860px) {
+  .about-portal {
+    min-height: 0;
+    padding-top: clamp(56px, 9vw, 80px);
+    padding-bottom: clamp(56px, 9vw, 80px);
+  }
+  .about-portal__inner {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 40px;
+  }
+  /* Copy first, scene below. */
+  .about-portal__copy {
+    order: 1;
+  }
+  .about-portal__stage {
+    order: 2;
+    min-height: 510px;
+    margin-right: calc(-1 * max(24px, (100vw - 1180px) / 2));
+    margin-left: calc(-1 * max(24px, (100vw - 1180px) / 2));
+  }
+}
+
+@media (max-width: 560px) {
+  .about-portal__features {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px 0;
+  }
+  .about-portal__features li + li {
+    padding-left: 16px;
+    border-left: 1px solid var(--line-ink);
+  }
+  /* In a two-up grid the third item starts a new row, so it should not carry
+     a divider on its left edge. */
+  .about-portal__features li:nth-child(odd) {
+    padding-left: 0;
+    border-left: 0;
+  }
+  .about-portal__stage {
+    min-height: 480px;
+  }
+  .about-portal__portal-text {
+    font-size: 1.62rem;
+  }
+}
+
+/* ── asset-missing placeholder ────────────────────────────────────────────
+   Shown in place of the figure when /public/models/person.glb is absent.
+   Development only — the component is compiled out of production builds.
+   Nothing procedural is ever drawn as a substitute for the model. */
+.about-portal__missing {
+  display: grid;
+  gap: 4px;
+  width: 268px;
+  padding: 14px 16px;
+  border: 1px dashed rgba(37, 99, 235, 0.42);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 14px 34px rgba(17, 40, 100, 0.14);
+  color: var(--ink-2);
+  font-family: "Poppins", sans-serif;
+  font-size: 0.72rem;
+  line-height: 1.5;
+  text-align: center;
+  pointer-events: none;
+  user-select: none;
+}
+
+.about-portal__missing strong {
+  color: var(--brand-blue);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.about-portal__missing code {
+  color: var(--ink);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.68rem;
+}
+
+.about-portal__missing small {
+  color: rgba(57, 69, 110, 0.7);
+  font-size: 0.64rem;
+}
+
+/* ==========================================================================
+   VISUAL — the supplied portal render
+   Replaces the WebGL canvas. Layered so the depth still reads: a soft brand
+   glow behind, the cutout itself, and the ring's words sitting over it.
+   ========================================================================== */
+
+.about-portal__visual {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  overflow: visible;
+}
+
+/* brand bloom behind the ring, so the cutout sits in light rather than on
+   flat paper — this is what the WebGL scene's environment used to give */
+.about-portal__visual-glow {
+  position: absolute;
+  top: 44%;
+  left: 52%;
+  width: 62%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(20, 123, 194, 0.22),
+    rgba(99, 52, 148, 0.12) 45%,
+    transparent 70%
+  );
+  opacity: 0.65;
+  will-change: transform, opacity;
+}
+
+.about-portal__visual-float {
+  position: relative;
+  width: 100%;
+  will-change: transform;
+}
+
+.about-portal__visual-art {
+  position: relative;
+  width: 100%;
+  perspective: 1200px;
+  will-change: transform;
+}
+
+.about-portal__visual-art img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: none;
+  /* the render carries its own lighting; a light drop keeps it off the page */
+  filter: drop-shadow(0 30px 60px rgba(15, 30, 70, 0.18));
+}
+
+/* The words sit in the bright upper half of the ring's opening — the figure
+   occupies the lower half, and dark type over a dark silhouette was
+   unreadable. Set on one line here so it clears the head entirely. */
+.about-portal__visual-art .about-portal__portal-text {
+  position: absolute;
+  top: 27%;
+  left: 50%;
+  display: flex;
+  gap: 0.34em;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  user-select: none;
+  font-size: 1.7rem;
+  letter-spacing: 0.06em;
+}
+
+@media (max-width: 1080px) {
+  .about-portal__visual-art .about-portal__portal-text {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 720px) {
+  .about-portal__visual-art .about-portal__portal-text {
+    font-size: 1.05rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-portal__visual-glow,
+  .about-portal__visual-float,
+  .about-portal__visual-art {
+    will-change: auto;
+  }
+}
+
+/* One size for every section heading on the site — see --h2-size in App.css. */
+@media (min-width: 901px) {
+  /* scaled like every other Bebas heading on the site: the shared token is
+     sized for Poppins, and Bebas sets about a third smaller at the same px */
+  .about-portal__title { font-size: calc(var(--h2-size) * 1.32); line-height: 1.02; }
+}

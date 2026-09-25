@@ -1,0 +1,40 @@
+# dependencies
+node_modules/
+
+# build output
+dist/
+.vite/
+
+# local env
+.env
+.env.local
+.env.*.local
+
+# vercel
+.vercel/
+
+# editor / OS
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+
+# scratch
+tmp/
+
+# Source artwork kept alongside the repo for re-exporting the served WebP
+# files. It is ~60MB of PNG/JPG that never ships, so it stays out of git.
+# Keep a backup of this folder somewhere else before cloning fresh.
+assets-src/
+
+# Verification screenshots from development runs — 180MB of PNGs that the app
+# never serves. Regenerate them rather than carrying them in history.
+screenshots/
+test-results/
+playwright-report/
+
+# Screenshot artifacts from development runs — 182MB of PNGs that are not
+# part of the site. Delete or archive them; they are not needed to build.
+screenshots/
+test-results/
+playwright-report/

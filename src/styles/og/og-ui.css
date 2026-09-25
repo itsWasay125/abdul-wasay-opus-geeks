@@ -1,0 +1,114 @@
+/* ==========================================================================
+   OPUS GEEKS — SHARED UI PRIMITIVES
+   Lockup · live readouts · skip link
+   (Buttons live in og-button.css, headings in og-type.css.)
+   ========================================================================== */
+
+/* ── SKIP LINK ──────────────────────────────────────────────────────────── */
+.og-skip {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 1200;
+  padding: 10px 16px;
+  border-radius: var(--og-r-sm);
+  background: var(--og-brand);
+  color: #fff;
+  font-family: var(--og-mono);
+  font-size: var(--og-t-xs);
+  transform: translateY(-180%);
+  transition: transform var(--og-base) var(--og-ease);
+}
+.og-skip:focus-visible {
+  transform: translateY(0);
+}
+
+/* ── LOCKUP ─────────────────────────────────────────────────────────────── */
+.og-wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--og-ink);
+  text-decoration: none;
+  line-height: 1;
+}
+
+.og-mark {
+  display: block;
+  flex: none;
+  /* The emblem is a bitmap cut from the source logo; a touch of drop-shadow
+     in its own blue keeps it from looking pasted onto a dark field. */
+  filter: drop-shadow(0 0 10px rgba(0, 128, 198, 0));
+  transition: filter var(--og-base) var(--og-ease), transform var(--og-base) var(--og-ease);
+}
+.og-mark img {
+  display: block;
+  width: var(--mark-size, 30px);
+  height: auto;
+}
+.og-wordmark:hover .og-mark {
+  filter: drop-shadow(0 0 12px rgba(0, 128, 198, 0.55));
+  transform: translateY(-1px);
+}
+
+.og-wordmark__type {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.og-wordmark__name {
+  font-family: var(--og-sans);
+  font-size: 1.0625rem;
+  font-weight: 700;
+  letter-spacing: -0.022em;
+  white-space: nowrap;
+}
+
+/* ── LIVE OFFICE READOUT ────────────────────────────────────────────────── */
+.og-pulse {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 11px;
+  border: 1px solid var(--og-line);
+  border-radius: var(--og-r-sm);
+  font-family: var(--og-mono);
+  font-size: var(--og-t-micro);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--og-ink-3);
+  white-space: nowrap;
+  user-select: none;
+}
+.og-pulse__time {
+  color: var(--og-ink);
+  font-variant-numeric: tabular-nums;
+}
+.og-pulse__dot {
+  width: 6px;
+  height: 6px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--og-idle);
+  box-shadow: 0 0 0 0 transparent;
+}
+.og-pulse__dot[data-live="true"] {
+  background: var(--og-live);
+  animation: og-breathe 2.6s var(--og-ease-io) infinite;
+}
+
+@keyframes og-breathe {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(56, 211, 159, 0.5);
+  }
+  55% {
+    box-shadow: 0 0 0 5px rgba(56, 211, 159, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .og-pulse__dot[data-live="true"] {
+    animation: none;
+  }
+}

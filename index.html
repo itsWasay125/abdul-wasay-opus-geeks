@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Opus Geeks is a premium mobile app, web development, game development, and UI/UX design agency in Karachi, Pakistan and Pembroke Pines, Florida."
+    />
+    <meta name="theme-color" content="#0f0f1a" />
+    <meta property="og:title" content="Opus Geeks | Digital Product Agency" />
+    <meta
+      property="og:description"
+      content="We build premium mobile apps, web platforms, games, and UI/UX systems for ambitious teams."
+    />
+    <meta property="og:type" content="website" />
+    <title>Opus Geeks | Premium App, Web & UI/UX Agency</title>
+    <link rel="icon" type="image/png" href="/logo.png" />
+    <link rel="apple-touch-icon" href="/logo.png" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!--
+      The font stylesheet used to block the first paint for about half a
+      second: nothing at all was drawn until Google answered. It is fetched at
+      the same priority as before, but applied once it arrives instead of being
+      waited on - the sheet already carries display=swap, so a late font was
+      always going to swap in; this just stops the wait happening on a blank
+      page. The noscript copy keeps it working without JavaScript.
+    -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@400;500;600;700;800&display=swap" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@400;500;600;700;800&display=swap"
+      media="print"
+      onload="this.media='all'; this.onload=null;"
+    />
+    <noscript>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@400;500;600;700;800&display=swap" />
+    </noscript>
+
+    <!-- above the fold on every visit: the hand and the object it holds -->
+    <link rel="preload" as="image" href="/assets/herobanner/01_robotic_hand.webp" type="image/webp" />
+    <link rel="preload" as="image" href="/assets/herobanner/18_core_cube.webp" type="image/webp" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>Enable JavaScript to view the Opus Geeks experience.</noscript>
+
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

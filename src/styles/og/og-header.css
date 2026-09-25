@@ -1,0 +1,1030 @@
+/* ==========================================================================
+   OPUS GEEKS — SITE HEADER
+   A full-bleed rail over the hero that detaches into a floating capsule
+   the moment the page moves.
+   ========================================================================== */
+
+.og-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--og-z-header);
+  padding: 0;
+  transition: padding 520ms var(--og-ease);
+}
+
+.og-header__bar {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 24px;
+  height: var(--og-header-h);
+  width: 100%;
+  max-width: 100%;
+  margin-inline: auto;
+  padding-inline: var(--og-gutter);
+  border: 1px solid transparent;
+  border-bottom-color: rgba(15, 23, 42, 0.08);
+  border-radius: 0;
+  background: transparent;
+  transition: height 520ms var(--og-ease), max-width 520ms var(--og-ease),
+    border-radius 520ms var(--og-ease), background-color 400ms var(--og-ease),
+    border-color 400ms var(--og-ease), box-shadow 400ms var(--og-ease),
+    padding-inline 520ms var(--og-ease);
+}
+
+.og-header .og-wordmark__name {
+  font-size: 28px;
+}
+
+/* Legibility scrim, kept for any future banner that needs one. Every route
+   opens on a light surface today, so nothing sets data-hero any more. */
+.og-header[data-hero="dark"][data-pinned="false"] .og-header__bar::before {
+  content: "";
+  position: absolute;
+  inset: -1px 0;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(5, 8, 14, 0.74) 0%,
+    rgba(5, 8, 14, 0.42) 58%,
+    rgba(5, 8, 14, 0) 100%
+  );
+}
+
+/* Resting state at top of page (over white hero) */
+.og-header[data-pinned="false"] .og-link__slide::before {
+  color: #334155;
+}
+.og-header[data-pinned="false"] .og-link__slide::after {
+  color: #05080E;
+}
+.og-header[data-pinned="false"] .og-wordmark {
+  color: #05080E;
+}
+
+/* ── PINNED: the rail becomes an ultra-sleek floating glass capsule ─────────── */
+.og-header[data-pinned="true"] {
+  padding: 10px clamp(10px, 2vw, 22px);
+}
+
+.og-header[data-pinned="true"] .og-header__bar {
+  height: 58px;
+  width: 100%;
+  max-width: 100%;
+  padding-inline: clamp(14px, 2vw, 28px);
+  border-radius: 0;
+  border-color: rgba(255, 255, 255, 0.14);
+  background: rgba(8, 13, 22, 0.94);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35);
+}
+
+.og-header[data-pinned="true"] .og-link__slide::before {
+  color: #A3B1C2;
+}
+.og-header[data-pinned="true"] .og-link__slide::after {
+  color: #FFFFFF;
+}
+.og-header[data-pinned="true"] .og-wordmark {
+  color: #FFFFFF;
+}
+
+/* While the mega panel is open the bar squares off into it. */
+.og-header[data-mega="true"] .og-header__bar {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.og-header__lead {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+/* ── SCROLL PROGRESS ────────────────────────────────────────────────────
+   Linked to the browser's own scroll timeline, so it costs no listener and
+   cannot jank. Browsers without it simply never show the line.          */
+.og-header__progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  background: var(--og-brand-grad);
+  opacity: 0;
+  pointer-events: none;
+}
+
+@supports (animation-timeline: scroll()) {
+  .og-header__progress {
+    opacity: 1;
+    animation: og-progress linear both;
+    animation-timeline: scroll(root block);
+  }
+}
+
+@keyframes og-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* ── NAV ────────────────────────────────────────────────────────────────── */
+.og-header__nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(14px, 2.2vw, 30px);
+}
+
+.og-header__megawrap {
+  position: static;
+}
+
+.og-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 2px;
+  color: var(--og-ink-2);
+  font-family: var(--og-sans);
+  font-size: var(--og-t-sm);
+  font-weight: 500;
+  letter-spacing: 0.1px;
+  text-decoration: none;
+}
+
+/* Two stacked copies of the label: the resting one lifts out, the incoming
+   one rises into its place. The real text node stays in the DOM for screen
+   readers and for sizing, just painted transparent. */
+.og-link__slide {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  line-height: 1.55;
+  color: transparent;
+}
+.og-link__slide::before,
+.og-link__slide::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  transition: transform 460ms var(--og-ease), color var(--og-fast) var(--og-ease);
+}
+.og-link__slide::before {
+  color: var(--og-ink-2);
+  transform: translateY(0);
+}
+.og-link__slide::after {
+  color: var(--og-ink);
+  transform: translateY(100%);
+}
+.og-link:hover .og-link__slide::before,
+.og-link:focus-visible .og-link__slide::before {
+  transform: translateY(-100%);
+}
+.og-link:hover .og-link__slide::after,
+.og-link:focus-visible .og-link__slide::after {
+  transform: translateY(0);
+}
+
+/* Active page: a brand dot, not an underline. */
+.og-link.is-active .og-link__slide::before {
+  color: var(--og-ink);
+}
+.og-link.is-active::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -1px;
+  width: 4px;
+  height: 4px;
+  margin-left: -2px;
+  border-radius: 50%;
+  background: var(--og-brand);
+  box-shadow: 0 0 8px var(--og-brand-glow);
+}
+
+.og-link__caret {
+  width: 5px;
+  height: 5px;
+  border-right: 1.4px solid currentColor;
+  border-bottom: 1.4px solid currentColor;
+  transform: translateY(-2px) rotate(45deg);
+  opacity: 0.6;
+  transition: transform var(--og-base) var(--og-ease), opacity var(--og-base) var(--og-ease);
+}
+.og-header[data-mega="true"] .og-link__caret {
+  transform: translateY(0) rotate(225deg);
+  opacity: 1;
+}
+
+/* ── RIGHT CLUSTER ──────────────────────────────────────────────────────── */
+.og-header__aside {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ── MEGA PANEL ─────────────────────────────────────────────────────────── */
+.og-mega {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  padding-inline: clamp(10px, 2vw, 22px);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: opacity 300ms var(--og-ease), transform 420ms var(--og-ease),
+    visibility 0s linear 420ms;
+}
+.og-mega[data-open="true"] {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition-delay: 0s;
+}
+
+/* The panel is built entirely from --og-* tokens, so re-theming it is a
+   matter of redefining them on the panel rather than restyling ten children.
+   Everything inside picks the new values up on its own. */
+.og-mega {
+  --og-surface: #ffffff;
+  --og-surface-2: #f5f8ff;
+  --og-bg-raise: #f6f9ff;
+  --og-veil: rgba(255, 255, 255, 0.86);
+  --og-ink: #0b1230;
+  --og-ink-rest: #2a3555;
+  --og-ink-2: #44507a;
+  --og-ink-3: #6f7b9d;
+  --og-ink-4: #93a0bd;
+  --og-line: rgba(14, 30, 72, 0.1);
+  --og-line-2: rgba(14, 30, 72, 0.16);
+  --og-line-3: rgba(14, 30, 72, 0.24);
+}
+
+.og-mega__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(230px, 300px);
+  gap: 0;
+  max-width: calc(var(--og-max) - 48px);
+  margin-inline: auto;
+  border: 1px solid var(--og-line);
+  border-radius: var(--og-r-lg);
+  background: var(--og-surface);
+  box-shadow: var(--og-shadow-3);
+  overflow: hidden;
+}
+.og-header[data-pinned="false"] .og-mega__inner {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+/* Three capabilities read as three columns, not a stacked list — it fills
+   the panel properly and lets them be compared at a glance. */
+.og-mega__list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 4px;
+  padding: 10px;
+}
+
+.og-mega__item {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px 18px 22px;
+  border-radius: var(--og-r-md);
+  color: inherit;
+  text-decoration: none;
+  transition: background-color var(--og-base) var(--og-ease);
+  /* Staggered entrance driven by the panel's own open state. */
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+/* Hairline separators between columns, without a border on the outer edge. */
+.og-mega__item + .og-mega__item {
+  box-shadow: inset 1px 0 0 var(--og-line);
+}
+
+/* ── SERVICE IMAGERY ──────────────────────────────────────────────────────
+   A real project shot per capability. It is held in a fixed-ratio window and
+   desaturated at rest, so three busy client mockups still read as one calm
+   row; hovering brings the colour back and pushes in slightly. */
+.og-mega__shot {
+  display: block;
+  position: relative;
+  aspect-ratio: 16 / 10;
+  margin-bottom: 4px;
+  border-radius: var(--og-r-sm);
+  overflow: hidden;
+  background: var(--og-bg-sunk);
+  box-shadow: inset 0 0 0 1px var(--og-line);
+}
+.og-mega__shot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 32%;
+  filter: grayscale(1) contrast(1.05) brightness(0.72);
+  transform: scale(1.02);
+  transition: filter 520ms var(--og-ease), transform 700ms var(--og-ease);
+}
+/* A brand veil over the greyscale, lifted on hover. */
+.og-mega__shot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(5, 8, 14, 0.85) 0%,
+    rgba(23, 134, 207, 0.18) 55%,
+    rgba(5, 8, 14, 0.2) 100%
+  );
+  opacity: 1;
+  transition: opacity 520ms var(--og-ease);
+}
+.og-mega__item:hover .og-mega__shot img {
+  filter: grayscale(0) contrast(1) brightness(1);
+  transform: scale(1.07);
+}
+.og-mega__item:hover .og-mega__shot::after {
+  opacity: 0.35;
+}
+.og-mega[data-open="true"] .og-mega__item,
+.og-mega[data-open="true"] .og-mega__aside {
+  animation: og-mega-in 480ms var(--og-ease) forwards;
+  animation-delay: calc(60ms + var(--i) * 55ms);
+}
+@keyframes og-mega-in {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.og-mega__item:hover {
+  background: var(--og-surface-2);
+}
+
+.og-mega__index {
+  display: block;
+  font-family: var(--og-mono);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  color: var(--og-ink-4);
+  transition: color var(--og-base) var(--og-ease);
+}
+.og-mega__item:hover .og-mega__index {
+  color: var(--og-brand-lift);
+}
+
+.og-mega__body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.og-mega__title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 7px;
+  font-family: var(--og-sans);
+  font-size: 1.25rem;
+  font-weight: 650;
+  letter-spacing: 0.1px;
+  color: var(--og-ink);
+}
+.og-mega__title svg {
+  opacity: 0;
+  transform: translate(-4px, 4px);
+  transition: opacity var(--og-base) var(--og-ease), transform var(--og-base) var(--og-ease);
+  color: var(--og-brand-lift);
+}
+.og-mega__item:hover .og-mega__title svg {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
+.og-mega__blurb {
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--og-ink-2);
+}
+
+.og-mega__stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: auto;
+  padding-top: 6px;
+}
+.og-mega__stack em {
+  font-family: var(--og-mono);
+  font-style: normal;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--og-ink-3);
+  padding: 3px 7px;
+  border: 1px solid var(--og-line);
+  border-radius: var(--og-r-xs);
+}
+
+.og-mega__aside {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 26px 24px;
+  border-left: 1px solid var(--og-line);
+  background: var(--og-bg-raise);
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.og-mega__pitch {
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--og-ink-2);
+}
+
+.og-mega__cta {
+  width: 100%;
+  justify-content: space-between;
+}
+
+.og-mega__mail {
+  font-family: var(--og-mono);
+  font-size: 0.8125rem;
+  letter-spacing: 0.04em;
+  color: var(--og-ink-3);
+  text-decoration: none;
+  border-bottom: 1px solid var(--og-line-2);
+  padding-bottom: 2px;
+  transition: color var(--og-fast) var(--og-ease), border-color var(--og-fast) var(--og-ease);
+}
+.og-mega__mail:hover {
+  color: var(--og-brand-lift);
+  border-color: var(--og-brand-line);
+}
+
+/* ── BURGER ─────────────────────────────────────────────────────────────── */
+.og-burger {
+  display: none;
+  position: relative;
+  width: 40px;
+  height: 40px;
+  flex: none;
+  padding: 0;
+  border: 1px solid rgba(130, 175, 220, 0.22);
+  border-radius: var(--og-r-sm);
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  cursor: pointer;
+  transition: all 260ms var(--og-ease);
+}
+
+.og-burger:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(79, 178, 240, 0.45);
+}
+
+.og-burger span {
+  position: absolute;
+  left: 50%;
+  width: 18px;
+  height: 2px;
+  margin-left: -9px;
+  border-radius: 2px;
+  background: var(--og-ink, #05080e);
+  transition: transform 380ms var(--og-ease), opacity 200ms var(--og-ease), background-color 200ms ease;
+}
+
+.og-header[data-pinned="true"] .og-burger span,
+.og-header[data-drawer="open"] .og-burger span {
+  background: #ffffff;
+}
+
+.og-burger span:nth-child(1) {
+  top: 14px;
+}
+.og-burger span:nth-child(2) {
+  top: 22px;
+}
+.og-burger[data-open="true"] span:nth-child(1) {
+  transform: translateY(4px) rotate(45deg);
+}
+.og-burger[data-open="true"] span:nth-child(2) {
+  transform: translateY(-4px) rotate(-45deg);
+}
+
+/* ── HEADER WHEN DRAWER OPEN ────────────────────────────────────────────── */
+.og-header[data-drawer="open"] {
+  position: fixed !important;
+  padding: 0 !important;
+}
+
+.og-header[data-drawer="open"] .og-header__bar {
+  background: rgba(6, 10, 18, 0.98) !important;
+  backdrop-filter: blur(24px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
+}
+
+.og-header[data-drawer="open"] .og-wordmark {
+  color: #ffffff !important;
+}
+
+.og-header[data-drawer="open"] .og-header__cta {
+  display: none !important;
+}
+
+/* ── MOBILE DRAWER ──────────────────────────────────────────────────────── */
+.og-drawer {
+  position: fixed;
+  inset: 0;
+  z-index: var(--og-z-drawer, 950);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 24px;
+  padding: calc(var(--og-header-h, 60px) + 24px) var(--og-gutter, 20px) 130px;
+  background: radial-gradient(circle at 50% 0%, rgba(20, 35, 65, 0.8) 0%, rgba(5, 8, 14, 0.98) 70%), #05080E;
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  opacity: 0;
+  visibility: hidden;
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path 500ms var(--og-ease), opacity 280ms var(--og-ease),
+    visibility 0s linear 500ms;
+}
+
+.og-drawer[data-open="true"] {
+  opacity: 1;
+  visibility: visible;
+  clip-path: inset(0 0 0 0);
+  transition-delay: 0s;
+}
+
+.og-drawer__nav {
+  display: flex;
+  flex-direction: column;
+}
+
+.og-drawer__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.og-drawer__link,
+.og-drawer__group {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  opacity: 0;
+  transform: translateY(14px);
+}
+
+.og-drawer[data-open="true"] .og-drawer__link,
+.og-drawer[data-open="true"] .og-drawer__group,
+.og-drawer[data-open="true"] .og-drawer__foot {
+  animation: og-drawer-in 500ms var(--og-ease) forwards;
+  animation-delay: calc(80ms + var(--i) * 45ms);
+}
+
+@keyframes og-drawer-in {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.og-drawer__link {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 4px;
+  font-family: var(--og-sans);
+  font-size: clamp(1.4rem, 5.5vw, 2.05rem);
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  color: #e2e8f0;
+  text-decoration: none;
+  transition: color 200ms ease, padding-left 200ms ease;
+}
+
+.og-drawer__link:hover,
+.og-drawer__link.is-active {
+  color: #4fb2f0;
+}
+
+.og-drawer__group .og-drawer__link {
+  border-bottom: 0;
+  opacity: 1;
+  transform: none;
+  animation: none;
+  flex: 1;
+}
+
+.og-drawer__num {
+  font-family: var(--og-mono);
+  font-size: 0.70rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: #4fb2f0;
+  padding: 2px 7px;
+  border-radius: 4px;
+  background: rgba(79, 178, 240, 0.12);
+  border: 1px solid rgba(79, 178, 240, 0.25);
+  flex-shrink: 0;
+}
+
+.og-drawer__expand {
+  min-width: 36px;
+  min-height: 36px;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  flex: none;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--og-r-sm);
+  background: rgba(255, 255, 255, 0.05);
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 200ms ease;
+}
+
+.og-drawer__expand:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(79, 178, 240, 0.4);
+}
+
+.og-drawer__sub {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 360ms var(--og-ease);
+}
+
+.og-drawer__sub[data-open="true"] {
+  grid-template-rows: 1fr;
+}
+
+.og-drawer__sub > div {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-top: 4px;
+  padding-bottom: 8px;
+}
+
+.og-drawer__sub a {
+  padding: 10px 0 10px 22px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #94a3b8;
+  text-decoration: none;
+  border-left: 2px solid rgba(79, 178, 240, 0.25);
+  margin-left: 10px;
+  transition: all 200ms ease;
+}
+
+.og-drawer__sub a:hover,
+.og-drawer__sub a.is-active {
+  color: #ffffff;
+  border-left-color: #4fb2f0;
+  padding-left: 26px;
+}
+
+.og-drawer__foot {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 8px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  opacity: 0;
+  transform: translateY(14px);
+}
+
+.og-drawer__cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 24px;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(122deg, #623595 0%, #0080C6 52%, #00ADEE 100%);
+  color: #ffffff;
+  font-family: var(--og-sans);
+  font-size: 0.92rem;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 8px 24px rgba(0, 128, 198, 0.35);
+  transition: transform 200ms ease, box-shadow 200ms ease;
+}
+
+.og-drawer__cta:active {
+  transform: scale(0.98);
+}
+
+.og-drawer__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-family: var(--og-mono);
+  font-size: 0.78rem;
+  color: #64748b;
+}
+
+.og-drawer__meta a {
+  color: #94a3b8;
+  text-decoration: none;
+  transition: color 200ms ease;
+}
+
+.og-drawer__meta a:hover {
+  color: #4fb2f0;
+}
+
+/* ── RESPONSIVE ─────────────────────────────────────────────────────────── */
+@media (max-width: 1120px) {
+  .og-header__nav {
+    gap: 16px;
+  }
+  .og-pulse {
+    display: none;
+  }
+}
+
+@media (max-width: 980px) {
+  .og-header__bar {
+    grid-template-columns: auto auto !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    height: 58px !important;
+    padding-inline: 18px !important;
+  }
+  .og-header__nav,
+  .og-header__cta,
+  .og-header__cta.btn-glow,
+  .og-pulse,
+  .og-mega {
+    display: none !important;
+  }
+  .og-burger {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .og-header__bar {
+    height: 54px !important;
+    padding-inline: 14px !important;
+  }
+  .og-header .og-wordmark__name {
+    font-size: 1.05rem !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .og-header,
+  .og-header__bar,
+  .og-mega,
+  .og-drawer {
+    transition-duration: 1ms;
+  }
+  .og-mega[data-open="true"] .og-mega__item,
+  .og-mega[data-open="true"] .og-mega__aside,
+  .og-drawer[data-open="true"] .og-drawer__link,
+  .og-drawer[data-open="true"] .og-drawer__group,
+  .og-drawer[data-open="true"] .og-drawer__foot {
+    animation-duration: 1ms;
+    animation-delay: 0ms;
+  }
+  .og-link__slide::before,
+  .og-link__slide::after {
+    transition-duration: 1ms;
+  }
+}
+
+/* Hide chatbot trigger when drawer is active */
+body[data-drawer-open="true"] .chatbot-trigger,
+.og-drawer[data-open="true"] ~ * .chatbot-trigger {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: translateY(20px) !important;
+  transition: opacity 200ms ease, transform 200ms ease !important;
+}
+
+/* ==========================================================================
+   THE MEGA PANEL MATCHES THE BAR IT HANGS FROM
+   Pinned, the header bar is a dark translucent pill. The panel under it
+   stayed white, so the two read as two different components that happened
+   to touch. The panel is themed off the same state now: it only has to
+   redefine the surface and ink tokens, because everything inside it is
+   already drawn from those.
+   ========================================================================== */
+
+.og-header[data-pinned="true"] .og-mega {
+  --og-surface: rgba(8, 13, 22, 0.94);
+  --og-surface-2: rgba(255, 255, 255, 0.06);
+  --og-bg-raise: rgba(255, 255, 255, 0.05);
+  --og-veil: rgba(8, 13, 22, 0.86);
+  --og-ink: #ffffff;
+  --og-ink-rest: #d7dEEC;
+  --og-ink-2: #aab6cd;
+  --og-ink-3: #8b98b4;
+  --og-ink-4: #6f7c99;
+  --og-line: rgba(255, 255, 255, 0.12);
+  --og-line-2: rgba(255, 255, 255, 0.18);
+  --og-line-3: rgba(255, 255, 255, 0.26);
+}
+
+.og-header[data-pinned="true"] .og-mega__inner {
+  border-color: rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+}
+
+/* ── the aside foot ─────────────────────────────────────────────────── */
+
+.og-mega__phone {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  color: var(--og-ink-2);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  transition: color 240ms var(--og-ease);
+}
+.og-mega__phone:hover { color: var(--og-ink); }
+.og-mega__phone svg { flex: none; color: var(--og-brand-lift, #00aeef); }
+
+.og-mega__promise {
+  display: grid;
+  gap: 9px;
+  margin: 18px 0 0;
+  padding: 16px 0 0;
+  border-top: 1px solid var(--og-line);
+  list-style: none;
+}
+
+.og-mega__promise li {
+  display: grid;
+  grid-template-columns: 15px minmax(0, 1fr);
+  align-items: start;
+  gap: 9px;
+  color: var(--og-ink-3);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+.og-mega__promise svg {
+  margin-top: 1px;
+  color: var(--og-brand-lift, #00aeef);
+}
+
+/* ==========================================================================
+   THE PANEL IN THE BRAND, NOT IN NEUTRAL BLACK
+   It was matched to the pinned bar's near-black. This puts the Opus Geeks
+   ramp behind it instead — violet through blue, deep enough that white type
+   and the work thumbnails still carry. The bar above stays as it is, so the
+   two read as one component with the panel as its lit face.
+   ========================================================================== */
+
+.og-header[data-pinned="true"] .og-mega__inner,
+.og-mega__inner {
+  background: rgba(8, 13, 22, 0.96) !important;
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+}
+
+.og-mega,
+.og-header[data-pinned="true"] .og-mega {
+  --og-surface: rgba(8, 13, 22, 0.96);
+  --og-surface-2: rgba(255, 255, 255, 0.07);
+  --og-bg-raise: rgba(255, 255, 255, 0.06);
+  --og-veil: rgba(8, 13, 22, 0.88);
+  --og-ink: #ffffff;
+  --og-ink-rest: #dbe3f2;
+  --og-ink-2: #b4c0da;
+  --og-ink-3: #93a1c0;
+  --og-ink-4: #7484a6;
+  --og-line: rgba(255, 255, 255, 0.13);
+  --og-line-2: rgba(255, 255, 255, 0.2);
+  --og-line-3: rgba(255, 255, 255, 0.3);
+}
+
+/* The panel items hover */
+.og-mega__item:hover { background: rgba(255, 255, 255, 0.08); }
+
+/* Header CTA styled as btn-glow */
+.og-header__cta.btn-glow,
+.og-header__cta.og-btn,
+.og-btn--solid.og-header__cta,
+.og-header__cta {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 38px !important;
+  height: 38px !important;
+  padding: 0 18px !important;
+  border: 1px solid rgba(0, 128, 198, 0.32) !important;
+  border-radius: 999px !important;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(243, 248, 255, 0.92)) !important;
+  color: #0b1e42 !important;
+  font-family: "Poppins", sans-serif;
+  font-size: 0.76rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.02em;
+  text-transform: capitalize !important;
+  text-decoration: none;
+  box-shadow: 0 4px 16px rgba(0, 128, 198, 0.12);
+  transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1) !important;
+}
+
+.og-header__cta::after,
+.og-header__cta.btn-glow::after,
+.og-header__cta::before,
+.og-header__cta.btn-glow::before {
+  display: none !important;
+  content: none !important;
+}
+
+.og-header__cta.btn-glow:is(:hover, :focus-visible),
+.og-header__cta.og-btn:is(:hover, :focus-visible),
+.og-btn--solid.og-header__cta:is(:hover, :focus-visible),
+.og-header__cta:is(:hover, :focus-visible) {
+  background: linear-gradient(118deg, #6d28d9, #2563eb 46%, #06b6d4) !important;
+  color: #ffffff !important;
+  border-color: transparent !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 12px 28px rgba(0, 128, 198, 0.45) !important;
+}
+
+.og-header__cta svg,
+.og-btn--solid.og-header__cta svg {
+  width: 14px !important;
+  height: 14px !important;
+  color: #0080c6 !important;
+  transition: transform 0.5s ease, color 0.5s ease !important;
+}
+
+.og-header__cta:is(:hover, :focus-visible) svg,
+.og-btn--solid.og-header__cta:is(:hover, :focus-visible) svg {
+  color: #ffffff !important;
+  transform: translate(2px, -2px) !important;
+}
+
+@media (max-width: 980px) {
+  .og-header__cta,
+  .og-header__cta.btn-glow,
+  .og-header__cta.og-btn,
+  .og-btn--solid.og-header__cta {
+    display: none !important;
+  }
+}
+

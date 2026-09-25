@@ -1,0 +1,123 @@
+/* ==========================================================================
+   SITE LOADER
+   A full-screen panel that lifts off the top of the viewport when the count
+   reaches 100. Everything here is transform and opacity, so the curtain is a
+   composited move and costs nothing on the way out.
+   ========================================================================== */
+
+.og-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 26px;
+  background:
+    radial-gradient(70% 55% at 50% 38%, rgba(37, 99, 235, 0.16), transparent 68%),
+    radial-gradient(60% 50% at 82% 88%, rgba(109, 40, 217, 0.14), transparent 70%),
+    linear-gradient(165deg, #070c1c 0%, #0a1128 54%, #0b0a22 100%);
+  /* the lift is eased on the way out only — it never animates in, because it
+     is already on screen before the first frame */
+  transition: transform 760ms cubic-bezier(0.76, 0, 0.24, 1);
+  will-change: transform;
+}
+
+.og-loader.is-lifting {
+  transform: translateY(-100%);
+}
+
+/* a hairline of brand at the parting edge, so the lift reads as a curtain
+   being drawn rather than a box sliding away */
+.og-loader::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 2px;
+  background: linear-gradient(90deg, #6d28d9, #2563eb 46%, #06b6d4);
+  opacity: 0;
+  transition: opacity 260ms ease;
+}
+
+.og-loader.is-lifting::after { opacity: 1; }
+
+.og-loader__inner {
+  display: grid;
+  justify-items: center;
+  gap: 18px;
+  padding-inline: 24px;
+  text-align: center;
+}
+
+.og-loader__mark {
+  display: block;
+  animation: ogLoaderMark 2.4s ease-in-out infinite;
+}
+
+.og-loader__mark img {
+  display: block;
+  width: 46px;
+  height: auto;
+}
+
+@keyframes ogLoaderMark {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-7px); }
+}
+
+.og-loader__name {
+  color: #ffffff;
+  font-family: "Bebas Neue", sans-serif;
+  font-size: clamp(2.2rem, 6vw, 3.4rem);
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+
+/* the rule is the progress bar; the fill is scaled rather than sized so the
+   browser never has to lay anything out while it moves */
+.og-loader__rule {
+  position: relative;
+  display: block;
+  width: min(260px, 62vw);
+  height: 2px;
+  overflow: hidden;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.og-loader__rule i {
+  position: absolute;
+  inset: 0;
+  transform-origin: left center;
+  background: linear-gradient(90deg, #6d28d9, #2563eb 46%, #06b6d4);
+}
+
+.og-loader__count {
+  color: rgba(226, 236, 252, 0.72);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.86rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.22em;
+}
+
+.og-loader__foot {
+  position: absolute;
+  bottom: clamp(24px, 5vh, 46px);
+  color: rgba(163, 180, 210, 0.5);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 560px) {
+  .og-loader__foot { font-size: 0.64rem; letter-spacing: 0.14em; padding-inline: 20px; text-align: center; }
+}
+
+/* The component does not mount at all under reduced motion, so this is only
+   a guard for anyone forcing it on. */
+@media (prefers-reduced-motion: reduce) {
+  .og-loader,
+  .og-loader__mark { animation: none; transition: none; }
+}
