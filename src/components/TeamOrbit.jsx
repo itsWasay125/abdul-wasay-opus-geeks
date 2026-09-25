@@ -13,7 +13,7 @@ const teamMembers = [
     { id: 5, name: "Ehtisham Ahmed", role: "UI/UX Designer", email: "ehtisham@opusgeeks.com", gradient: "linear-gradient(135deg, #0ea5e9, #4f46e5)", avatar: "/assets/team/ehtisham-ahmed.jpg" },
   { id: 6, name: "Abdullah Ahmed", role: "Sales Lead", email: "abdullah@opusgeeks.com", gradient: "linear-gradient(135deg, #10b981, #059669)", avatar: "/assets/team/bilal-qureshi.jpg" },
   { id: 7, name: "Mazaain Hasan", role: "Business Development Lead", email: "mazaain@opusgeeks.com", gradient: "linear-gradient(135deg, #8b5cf6, #6d28d9)", avatar: "/assets/team/mazaain-hasan.jpg" },
-  { id: 8, name: "Salman Khan", role: "Senior Software Engineer", email: "salman@opusgeeks.com", gradient: "linear-gradient(135deg, #ec4899, #be185d)" },
+  { id: 8, name: "Salman Khan", role: "Senior Software Engineer", email: "salman@opusgeeks.com", gradient: "linear-gradient(135deg, #ec4899, #be185d)", avatar: "/assets/team/salman-khan.jpg" },
 ];
 
 function getInitials(name) {

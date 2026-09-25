@@ -214,17 +214,18 @@ export default function HeroCluster({
 
   return (
     <section className="hero-cluster" ref={rootRef}>
-      {/* Same grid as the individual service banners (ServiceDetail.jsx),
-          same cell size and the same violet tint their GRID_TINT.mobile
-          uses - this index page has no single service theme, so it takes
-          the violet end of the ramp. It was 76px cells and a lighter/looser
-          tint here, which is why it read as a different, bigger grid than
-          every page one click away from it. */}
+      {/* Same blue the home hero (rh-hero__grid) and about hero grids both
+          use - this index page has no single service theme of its own, and
+          blue is the site's default/primary accent everywhere else a grid
+          like this appears. The previous version picked the mobile
+          service's violet tint here, which made this the one grid on the
+          whole site that was not blue. Cell size (44px) still matches the
+          individual service banners. */}
       <InteractiveGrid
         className="svc-grid"
         gridSize={44}
-        gridColor="rgba(99, 52, 148, 0.10)"
-        effectColor="rgba(99, 52, 148, 0.40)"
+        gridColor="rgba(20, 123, 194, 0.10)"
+        effectColor="rgba(20, 123, 194, 0.42)"
         glowRadius={18}
         fadeIntensity={36}
         fadeColor="#ffffff"
