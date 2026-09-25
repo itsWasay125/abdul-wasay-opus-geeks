@@ -214,16 +214,19 @@ export default function HeroCluster({
 
   return (
     <section className="hero-cluster" ref={rootRef}>
-      {/* The same reactive grid the home and about heroes carry, at a coarser
-          pitch and in the violet end of the ramp - so the services pages feel
-          like one family without reading as a copy of the homepage. */}
+      {/* Same grid as the individual service banners (ServiceDetail.jsx),
+          same cell size and the same violet tint their GRID_TINT.mobile
+          uses - this index page has no single service theme, so it takes
+          the violet end of the ramp. It was 76px cells and a lighter/looser
+          tint here, which is why it read as a different, bigger grid than
+          every page one click away from it. */}
       <InteractiveGrid
         className="svc-grid"
-        gridSize={76}
-        gridColor="rgba(99, 52, 148, 0.06)"
-        effectColor="rgba(99, 52, 148, 0.2)"
-        glowRadius={26}
-        fadeIntensity={44}
+        gridSize={44}
+        gridColor="rgba(99, 52, 148, 0.10)"
+        effectColor="rgba(99, 52, 148, 0.40)"
+        glowRadius={18}
+        fadeIntensity={36}
         fadeColor="#ffffff"
       />
       <div className="hero-cluster__inner">

@@ -27110,6 +27110,7 @@ main .services-vvip__capabilities .service-card :is(h3, h4) {
     transform: translateY(0);
   }
 }
+#about-opus .ghost-link.story-showcase__link {margin-top:0px !important;}
 
 
 /* ============================================================
