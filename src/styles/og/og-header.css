@@ -930,3 +930,42 @@ body[data-drawer-open="true"] .chatbot-trigger,
   margin-top: 1px;
   color: var(--og-brand-lift, #00aeef);
 }
+
+/* ==========================================================================
+   THE LOGO FOLLOWS ITS SURFACE
+   The wordmark ships in black and white. Black is the default, because
+   most of the site is light; the white one takes over on the surfaces that
+   are dark. Measured: header rgba(255,255,255,.72) -> black; footer
+   rgb(5,8,14) and the open mobile menu rgba(6,10,18,.98) -> white.
+   ========================================================================== */
+
+.og-wordmark { display: inline-flex; align-items: center; gap: 10px; }
+
+.og-wordmark__type {
+  display: inline-grid;
+  line-height: 0;
+}
+
+/* both images sit in one grid cell, so swapping them never moves anything */
+.og-wordmark__img {
+  grid-area: 1 / 1;
+  display: block;
+  height: var(--type-h, 16px);
+  width: auto;
+}
+
+.og-wordmark__img--light { visibility: hidden; }
+
+.og-footer .og-wordmark__img--dark,
+.og-header[data-drawer="open"] .og-wordmark__img--dark,
+.og-header[data-pinned="true"] .og-wordmark__img--dark { visibility: hidden; }
+
+.og-footer .og-wordmark__img--light,
+.og-header[data-drawer="open"] .og-wordmark__img--light,
+.og-header[data-pinned="true"] .og-wordmark__img--light { visibility: visible; }
+
+.og-mark img {
+  display: block;
+  width: auto;
+  height: var(--mark-size, 30px);
+}

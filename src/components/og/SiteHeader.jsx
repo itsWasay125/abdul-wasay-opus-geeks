@@ -83,7 +83,7 @@ export default function SiteHeader({ darkHero = false }) {
       >
         <div className="og-header__bar">
           <div className="og-header__lead">
-            <Wordmark size={28} />
+            <Wordmark size={34} />
           </div>
 
           <nav className="og-header__nav" aria-label="Primary">

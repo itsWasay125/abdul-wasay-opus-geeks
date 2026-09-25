@@ -96,7 +96,7 @@ export const FlutterIcon = () => (
 const OpusGeeksHubLogo = () => (
   <div className="og-convergence-hub__logo-wrap">
     <img
-      src="/assets/oglogo-mark.webp"
+      src="/assets/logo/mark.webp"
       alt="Opus Geeks"
       className="og-convergence-hub__logo"
       width={38}

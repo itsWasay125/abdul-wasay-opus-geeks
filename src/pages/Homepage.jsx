@@ -243,7 +243,7 @@ function CtaBanner() {
               <span className="cta-banner-brand-beam cta-banner-brand-beam--two" />
               <div className="cta-banner-brand-card">
                 <span className="cta-banner-brand-card-edge" />
-                <img src="/assets/oglogo-mark.webp" alt="" />
+                <img src="/assets/logo/mark.webp" alt="" />
                 <small>Digital products worldwide</small>
               </div>
               <span className="cta-banner-brand-chip cta-banner-brand-chip--one">Strategy</span>
