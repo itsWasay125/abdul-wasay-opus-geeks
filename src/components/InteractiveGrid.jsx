@@ -29,6 +29,17 @@ export default function InteractiveGrid({
 }) {
   const canvasRef = useRef(null);
   const containerRef = useRef(null);
+
+  /* A section with a reactive grid already answers the pointer, so the
+     cursor trail stays out of it (LineTrail skips anything inside
+     [data-no-trail]). The grid marks its own section, so every banner with
+     a grid gets this without the page having to remember it. */
+  useEffect(() => {
+    const host = containerRef.current?.closest("section, header, .hero-banner, .rh-hero");
+    if (!host) return undefined;
+    host.setAttribute("data-no-trail", "");
+    return () => host.removeAttribute("data-no-trail");
+  }, []);
   const trailRef = useRef([]);
   const idleTargetsRef = useRef([]);
   const idlePositionsRef = useRef([]);

@@ -11,6 +11,8 @@ import Homepage from "./pages/Homepage";
 import { useFitHeadings } from "./hooks/useFitHeadings";
 import SiteLoader from "./components/SiteLoader";
 import useLiteMode from "./hooks/useLiteMode";
+import LineTrail from "./components/LineTrail";
+import useShineBudget from "./hooks/useShineBudget";
 
 /* Every route but the homepage is split out.
 
@@ -39,6 +41,8 @@ function SiteLayout() {
   useFitHeadings(pathname);
   /* no GPU, or very little CPU: the decorative motion stands down */
   useLiteMode();
+  /* heading shine repaints text every frame; it only runs while visible */
+  useShineBudget(pathname);
   const hideGlobalStats = pathname.startsWith("/contact-us") || pathname.startsWith("/faqs");
   /* Portfolio opens on the lit studio stage — a dark band — so the resting
      header drops its light plate there and inverts its type. */
@@ -69,6 +73,9 @@ export default function App() {
     <ScrollProvider>
       {/* plays once per real page load, never on in-app navigation */}
       <SiteLoader />
+      {/* the cursor trail: one canvas for the whole app, outside the router so
+          a route change never re-mounts it (see components/LineTrail.jsx) */}
+      <LineTrail />
       {/* mounted above the router, so it runs on a real page load and never on
           an in-app navigation */}
 

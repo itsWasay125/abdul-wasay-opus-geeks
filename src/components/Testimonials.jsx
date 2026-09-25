@@ -84,7 +84,7 @@ export default function Testimonials() {
         {rows.map((slide, slideIndex) => (
           <ThreeDScrollTriggerRow
             key={slideIndex}
-            baseVelocity={7}
+            baseVelocity={5}
             direction={slideIndex % 2 === 0 ? 1 : -1}
             className="testimonial-3d-row"
             pauseOnHover={true}

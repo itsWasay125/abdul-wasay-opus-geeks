@@ -316,9 +316,20 @@ export default function LiquidGlassBackground({
 
     let bufferW = 0;
     let bufferH = 0;
+    /* Adaptive resolution. The shader is a full-screen refraction with blur,
+       so its cost is almost entirely per pixel: at 1.7x device resolution a
+       1440x900 hero is ~3.7M pixels a frame. On an Intel UHD 620 that ran the
+       contact page at 7-21fps with the pointer still. It starts at full
+       quality and, if frames are running long, steps the buffer down - the
+       glass is soft by design, so a lower buffer upscaled by the canvas is
+       close to indistinguishable, and a strong GPU never leaves step one. */
+    /* It waits 3s before measuring - the first seconds after load are decode,
+       font and chunk work, not the shader - and only steps down after two
+       slow windows in a row, to a floor of half resolution. */
+    const quality = { scale: 1, steps: [1, 0.72, 0.5], step: 0, samples: [], last: 0, slow: 0, from: performance.now() + 3000 };
     const resize = () => {
       const rect = wrap.getBoundingClientRect();
-      const dpr = Math.min(window.devicePixelRatio || 1, MAX_DPR) * RENDER_SCALE;
+      const dpr = Math.min(window.devicePixelRatio || 1, MAX_DPR) * RENDER_SCALE * quality.scale;
       const w = Math.max(1, Math.round(rect.width * dpr));
       const h = Math.max(1, Math.round(rect.height * dpr));
       if (w !== bufferW || h !== bufferH) {
@@ -379,9 +390,28 @@ export default function LiquidGlassBackground({
       if (!inViewRef.current) {
         cancelAnimationFrame(rafRef.current);
         rafRef.current = 0;
+        quality.last = 0;
         return;
       }
       mouse.strength += (mouse.target - mouse.strength) * 0.08;
+
+      if (quality.last && now > quality.from) {
+        quality.samples.push(now - quality.last);
+        if (quality.samples.length >= 60) {
+          const sorted = quality.samples.sort((x, y) => x - y);
+          const median = sorted[sorted.length >> 1];
+          quality.samples = [];
+          // two windows in a row under ~45fps: drop a step, while there is one
+          quality.slow = median > 22 ? quality.slow + 1 : 0;
+          if (quality.slow >= 2 && quality.step < quality.steps.length - 1) {
+            quality.slow = 0;
+            quality.step += 1;
+            quality.scale = quality.steps[quality.step];
+            resize();
+          }
+        }
+      }
+      quality.last = now;
 
 
       draw((now - start0) / 1000);
