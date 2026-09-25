@@ -130,7 +130,13 @@ function ClientsSection() {
   );
 }
 
-/* The four accents are four stops sampled off the brand ramp itself
+/* The photographs were hotlinked from images.unsplash.com. Measured on the
+   built site they were the four slowest requests on the homepage by a wide
+   margin - 9.3s, 8.8s, 6.4s and 6.2s against a 1.4s first paint - so the page
+   was not finishing loading until an external CDN felt like answering. They
+   are served from here now.
+
+   The four accents are four stops sampled off the brand ramp itself
    (violet #633494 -> blue #147bc2 -> cyan #00aeef), evenly spaced. They used
    to be Tailwind defaults - a bright #8b5cf6 violet sitting next to the brand
    #623595 violet, which read as two purples arguing rather than one family. */
@@ -142,7 +148,7 @@ const aboutPoints = [
     color: "#633494",
     tag: "Senior craft",
     caption: "Product leads in the work, not above it",
-    image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1100&q=70",
+    image: "/assets/about-pillars/pillar-01.webp",
     alt: "Senior specialists collaborating on product work",
   },
   {
@@ -152,7 +158,7 @@ const aboutPoints = [
     color: "#2f63b2",
     tag: "No handoffs",
     caption: "Strategy, design & engineering at one table",
-    image: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1100&q=70",
+    image: "/assets/about-pillars/pillar-02.webp",
     alt: "One connected team working around a table",
   },
   {
@@ -162,7 +168,7 @@ const aboutPoints = [
     color: "#0e8bd0",
     tag: "Always shipping",
     caption: "Weekly progress you can actually see",
-    image: "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=1100&q=70",
+    image: "/assets/about-pillars/pillar-03.webp",
     alt: "Team driving a product launch forward",
   },
   {
@@ -172,7 +178,7 @@ const aboutPoints = [
     color: "#00aeef",
     tag: "Still here",
     caption: "The work does not stop at handover",
-    image: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=1100&q=70",
+    image: "/assets/about-pillars/pillar-04.webp",
     alt: "Team reviewing a live product after launch",
   },
 ];

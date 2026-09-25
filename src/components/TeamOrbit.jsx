@@ -126,7 +126,7 @@ export default function TeamOrbit() {
                 src={active.avatar}
                 alt={active.name}
                 className="orbit-avatar-img"
-                loading="eager"
+                loading="lazy"
                 onError={(event) => { event.currentTarget.style.display = "none"; }}
               />
             ) : null}
@@ -184,7 +184,7 @@ export default function TeamOrbit() {
                     src={member.avatar}
                     alt={member.name}
                     className="orbit-face-img"
-                    loading="eager"
+                    loading="lazy"
                     onError={(event) => { event.currentTarget.style.display = "none"; }}
                   />
                 ) : null}

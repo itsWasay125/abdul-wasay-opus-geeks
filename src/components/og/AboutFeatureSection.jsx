@@ -85,6 +85,11 @@ const FEATURES_DATA = [
  * three.js dependency goes with it — one fewer WebGL context on the page.
  */
 function DisciplineVisual({ activeIndex }) {
+  /* Which plates have been shown; see the note by the render below. */
+  const [seenPlates, setSeenPlates] = useState(() => new Set([0]));
+  useEffect(() => {
+    setSeenPlates((current) => (current.has(activeIndex) ? current : new Set(current).add(activeIndex)));
+  }, [activeIndex]);
   const framesRef = useRef([]);
   const floatRef = useRef(null);
   const previousRef = useRef(activeIndex);
@@ -163,22 +168,29 @@ function DisciplineVisual({ activeIndex }) {
         />
 
         <div className="og-about-features__plates" ref={floatRef}>
-          {FEATURES_DATA.map((feat, i) => (
-            <img
-              key={feat.id}
-              ref={(el) => {
-                framesRef.current[i] = el;
-              }}
-              className="og-about-features__plate"
-              src={feat.image}
-              alt={i === activeIndex ? `${feat.title} illustration` : ""}
-              width="1254"
-              height="1254"
-              loading={i === 0 ? "eager" : "lazy"}
-              decoding="async"
-              draggable="false"
-            />
-          ))}
+          {/* Every plate sits in the same grid cell, so all five are inside the
+              viewport and `loading="lazy"` defers none of them - the page pulled
+              2.1MB of plates to show one. A plate is mounted the first time its
+              discipline is selected and stays mounted, so the swap still
+              cross-fades from something. */}
+          {FEATURES_DATA.map((feat, i) =>
+            seenPlates.has(i) ? (
+              <img
+                key={feat.id}
+                ref={(el) => {
+                  framesRef.current[i] = el;
+                }}
+                className="og-about-features__plate"
+                src={feat.image}
+                alt={i === activeIndex ? `${feat.title} illustration` : ""}
+                width="1254"
+                height="1254"
+                loading={i === 0 ? "eager" : "lazy"}
+                decoding="async"
+                draggable="false"
+              />
+            ) : null,
+          )}
         </div>
 
         <div className="og-about-features__canvas-hud-top">

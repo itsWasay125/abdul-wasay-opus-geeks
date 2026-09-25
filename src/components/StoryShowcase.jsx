@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Icon from "./Icon";
 
@@ -16,6 +17,14 @@ export default function StoryShowcase({
   linkIcon = "explore",
 }) {
   const activeItem = items[activeIndex];
+
+  /* Which panels have been shown. An image is mounted the first time its
+     panel becomes active and stays mounted after that, so the cross-fade
+     still has something to fade from. */
+  const [seen, setSeen] = useState(() => new Set([0]));
+  useEffect(() => {
+    setSeen((current) => (current.has(activeIndex) ? current : new Set(current).add(activeIndex)));
+  }, [activeIndex]);
 
   return (
     <div
@@ -62,15 +71,18 @@ export default function StoryShowcase({
       <div className="story-showcase__stage">
         <div className="story-showcase__screen">
           <div className="story-showcase__screen-media">
-            {items.map((item, index) => (
-              <img
-                key={item.number || item.title || item.label}
-                src={item.image}
-                alt={item.alt}
-                loading={index === 0 ? "eager" : "lazy"}
-                className={index === activeIndex ? "is-active" : ""}
-              />
-            ))}
+            {items.map((item, index) =>
+              seen.has(index) ? (
+                <img
+                  key={item.number || item.title || item.label}
+                  src={item.image}
+                  alt={item.alt}
+                  loading={index === 0 ? "eager" : "lazy"}
+                  decoding="async"
+                  className={index === activeIndex ? "is-active" : ""}
+                />
+              ) : null,
+            )}
             <span className="story-showcase__screen-shade" aria-hidden="true" />
             <span className="story-showcase__screen-grid" aria-hidden="true" />
           </div>

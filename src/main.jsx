@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "./styles/fonts.css";
 import "./App.css";
 /* Every @media block from App.css, kept in the same cascade position it
    had when it was inline. See the header in that file. */
