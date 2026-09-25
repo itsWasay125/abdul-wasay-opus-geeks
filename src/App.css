@@ -37879,9 +37879,18 @@ a.blog-detail-page__toc-cta:hover,
 /* No hover: these are a plain list of disciplines, not a control - a
    colour shift on hover read as broken interactivity for text that does
    nothing when clicked. */
+/* Fully inert: an earlier rule (line ~32242) still set border-color and
+   box-shadow on hover with !important, which this only partly overrode
+   (transform/colour) - so the box-shadow kept appearing on hover even
+   after the colour and lift were killed. Every property that rule can
+   touch is pinned here now. */
 .theme-light .team-section .team-section__signals span:hover,
 .team-section .team-section__signals span:hover {
   transform: none !important;
+  border: 0 !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  background: none !important;
   color: #44507a !important;
 }
 

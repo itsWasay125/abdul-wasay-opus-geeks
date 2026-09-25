@@ -17,8 +17,12 @@ import "./SiteLoader.css";
    whole sequence runs on the compositor while the page renders underneath.
    ========================================================================== */
 
-const EXIT_AT = 1500; // ms: the mark starts to expand
-const DONE_AT = 2150; // ms: unmounted
+/* Was 1500/2150 - every real page load paid the full 2.15s no matter how
+   fast the page underneath was ready, which read as every banner opening
+   late. The typed word now finishes at 900ms instead of 1200ms and the
+   exit starts right after it, cutting the fixed tax to 1.4s. */
+const EXIT_AT = 950; // ms: the mark starts to expand
+const DONE_AT = 1400; // ms: unmounted
 
 export default function SiteLoader() {
   const [enabled] = useState(() => {

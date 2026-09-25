@@ -1,28 +1,33 @@
-import { Component, Suspense, lazy, useEffect, useRef, useState } from "react";
-
-const Spline = lazy(() => import("@splinetool/react-spline"));
+import { useEffect, useRef, useState } from "react";
 
 /**
- * A Spline scene, loaded only once it is worth loading.
+ * A Spline scene, loaded only once it is worth loading — and drawn with the
+ * classic WebGL pipeline, never the newer three.js r185 WebGPU one.
  *
- * Ported from the other project's ui/SplineScene.jsx with two additions that
- * this build needs, because the banner it sits in now renders on **every**
- * page rather than only the homepage:
+ * Two lazy gates, same as before:
+ *  · The scene is not fetched until the container comes within roughly two
+ *    screens of the viewport — @splinetool/runtime plus the remote
+ *    .splinecode file are a few megabytes, not worth paying for above the
+ *    fold on every route this banner appears on.
+ *  · Under prefers-reduced-motion the live scene never loads at all; the
+ *    static fallback renders instead.
  *
- *  · The scene is not mounted until the container comes within a screen of
- *    the viewport. @splinetool/runtime plus the remote .splinecode is a few
- *    megabytes; paying that on every route, above the fold, for a section
- *    that lives near the bottom of the page would be indefensible. The
- *    chunk is only requested when someone actually scrolls to it.
- *  · Under prefers-reduced-motion the live scene never loads at all and the
- *    static fallback is shown instead — the scene is continuous motion that
- *    cannot be paused from outside it.
+ * The one structural change: this talks to @splinetool/runtime's
+ * `Application` class directly instead of going through the `<Spline>`
+ * wrapper component. The wrapper only forwards `renderOnDemand` and
+ * `wasmPath` to Application's constructor — it never exposes `renderer`,
+ * so left to its own default the runtime probes WebGPU first (loading a
+ * *second*, separate pipeline chunk to do it) and only falls back to WebGL
+ * once that construction throws. Every visitor paid for that probe and its
+ * extra chunk regardless of whether WebGPU ever had a chance — this was
+ * exactly the sequence a GPU-disabled browser's console showed: "Failed to
+ * load the WebGPU material backend, using WebGL", then the WebGL attempt
+ * after it. `renderer: "webgl"` is a documented Application constructor
+ * option that skips the probe and the extra chunk outright, so the scene
+ * reaches its first frame sooner for every visitor, not only the ones
+ * where WebGPU was always going to fail.
  */
-/* Can this browser draw WebGL at all? With hardware acceleration off, or
-   the GPU blocklisted, Chrome reports GL_VENDOR = Disabled and Spline's
-   renderer throws while constructing - an uncaught error, and four
-   megabytes of runtime downloaded and parsed for nothing. Asking first
-   means those browsers get the fallback and never fetch the runtime. */
+
 let webglAnswer;
 function canUseWebGL() {
   if (webglAnswer !== undefined) return webglAnswer;
@@ -37,26 +42,9 @@ function canUseWebGL() {
   return webglAnswer;
 }
 
-/* Anything Spline throws while rendering lands here instead of taking the
-   CTA banner - and the console - down with it. */
-class SplineBoundary extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { failed: false };
-  }
-  static getDerivedStateFromError() {
-    return { failed: true };
-  }
-  componentDidCatch() {
-    this.props.onFail?.();
-  }
-  render() {
-    return this.state.failed ? this.props.fallback : this.props.children;
-  }
-}
-
 export function SplineScene({ scene, className = "", onLoaded }) {
   const holderRef = useRef(null);
+  const canvasRef = useRef(null);
   const appRef = useRef(null);
   const [loaded, setLoaded] = useState(false);
   const [armed, setArmed] = useState(false);
@@ -84,22 +72,51 @@ export function SplineScene({ scene, className = "", onLoaded }) {
           observer.disconnect();
         }
       },
-      /* four megabytes of runtime and a remote scene file: 800px of warning
-         was not enough lead time, so the observer fires two screens out */
       { rootMargin: "2200px" },
     );
     observer.observe(holder);
     return () => observer.disconnect();
   }, [armed, reduced, hasError]);
 
-  /* The CTA banner is part of the site layout, so this scene exists on every
-     route. Loading it lazily was only half the job: once loaded it kept
-     drawing WebGL frames forever, including while the visitor was ten screens
-     away reading something else. It now renders only while it is on screen.
+  /* @splinetool/runtime is still a *dynamic* import — kept deliberately, so
+     Vite still code-splits it into its own chunk, only fetched once armed,
+     exactly as the old React.lazy(() => import("@splinetool/react-spline"))
+     did. The only change is which package that import names, and passing
+     the renderer option its constructor never got before. */
+  useEffect(() => {
+    if (!armed || reduced || hasError) return undefined;
+    const canvas = canvasRef.current;
+    if (!canvas) return undefined;
 
-     Guarded by typeof checks because play/stop are runtime methods on the
-     Spline Application, and a version that does not expose them should cost
-     nothing rather than throw. */
+    let cancelled = false;
+    let app = null;
+
+    import("@splinetool/runtime")
+      .then(({ Application }) => {
+        if (cancelled) return undefined;
+        app = new Application(canvas, { renderer: "webgl" });
+        appRef.current = app;
+        return app.load(scene);
+      })
+      .then(() => {
+        if (cancelled) return;
+        setLoaded(true);
+        onLoaded?.(app);
+      })
+      .catch(() => {
+        if (!cancelled) setHasError(true);
+      });
+
+    return () => {
+      cancelled = true;
+      app?.dispose();
+      appRef.current = null;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [armed, reduced, hasError, scene]);
+
+  /* Loaded doesn't mean visible — the banner lives on every route, so this
+     keeps the scene stopped whenever it scrolls off screen. */
   useEffect(() => {
     const holder = holderRef.current;
     if (!holder || !armed || reduced) return undefined;
@@ -108,33 +125,15 @@ export function SplineScene({ scene, className = "", onLoaded }) {
       ([entry]) => {
         const app = appRef.current;
         if (!app) return;
-        if (entry.isIntersecting) {
-          if (typeof app.play === "function") app.play();
-        } else if (typeof app.stop === "function") {
-          app.stop();
-        }
+        if (entry.isIntersecting) app.play();
+        else app.stop();
       },
-      { threshold: 0 }
+      { threshold: 0 },
     );
-
     observer.observe(holder);
     return () => observer.disconnect();
   }, [armed, reduced]);
 
-  const handleLoad = (app) => {
-    appRef.current = app;
-    setLoaded(true);
-    onLoaded?.(app);
-  };
-
-  /* There was an idle prefetch here that pulled the Spline chunk during
-     requestIdleCallback. It made the scene appear sooner and cost more than
-     it was worth: four megabytes of JavaScript still has to be parsed on the
-     main thread, and doing that early dragged first paint from 5.7s to 12s
-     on a 4x throttled CPU and took a third off the scroll rate.
-
-     The lead time now comes from the observer's 2200px margin alone, which
-     costs nothing until someone is actually heading this way. */
   const fallback = (
     <div className="og-spline-fallback">
       <div className="og-spline-fallback__content">
@@ -149,36 +148,21 @@ export function SplineScene({ scene, className = "", onLoaded }) {
       {hasError || reduced ? (
         fallback
       ) : armed ? (
-        <Suspense
-          fallback={
-            <div className="og-spline-loader-wrap">
+        <>
+          <canvas
+            ref={canvasRef}
+            className="og-spline-canvas"
+            style={{ display: loaded ? "block" : "none" }}
+          />
+          {loaded ? null : (
+            <div className="og-spline-loader-wrap og-spline-loader-wrap--over" aria-hidden="true">
               <div className="og-spline-loader">
                 <div className="og-spline-loader__spinner" />
                 <span className="og-spline-loader__text">Loading 3D engine…</span>
               </div>
             </div>
-          }
-        >
-          <SplineBoundary fallback={fallback} onFail={() => setHasError(true)}>
-            <Spline
-              scene={scene}
-              className="og-spline-canvas"
-              onError={() => setHasError(true)}
-              onLoad={handleLoad}
-            />
-            {/* Suspense lifts the moment the chunk arrives, but the scene
-                file itself is still coming - without this the section shows
-                an empty box for the gap between the two. */}
-            {loaded ? null : (
-              <div className="og-spline-loader-wrap og-spline-loader-wrap--over" aria-hidden="true">
-                <div className="og-spline-loader">
-                  <div className="og-spline-loader__spinner" />
-                  <span className="og-spline-loader__text">Loading 3D engine…</span>
-                </div>
-              </div>
-            )}
-          </SplineBoundary>
-        </Suspense>
+          )}
+        </>
       ) : (
         <div className="og-spline-loader-wrap" aria-hidden="true" />
       )}

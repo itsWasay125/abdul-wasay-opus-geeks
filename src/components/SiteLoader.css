@@ -1,5 +1,5 @@
 /* See SiteLoader.jsx for the sequence. Timings here and there must agree:
-   mark in 0-450ms, type 300-1200ms, hold, expand from 1500ms. */
+   mark in 0-350ms, type 200-900ms, expand from 950ms. */
 
 .og-loader {
   position: fixed;
@@ -8,7 +8,7 @@
   display: grid;
   place-items: center;
   background: #ffffff;
-  transition: opacity 560ms ease 120ms;
+  transition: opacity 400ms ease 80ms;
 }
 
 .og-loader--out {
@@ -26,12 +26,12 @@
 .og-loader__mark {
   width: auto;
   height: clamp(74px, 11vw, 116px);
-  animation: loaderMarkIn 450ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: loaderMarkIn 350ms cubic-bezier(0.22, 1, 0.36, 1) both;
   will-change: transform, opacity;
 }
 
 .og-loader--out .og-loader__mark {
-  animation: loaderMarkOut 650ms cubic-bezier(0.7, 0, 0.84, 0) forwards;
+  animation: loaderMarkOut 450ms cubic-bezier(0.7, 0, 0.84, 0) forwards;
 }
 
 @keyframes loaderMarkIn {
@@ -58,7 +58,7 @@
   width: auto;
   height: clamp(18px, 2.6vw, 28px);
   clip-path: inset(0 100% 0 0);
-  animation: loaderType 900ms steps(9, end) 300ms forwards;
+  animation: loaderType 700ms steps(9, end) 200ms forwards;
 }
 
 .og-loader__caret {
@@ -70,8 +70,8 @@
   border-radius: 1px;
   background: #147bc2;
   animation:
-    loaderCaretMove 900ms steps(9, end) 300ms forwards,
-    loaderCaretBlink 0.5s steps(1) 1.2s infinite;
+    loaderCaretMove 700ms steps(9, end) 200ms forwards,
+    loaderCaretBlink 0.5s steps(1) 0.9s infinite;
 }
 
 .og-loader--out .og-loader__type {

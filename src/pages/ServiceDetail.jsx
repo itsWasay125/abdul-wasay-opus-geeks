@@ -5,13 +5,12 @@ import Icon from "../components/Icon";
 import { servicePages } from "../data/servicePages";
 import InteractiveGrid from "../components/InteractiveGrid";
 
-/* The grid colour per service, from the brand ramp: web takes the blue,
-   mobile the violet, design the cyan. */
-const GRID_TINT = {
-  web: { line: "rgba(20, 123, 194, 0.10)", glow: "rgba(20, 123, 194, 0.42)" },
-  mobile: { line: "rgba(99, 52, 148, 0.10)", glow: "rgba(99, 52, 148, 0.40)" },
-  design: { line: "rgba(0, 174, 239, 0.11)", glow: "rgba(0, 174, 239, 0.42)" },
-};
+/* One grid colour for every service now, not one per theme. The three
+   accents (web blue, mobile violet, design cyan) made the mobile and
+   design pages the odd ones out next to the blue grid on home, about and
+   the services index - this matches the rest of the site instead. */
+const GRID_LINE = "rgba(20, 123, 194, 0.10)";
+const GRID_GLOW = "rgba(20, 123, 194, 0.42)";
 
 export default function ServiceDetail({ service }) {
   const slug = service.path.split("/").pop();
@@ -92,8 +91,8 @@ export default function ServiceDetail({ service }) {
         <InteractiveGrid
           className="svc-grid"
           gridSize={44}
-          gridColor={(GRID_TINT[page.theme] || GRID_TINT.web).line}
-          effectColor={(GRID_TINT[page.theme] || GRID_TINT.web).glow}
+          gridColor={GRID_LINE}
+          effectColor={GRID_GLOW}
           glowRadius={18}
           fadeIntensity={36}
           fadeColor="#ffffff"
