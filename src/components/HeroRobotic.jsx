@@ -193,24 +193,10 @@ export default function HeroRobotic({
       let wordCall = null;
 
       /* ---------- idle float (own wrappers, so nothing collides) ---------- */
-      const idle = [
-        gsap.to(handFloatRef.current, {
-          y: 6,
-          duration: 6.2,
-          repeat: -1,
-          yoyo: true,
-          ease: "sine.inOut",
-          delay: 1.6,
-        }),
-        gsap.to(objFloatRef.current, {
-          y: 13,
-          duration: 4.6,
-          repeat: -1,
-          yoyo: true,
-          ease: "sine.inOut",
-          delay: 1.4,
-        }),
-      ];
+      /* The hand and the object float in CSS (rh-hand__float,
+         rh-object__float): the same sine drift, but on the compositor rather
+         than as two GSAP loops writing a transform every frame. */
+      const idle = [];
 
       /* ---------- the transformation loop ---------- */
       let queued = null;
@@ -450,10 +436,10 @@ export default function HeroRobotic({
               Transforming
             </span>
             <span className="rh-hero__line" ref={setCopyRef(2)}>
-              ideas that matter
+              ideas that <span className="rh-hero__grad">matter</span>
             </span>
             <span className="rh-hero__line" ref={setCopyRef(3)}>
-              into{" "}
+              <span className="rh-hero__grad">into</span>{" "}
               {/* The rotator is the last thing on the last line. It used to sit
                   mid-sentence with "into" after it, so the sizer's box - which is
                   as wide as the longest word and is what stops the line moving -

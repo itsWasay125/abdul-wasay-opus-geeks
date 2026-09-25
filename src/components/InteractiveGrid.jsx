@@ -134,7 +134,12 @@ export default function InteractiveGrid({
         dirty = false;
         lastFrame = now;
       }
-      if (visible) frameId = window.requestAnimationFrame(draw);
+      /* The loop used to re-arm on every frame while on screen, idle or not.
+         After the pointer has been still for 6s the idle wander stops too,
+         and the loop parks; the next pointer move wakes it. */
+      const quiet = Date.now() - lastMouseTimeRef.current > 6000;
+      if (visible && !(quiet && !dirty)) frameId = window.requestAnimationFrame(draw);
+      else frameId = 0;
     };
 
     const onMouseMove = (event) => {
@@ -145,6 +150,8 @@ export default function InteractiveGrid({
 
       lastMouseTimeRef.current = Date.now();
       pushCell(Math.floor(x / gridSize), Math.floor(y / gridSize), trailLength);
+      // the loop parks when quiet; a pointer move wakes it
+      if (!frameId && visible) frameId = window.requestAnimationFrame(draw);
     };
 
     const onResize = () => {
@@ -181,6 +188,8 @@ export default function InteractiveGrid({
       observer.observe(container);
     }
 
+    /* no GPU: the canvas is hidden by lite mode, so never start the loop */
+    if (document.documentElement.classList.contains("lite")) return () => {};
     frameId = window.requestAnimationFrame(draw);
 
     return () => {

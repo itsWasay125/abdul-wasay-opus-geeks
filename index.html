@@ -35,8 +35,18 @@
     </noscript>
 
     <!-- above the fold on every visit: the hand and the object it holds -->
-    <link rel="preload" as="image" href="/assets/herobanner/01_robotic_hand.webp" type="image/webp" />
-    <link rel="preload" as="image" href="/assets/herobanner/18_core_cube.webp" type="image/webp" />
+    <!-- The homepage hero images, preloaded only on the homepage. As plain
+         <link> tags they were fetched on every route (~290KB) and unused
+         everywhere but here, which Chrome flags as a wasted preload. -->
+    <script>
+      if (location.pathname === "/") {
+        ["/assets/herobanner/01_robotic_hand.webp", "/assets/herobanner/18_core_cube.webp"].forEach(function (href) {
+          var l = document.createElement("link");
+          l.rel = "preload"; l.as = "image"; l.type = "image/webp"; l.href = href;
+          document.head.appendChild(l);
+        });
+      }
+    </script>
       <!-- the loader draws these in its first frame -->
     <link rel="preload" as="image" href="/assets/logo/mark.webp" />
     <link rel="preload" as="image" href="/assets/logo/wordmark-dark.webp" />

@@ -10,6 +10,7 @@ import StatsSection from "./components/StatsSection";
 import Homepage from "./pages/Homepage";
 import { useFitHeadings } from "./hooks/useFitHeadings";
 import SiteLoader from "./components/SiteLoader";
+import useLiteMode from "./hooks/useLiteMode";
 
 /* Every route but the homepage is split out.
 
@@ -36,6 +37,8 @@ function SiteLayout() {
   const { pathname } = useLocation();
   /* every page banner stays on three lines - see the hook */
   useFitHeadings(pathname);
+  /* no GPU, or very little CPU: the decorative motion stands down */
+  useLiteMode();
   const hideGlobalStats = pathname.startsWith("/contact-us") || pathname.startsWith("/faqs");
   /* Portfolio opens on the lit studio stage — a dark band — so the resting
      header drops its light plate there and inverts its type. */

@@ -36,8 +36,7 @@ export default function PortfolioStudioBanner() {
 
         <h1 className="portfolio-hero-white__title">
           <span className="hero-line">Real products.</span>
-          <strong className="hero-line">Immersive</strong>
-          <strong className="hero-line">stories.</strong>
+          <strong className="hero-line">Immersive stories.</strong>
         </h1>
 
         <p className="portfolio-hero-white__lead">

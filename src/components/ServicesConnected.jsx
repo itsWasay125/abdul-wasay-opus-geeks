@@ -191,19 +191,12 @@ export default function ServicesConnected() {
           "-=0.5",
         );
 
-      /* each illustration drifts on its own clock so the row never pulses */
-      cards.forEach((card, i) => {
-        const art = card.querySelector(".sc-card__art-img");
-        if (!art) return;
-        gsap.to(art, {
-          y: 9,
-          duration: 3.4 + i * 0.45,
-          repeat: -1,
-          yoyo: true,
-          ease: "sine.inOut",
-          delay: 0.6 + i * 0.2,
-        });
-      });
+      /* Each illustration drifts on its own clock - done in CSS now
+         (sc-card__art-img, --drift-*). As a GSAP repeat:-1 per card it wrote
+         an inline transform on the main thread every frame, forever, on or
+         off screen: 679 style writes in three idle seconds, measured. A CSS
+         transform animation runs on the compositor and is paused by the
+         animation budget when the section is out of view. */
     }, root);
 
     const onResize = () => {
@@ -277,6 +270,7 @@ export default function ServicesConnected() {
                 <span className="sc-card__art-glow" aria-hidden="true" />
                 <img
                   className="sc-card__art-img"
+                  style={{ "--drift-dur": `${3.4 + i * 0.45}s`, "--drift-delay": `${0.6 + i * 0.2}s` }}
                   src={service.shot}
                   alt=""
                   loading="lazy"

@@ -38520,3 +38520,293 @@ h1 .hero-line,
 }
 
 #contact-options-title { line-height: 1.05 !important; }
+
+/* ==========================================================================
+   PORTFOLIO BANNER ON A PHONE
+   Desktop draws this hero as a dark studio with white type. Below 860px a
+   later rule swapped the background for a white gradient and left the type
+   white - the heading and lead were white on white. The studio stays dark on
+   a phone too. The lamps are too wide to hang at that size, so their light
+   is suggested instead: two soft pools falling from the top edge in the brand
+   colours, and a floor shadow so the buttons sit on something.
+   ========================================================================== */
+
+@media (max-width: 860px) {
+  .portfolio-hero-white {
+    background:
+      radial-gradient(70% 38% at 22% 0%, rgba(99, 52, 148, 0.55), transparent 70%),
+      radial-gradient(70% 38% at 78% 0%, rgba(0, 174, 239, 0.42), transparent 70%),
+      radial-gradient(90% 60% at 50% -10%, #10214a 0%, transparent 62%),
+      linear-gradient(180deg, #080f26 0%, #0b1533 52%, #070c1f 100%) !important;
+    border-bottom: 1px solid rgba(130, 175, 220, 0.14) !important;
+    box-shadow: inset 0 -80px 90px -60px rgba(0, 0, 0, 0.6);
+  }
+
+  .portfolio-hero-white__title { text-shadow: 0 10px 40px rgba(0, 174, 239, 0.25); }
+  .portfolio-hero-white__lead { color: rgba(214, 228, 250, 0.86) !important; }
+}
+
+/* ==========================================================================
+   HOME ABOUT — A FIELD, NOT A RING
+   The corner of this section gets a dot matrix that thins out toward the
+   middle, and the opposite corner a soft wash of the brand ramp. Neither is
+   a shape, so neither competes with the photographs for attention.
+   ========================================================================== */
+
+.home-about { position: relative; isolation: isolate; }
+
+.home-about::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: -1;
+  width: min(46%, 620px);
+  height: 70%;
+  opacity: 1;
+  pointer-events: none;
+  background-image: radial-gradient(rgba(20, 123, 194, 0.28) 1.4px, transparent 1.6px);
+  background-size: 22px 22px;
+  -webkit-mask-image: radial-gradient(120% 100% at 100% 0%, #000 0%, transparent 62%);
+  mask-image: radial-gradient(120% 100% at 100% 0%, #000 0%, transparent 62%);
+}
+
+.home-about::after {
+  content: "";
+  position: absolute;
+  left: -8%;
+  bottom: -12%;
+  z-index: -1;
+  width: min(60%, 760px);
+  aspect-ratio: 2 / 1;
+  border-radius: 50%;
+  pointer-events: none;
+  background: linear-gradient(110deg, rgba(99, 52, 148, 0.16), rgba(20, 123, 194, 0.12) 50%, rgba(0, 174, 239, 0.1));
+  filter: blur(60px);
+}
+
+/* "Meet Opus Geeks" sits on the centre line of its column */
+.home-about .story-showcase__link {
+  display: flex;
+  width: fit-content;
+  margin-inline: auto;
+  align-self: center;
+  justify-self: center;
+}
+
+/* ==========================================================================
+   HOME HEADLINE — "matter" and "into" take the ramp, like the typed word
+   ========================================================================== */
+
+.rh-hero__grad {
+  background: linear-gradient(95deg, #633494 0%, #147bc2 55%, #00aeef 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ==========================================================================
+   WORK DECK — LESS AIR AFTER THE LAST CARD
+   ========================================================================== */
+
+@media (min-width: 901px) {
+  .wd__stack { padding-bottom: clamp(40px, 8vh, 90px); }
+}
+
+/* ==========================================================================
+   SERVICE PROCESS — the step numbers in black
+   ========================================================================== */
+
+.svc-process .svc-process__num {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+  background-clip: border-box !important;
+  -webkit-background-clip: border-box !important;
+}
+
+/* ==========================================================================
+   BLOG BANNER
+   It was a heading, a paragraph and a photograph on white. It picks up the
+   reactive grid the other banners carry, a halo in the brand ramp behind the
+   portrait, and a row of the topics the journal actually files posts under.
+   ========================================================================== */
+
+.blogs-page__hero { position: relative; isolation: isolate; overflow: hidden; }
+.blogs-page__grid { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
+
+.blogs-page__halo {
+  position: absolute;
+  inset: 8% 4%;
+  z-index: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  background:
+    radial-gradient(closest-side, rgba(0, 174, 239, 0.32), transparent 72%),
+    conic-gradient(from 210deg, rgba(99, 52, 148, 0.35), rgba(20, 123, 194, 0.3), rgba(0, 174, 239, 0.35), rgba(99, 52, 148, 0.35));
+  filter: blur(46px);
+  opacity: 0.8;
+}
+
+.blogs-page__person-card { position: relative; z-index: 1; }
+
+.blogs-page__topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 26px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.blogs-page__topics a {
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 14px;
+  border: 1px solid rgba(14, 30, 72, 0.12);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.8);
+  color: #44507a;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: border-color 200ms ease, color 200ms ease, background 200ms ease;
+}
+
+.blogs-page__topics a:hover {
+  border-color: rgba(0, 128, 198, 0.4);
+  background: #ffffff;
+  color: #0080c6;
+}
+
+/* An older rule clears every `.homepage-flow > section::before` background,
+   which wiped the dot field above. Restated at that specificity. */
+.homepage-flow > .home-about::before {
+  background-image: radial-gradient(rgba(20, 123, 194, 0.28) 1.4px, transparent 1.6px);
+  background-size: 22px 22px;
+}
+
+/* .theme-light×3::before/::after { display: none } hides every light
+   section's pseudo elements; this one uses them for its dot field and wash. */
+.homepage-flow > .home-about.theme-light.theme-light.theme-light::before,
+.homepage-flow > .home-about.theme-light.theme-light.theme-light::after { display: block; }
+
+/* The dot field was landing behind the heading on the left. It belongs in
+   the top-right corner, behind the showcase, where the section is quiet. */
+.homepage-flow > .home-about.theme-light.theme-light.theme-light::before {
+  left: auto !important;
+  right: 0 !important;
+  top: 0 !important;
+  width: min(46%, 620px) !important;
+  height: 62% !important;
+  inset: 0 0 auto auto !important;
+}
+
+/* ==========================================================================
+   LITE MODE (see hooks/useLiteMode.js)
+   Only on machines drawing without a GPU. Decorative loops stop; content,
+   layout, hover states and the scroll-driven story all stay.
+   ========================================================================== */
+
+.lite *,
+.lite *::before,
+.lite *::after {
+  animation-iteration-count: 1 !important;
+}
+
+/* the continuous ones, which never stop on their own */
+.lite [class*="marquee"] *,
+.lite [class*="orbit"],
+.lite [class*="aura"],
+.lite [class*="blob"],
+.lite [class*="float"],
+.lite .typewriter__caret {
+  animation: none !important;
+}
+
+/* blur is the single most expensive thing to rasterise on the CPU */
+.lite [class*="aura"],
+.lite [class*="glow"],
+.lite [class*="halo"],
+.lite .home-about::after,
+.lite .svc-hero__aura {
+  filter: none !important;
+}
+
+.lite .og-header__bar,
+.lite .og-mega__inner,
+.lite .pmodal,
+.lite [class*="glass"] {
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+/* the reactive grids are canvases redrawn every frame */
+.lite .svc-grid,
+.lite .rh-hero__grid,
+.lite .blogs-page__grid,
+.lite .interactive-grid canvas {
+  display: none !important;
+}
+
+/* ==========================================================================
+   IDLE FLOATS ON THE COMPOSITOR
+   These were GSAP repeat:-1 tweens writing an inline transform every frame
+   on the main thread. As CSS transform animations they cost the main thread
+   nothing, and the animation budget pauses them off screen.
+   ========================================================================== */
+
+@keyframes ogDrift {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(0, var(--drift-y, 9px), 0); }
+}
+
+.sc-card__art-img {
+  animation: ogDrift var(--drift-dur, 3.4s) ease-in-out var(--drift-delay, 0.6s) infinite alternate both;
+}
+
+.rh-hand__float {
+  --drift-y: 6px;
+  animation: ogDrift 6.2s ease-in-out 1.6s infinite alternate both;
+}
+
+.rh-object__float {
+  --drift-y: 13px;
+  animation: ogDrift 4.6s ease-in-out 1.4s infinite alternate both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sc-card__art-img,
+  .rh-hand__float,
+  .rh-object__float { animation: none; }
+}
+
+/* Lite mode, the three that were still running on every frame: the heading
+   shine animates background-position and the button sheen animates `left`.
+   Neither can be composited - one repaints, the other re-lays out - which on
+   a CPU-only machine is most of what was left of the idle cost. */
+.lite *,
+.lite *::before,
+.lite *::after {
+  --lite-off: 1;
+}
+
+.lite [class*="h-accent"],
+.lite h1 strong,
+.lite h2 strong,
+.lite h1 span,
+.lite h2 span,
+.lite h1 em,
+.lite h2 em,
+.lite .glow-button,
+.lite .glow-button::before,
+.lite .glow-button::after,
+.lite .btn-shiny,
+.lite .btn-shiny::before,
+.lite .btn-shiny::after,
+.lite .btn-glow,
+.lite .btn-glow::before,
+.lite .btn-glow::after,
+.lite .svc-hero__chip {
+  animation: none !important;
+}

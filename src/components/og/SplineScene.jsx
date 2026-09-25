@@ -1,4 +1,4 @@
-import { Suspense, lazy, useEffect, useRef, useState } from "react";
+import { Component, Suspense, lazy, useEffect, useRef, useState } from "react";
 
 const Spline = lazy(() => import("@splinetool/react-spline"));
 
@@ -18,6 +18,43 @@ const Spline = lazy(() => import("@splinetool/react-spline"));
  *    static fallback is shown instead — the scene is continuous motion that
  *    cannot be paused from outside it.
  */
+/* Can this browser draw WebGL at all? With hardware acceleration off, or
+   the GPU blocklisted, Chrome reports GL_VENDOR = Disabled and Spline's
+   renderer throws while constructing - an uncaught error, and four
+   megabytes of runtime downloaded and parsed for nothing. Asking first
+   means those browsers get the fallback and never fetch the runtime. */
+let webglAnswer;
+function canUseWebGL() {
+  if (webglAnswer !== undefined) return webglAnswer;
+  try {
+    const c = document.createElement("canvas");
+    const gl = c.getContext("webgl2") || c.getContext("webgl");
+    webglAnswer = Boolean(gl);
+    gl?.getExtension("WEBGL_lose_context")?.loseContext();
+  } catch {
+    webglAnswer = false;
+  }
+  return webglAnswer;
+}
+
+/* Anything Spline throws while rendering lands here instead of taking the
+   CTA banner - and the console - down with it. */
+class SplineBoundary extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { failed: false };
+  }
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+  componentDidCatch() {
+    this.props.onFail?.();
+  }
+  render() {
+    return this.state.failed ? this.props.fallback : this.props.children;
+  }
+}
+
 export function SplineScene({ scene, className = "", onLoaded }) {
   const holderRef = useRef(null);
   const appRef = useRef(null);
@@ -28,11 +65,12 @@ export function SplineScene({ scene, className = "", onLoaded }) {
 
   useEffect(() => {
     setReduced(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+    if (!canUseWebGL()) setHasError(true);
   }, []);
 
   useEffect(() => {
     const holder = holderRef.current;
-    if (!holder || armed || reduced) return undefined;
+    if (!holder || armed || reduced || hasError) return undefined;
 
     if (typeof IntersectionObserver === "undefined") {
       setArmed(true);
@@ -52,7 +90,7 @@ export function SplineScene({ scene, className = "", onLoaded }) {
     );
     observer.observe(holder);
     return () => observer.disconnect();
-  }, [armed, reduced]);
+  }, [armed, reduced, hasError]);
 
   /* The CTA banner is part of the site layout, so this scene exists on every
      route. Loading it lazily was only half the job: once loaded it kept
@@ -121,7 +159,7 @@ export function SplineScene({ scene, className = "", onLoaded }) {
             </div>
           }
         >
-          <>
+          <SplineBoundary fallback={fallback} onFail={() => setHasError(true)}>
             <Spline
               scene={scene}
               className="og-spline-canvas"
@@ -139,7 +177,7 @@ export function SplineScene({ scene, className = "", onLoaded }) {
                 </div>
               </div>
             )}
-          </>
+          </SplineBoundary>
         </Suspense>
       ) : (
         <div className="og-spline-loader-wrap" aria-hidden="true" />

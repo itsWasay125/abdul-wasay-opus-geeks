@@ -1,6 +1,7 @@
 import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 import Icon from "../components/Icon";
+import InteractiveGrid from "../components/InteractiveGrid";
 import { BLOGS_PER_PAGE, blogCategories, blogPosts } from "../data/blogs";
 
 function normalize(value) {
@@ -86,6 +87,16 @@ export default function Blogs() {
   return (
     <main className="blogs-page">
       <section className="blogs-page__hero">
+        {/* the same reactive grid the other banners carry, in the cyan end */}
+        <InteractiveGrid
+          className="blogs-page__grid"
+          gridSize={48}
+          gridColor="rgba(0, 174, 239, 0.09)"
+          effectColor="rgba(0, 150, 220, 0.36)"
+          glowRadius={18}
+          fadeIntensity={38}
+          fadeColor="#ffffff"
+        />
         <div className="blogs-page__hero-copy">
           <p className="blogs-page__eyebrow">
             <span />
@@ -106,9 +117,19 @@ export default function Blogs() {
             Explore Articles
             <Icon name="move-right" />
           </a>
+
+          {/* what the journal covers, straight from the category filter below */}
+          <ul className="blogs-page__topics" aria-label="Topics">
+            {blogCategories.slice(0, 5).map((c) => (
+              <li key={c}>
+                <Link to={getCategoryLink(c)}>{c}</Link>
+              </li>
+            ))}
+          </ul>
         </div>
 
         <div className="blogs-page__hero-visual" aria-hidden="true">
+          <span className="blogs-page__halo" />
           <span className="blogs-page__orbit blogs-page__orbit--one" />
           <span className="blogs-page__orbit blogs-page__orbit--two" />
           <div className="blogs-page__person-card">

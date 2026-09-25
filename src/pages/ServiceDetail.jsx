@@ -5,6 +5,14 @@ import Icon from "../components/Icon";
 import { servicePages } from "../data/servicePages";
 import InteractiveGrid from "../components/InteractiveGrid";
 
+/* The grid colour per service, from the brand ramp: web takes the blue,
+   mobile the violet, design the cyan. */
+const GRID_TINT = {
+  web: { line: "rgba(20, 123, 194, 0.10)", glow: "rgba(20, 123, 194, 0.42)" },
+  mobile: { line: "rgba(99, 52, 148, 0.10)", glow: "rgba(99, 52, 148, 0.40)" },
+  design: { line: "rgba(0, 174, 239, 0.11)", glow: "rgba(0, 174, 239, 0.42)" },
+};
+
 export default function ServiceDetail({ service }) {
   const slug = service.path.split("/").pop();
   const page = servicePages[slug];
@@ -78,13 +86,16 @@ export default function ServiceDetail({ service }) {
       <section className="svc-hero">
         {/* Same grid as the services index, so a service page and the page
             that lists them share a background. */}
+        {/* Tinted by the service: the pointer lights cells in that page’s own
+            colour. The cells are 44px - at 76px each lit square read as a
+            large block rather than as a trail. */}
         <InteractiveGrid
           className="svc-grid"
-          gridSize={76}
-          gridColor="rgba(99, 52, 148, 0.06)"
-          effectColor="rgba(99, 52, 148, 0.2)"
-          glowRadius={26}
-          fadeIntensity={44}
+          gridSize={44}
+          gridColor={(GRID_TINT[page.theme] || GRID_TINT.web).line}
+          effectColor={(GRID_TINT[page.theme] || GRID_TINT.web).glow}
+          glowRadius={18}
+          fadeIntensity={36}
           fadeColor="#ffffff"
         />
         <div className="svc-hero__inner">

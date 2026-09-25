@@ -65,11 +65,19 @@ export default function usePageEffects() {
       gsap.registerPlugin(ScrollTrigger);
       /* `.nav-shell` was the old header; the site ships og-header now, which
          animates itself. The tween was targeting nothing. */
-      gsap.timeline({ defaults: { ease: "power3.out" } }).fromTo(
+      /* These are the old page-hero classes. Most pages no longer have any of
+         them, and handing GSAP a selector that matches nothing logs "target
+         not found" on every route - so it only runs when something is there. */
+      const heroBits = gsap.utils.toArray(
         ".hero-kicker, .hero-title, .hero-copy, .hero-actions, .hero-metrics, .page-hero .eyebrow, .page-hero h1, .page-hero p",
-        { y: 32, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.75, stagger: 0.06 },
       );
+      if (heroBits.length) {
+        gsap.timeline({ defaults: { ease: "power3.out" } }).fromTo(
+          heroBits,
+          { y: 32, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.75, stagger: 0.06 },
+        );
+      }
 
       gsap.utils.toArray(".reveal").forEach((el) => {
         const containsHeading = Boolean(el.querySelector("h2"));
