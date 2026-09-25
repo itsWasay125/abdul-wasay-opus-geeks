@@ -3962,7 +3962,8 @@ body.intro-is-active {
 .contact-section .contact-field textarea {
   min-height: 142px;
   padding: 16px 17px;
-  resize: vertical;
+  /* no grip: dragging it reflows the panel it sits in */
+  resize: none;
   line-height: 1.55;
 }
 
@@ -15742,7 +15743,10 @@ main>.stats-section {
     radial-gradient(ellipse 40% 30% at 85% 20%, rgba(98, 53, 149, 0.06), transparent 50%),
     linear-gradient(180deg, #ffffff 0%, #f6f9fe 50%, #ffffff 100%);
   color: #334155;
-  overflow: hidden;
+  /* clip, not hidden: `hidden` makes this a scroll container, and a
+     sticky descendant then sticks to it rather than to the viewport. */
+  overflow-x: clip;
+  overflow-y: visible;
 }
 
 .scroll-gallery__ambient-glow {
@@ -15886,12 +15890,22 @@ main>.stats-section {
 }
 
 /* ── 3D Wall of Work (Perspective Stage & Parallax Columns) ─────────── */
+/* The track is the scroll distance; the stage inside it is what sticks.
+
+   It used to carry `perspective` and `transform-style: preserve-3d` as well
+   as the stage. Either one makes the element a containing block for its
+   descendants, which cancels `position: sticky` on the stage - so the wall
+   scrolled straight past and left the rest of the 140vh track as empty white
+   below it. The stage has its own perspective and always did; the track only
+   ever needed to be tall. */
 .scroll-gallery__track {
   position: relative;
-  height: 140vh;
-  perspective: 1200px;
-  perspective-origin: 50% 50%;
-  transform-style: preserve-3d;
+  /* The stage inside is 100vh and sticks for (track - 100vh). At 140vh that
+     was 40vh of travel, so the wall finished laying down and then scrolled
+     away with most of the track still to go - which is the empty white the
+     section ended on. 300vh gives 200vh of stick, which is the distance the
+     rotation and the column drift are written against. */
+  height: 300vh;
 }
 
 .scroll-gallery__3d-stage {
@@ -29791,7 +29805,10 @@ main>.stats-section {
     radial-gradient(ellipse 40% 30% at 85% 20%, rgba(98, 53, 149, 0.06), transparent 50%),
     linear-gradient(180deg, #ffffff 0%, #f6f9fe 50%, #ffffff 100%);
   color: #334155;
-  overflow: hidden;
+  /* clip, not hidden: `hidden` makes this a scroll container, and a
+     sticky descendant then sticks to it rather than to the viewport. */
+  overflow-x: clip;
+  overflow-y: visible;
 }
 
 .scroll-gallery__ambient-glow {
@@ -29935,12 +29952,19 @@ main>.stats-section {
 }
 
 /* ── 3D Wall of Work (Perspective Stage & Parallax Columns) ─────────── */
+/* The track is only the scroll distance. `perspective` and `preserve-3d`
+   here made it a containing block for its descendants, which cancels the
+   stage's `position: sticky` - the wall scrolled past and left the rest of
+   the 140vh track as empty white below it. The stage carries its own
+   perspective and always did. */
 .scroll-gallery__track {
   position: relative;
-  height: 140vh;
-  perspective: 1200px;
-  perspective-origin: 50% 50%;
-  transform-style: preserve-3d;
+  /* The stage inside is 100vh and sticks for (track - 100vh). At 140vh that
+     was 40vh of travel, so the wall finished laying down and then scrolled
+     away with most of the section still to come - which is the empty white
+     it ended on. 300vh gives 200vh of stick, which is the distance the
+     rotation and the column drift are written against. */
+  height: 300vh;
 }
 
 .scroll-gallery__3d-stage {
@@ -37656,45 +37680,7 @@ a.blog-detail-page__toc-cta:hover,
   .team-section__signals span:nth-child(odd) { padding-right: 0; }
 }
 
-/* ==========================================================================
-   THE STACK — A PROGRESS SPINE DOWN THE PILE
-   The cards stacked with nothing tying them together, so the pile read as
-   five cards that happen to overlap. A rule runs down the left of the stack
-   and each card sits on a node of it, which is what makes the overlap read
-   as sequence.
-   ========================================================================== */
-
-.wd__stack { position: relative; }
-
-@media (min-width: 901px) {
-  .wd__stack::before {
-    content: "";
-    position: absolute;
-    top: 12px;
-    bottom: 12px;
-    left: -26px;
-    width: 2px;
-    border-radius: 2px;
-    background: linear-gradient(180deg, rgba(99, 52, 148, 0.34), rgba(0, 174, 239, 0.3) 62%, transparent);
-  }
-
-  .wd__card::before {
-    content: "";
-    position: absolute;
-    top: 42px;
-    left: -31px;
-    z-index: 2;
-    width: 12px;
-    height: 12px;
-    border: 2px solid #ffffff;
-    border-radius: 50%;
-    background: var(--wd-color);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--wd-color) 20%, transparent);
-  }
-
-  /* the section has to let the spine out of its own box */
-  .wd__stack { padding-left: 0; }
-}
+/* The progress spine that ran down the stack has been removed. */
 
 /* ==========================================================================
    ABOUT DISCIPLINES — THE PLATE STOPPED FITTING ITS FRAME
@@ -37909,4 +37895,151 @@ a.blog-detail-page__toc-cta:hover,
 
 @media (max-width: 620px) {
   .team-section .team-section__signals { grid-template-columns: minmax(0, 1fr) !important; }
+}
+
+/* ==========================================================================
+   SECONDARY PILL HOVER — THE SCOPED VARIANTS, ONCE MORE
+   These still carried their own hover colour from an older pass. The label
+   turns white over the brand fill, like every other secondary pill. The
+   sweep runs from the left because that is where the gradient's 0% width
+   grows from - `background-position: left center` on the base rule.
+   ========================================================================== */
+
+.work-rail .btn-glow:is(:hover, :focus-visible),
+.work-rail__links > * + *:is(:hover, :focus-visible),
+.scroll-gallery .btn-glow:is(:hover, :focus-visible),
+.scroll-gallery__ghost:is(:hover, :focus-visible),
+.project-3d-slider .btn-glow:is(:hover, :focus-visible),
+.industries-section .btn-glow:is(:hover, :focus-visible),
+.industry-brief__ghost:is(:hover, :focus-visible),
+.industries-section.theme-light .industry-console__adjacent > a:is(:hover, :focus-visible) {
+  background-size: 100% 100%, 100% 100% !important;
+  background-color: transparent !important;
+  background-position: left center, left center !important;
+  border-color: transparent !important;
+  color: #ffffff !important;
+  box-shadow: 0 18px 36px -16px rgba(37, 99, 235, 0.55) !important;
+}
+
+.work-rail .btn-glow:is(:hover, :focus-visible) svg,
+.work-rail__links > * + *:is(:hover, :focus-visible) svg,
+.scroll-gallery .btn-glow:is(:hover, :focus-visible) svg,
+.scroll-gallery__ghost:is(:hover, :focus-visible) svg,
+.project-3d-slider .btn-glow:is(:hover, :focus-visible) svg,
+.industries-section .btn-glow:is(:hover, :focus-visible) svg,
+.industry-brief__ghost:is(:hover, :focus-visible) svg,
+.industries-section.theme-light .industry-console__adjacent > a:is(:hover, :focus-visible) svg,
+.industries-section.theme-light .industry-console__adjacent > a:is(:hover, :focus-visible) * {
+  color: #ffffff !important;
+}
+
+/* ==========================================================================
+   CONTACT OPTIONS — THE SAME CORNER MARKS
+   The rings the services and team sections carry, on this section too. They
+   are drawn with ::before / ::after rather than extra markup, so nothing in
+   the component changes.
+   ========================================================================== */
+
+.contact-options-section {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.contact-options-section::before,
+.contact-options-section::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  pointer-events: none;
+  background: conic-gradient(
+    from 200deg,
+    rgba(99, 52, 148, 0.85),
+    rgba(20, 123, 194, 0.8) 38%,
+    rgba(0, 174, 239, 0.7) 66%,
+    rgba(99, 52, 148, 0.85)
+  );
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - var(--ring-w)), #000 calc(100% - var(--ring-w)));
+  mask: radial-gradient(farthest-side, transparent calc(100% - var(--ring-w)), #000 calc(100% - var(--ring-w)));
+  opacity: 0.32;
+}
+
+.contact-options-section::before {
+  --ring-w: clamp(10px, 1.3vw, 18px);
+  top: clamp(-120px, -7vw, -70px);
+  left: clamp(-110px, -6vw, -60px);
+  width: clamp(190px, 24vw, 360px);
+}
+
+.contact-options-section::after {
+  --ring-w: clamp(8px, 1vw, 13px);
+  right: clamp(-90px, -5vw, -50px);
+  bottom: clamp(-90px, -5vw, -50px);
+  width: clamp(140px, 18vw, 270px);
+}
+
+.contact-options-section > * { position: relative; z-index: 1; }
+
+@media (max-width: 900px) {
+  .contact-options-section::before { width: clamp(140px, 34vw, 210px); top: -60px; left: -50px; }
+  .contact-options-section::after { width: clamp(110px, 26vw, 160px); right: -44px; bottom: -44px; }
+}
+
+/* ==========================================================================
+   BLOG HERO — ONE h1 SIZE
+   Its h1 was set larger than every other page banner, so the blogs index
+   opened louder than the home page did. It uses the same size they do.
+   ========================================================================== */
+
+.blogs-page__hero h1,
+.blogs-page__hero .blogs-page__hero-title {
+  font-size: clamp(2.9rem, 6vw, 5.6rem);
+  line-height: 0.98;
+}
+
+/* ==========================================================================
+   WORK DECK — BACK TO A NORMAL CARD HEIGHT
+   The panel's illustration was allowed 48% of a card that had grown to hold
+   it, so the cards stood taller than the viewport on a laptop. The card is
+   sized as it was; the illustration takes the room that leaves.
+   ========================================================================== */
+
+.wd__card { min-height: clamp(360px, 52vh, 480px); }
+
+.wd__panel-img {
+  max-height: none;
+  flex: 0 1 auto;
+  min-height: 0;
+  object-fit: contain;
+}
+
+.wd__panel { justify-content: space-between; }
+
+/* ==========================================================================
+   FORM FIELDS DO NOT DRAG
+   A textarea ships with a resize grip. Dragging it out of a fixed-width
+   panel breaks the layout underneath, so the grip is off and the field is
+   bound to its column.
+   ========================================================================== */
+
+.pform__field textarea,
+.contact-form textarea,
+.pmodal textarea,
+.home-brief textarea {
+  resize: none;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.pform__field :is(input, select),
+.contact-form :is(input, select),
+.pmodal :is(input, select) {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }

@@ -488,9 +488,10 @@ export default function HeroRobotic({
               Transforming
             </span>
             <span className="rh-hero__line" ref={setCopyRef(2)}>
-              ideas into
+              ideas that matter
             </span>
             <span className="rh-hero__line" ref={setCopyRef(3)}>
+              into{" "}
               {/* The rotator is the last thing on the last line. It used to sit
                   mid-sentence with "into" after it, so the sizer's box - which is
                   as wide as the longest word and is what stops the line moving -

@@ -44,10 +44,17 @@
   transition: border-color 220ms ease, box-shadow 220ms ease;
 }
 
+/* No resize grip. Dragging a textarea out of a fixed-width panel pushes the
+   layout underneath it around, and in the dialog it can be dragged past the
+   card edge entirely. The field is bound to its column. */
 .pform__field textarea {
   min-height: 0;
-  resize: vertical;
+  resize: none;
   line-height: 1.6;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .pform__field :is(input, select, textarea):focus {
@@ -288,4 +295,84 @@
 
 @media (max-width: 960px) {
   .home-brief__inner { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* ==========================================================================
+   THE HOMEPAGE BRIEF — GIVEN SOME WEIGHT
+   It was a heading, a list and a white panel on a white page, which read as
+   a form that had been dropped in rather than a section. The panel is lifted
+   onto its own plate, the copy column gets a rule and a number so it reads
+   as the close of the page, and the whole thing sits on a tinted ground.
+   ========================================================================== */
+
+.home-brief {
+  border-top: 0;
+  padding-block: clamp(72px, 8vw, 120px);
+}
+
+.home-brief::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(14, 30, 72, 0.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(14, 30, 72, 0.028) 1px, transparent 1px);
+  background-size: 72px 72px;
+  -webkit-mask-image: radial-gradient(70% 60% at 50% 40%, #000, transparent 78%);
+  mask-image: radial-gradient(70% 60% at 50% 40%, #000, transparent 78%);
+}
+
+.home-brief__inner { position: relative; z-index: 1; }
+
+.home-brief__copy .og-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.home-brief__copy .og-eyebrow::before {
+  content: "";
+  width: 26px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--brand-grad, linear-gradient(118deg, #633494, #147bc2 46%, #00aeef));
+}
+
+.home-brief__points li {
+  position: relative;
+  padding: 11px 0;
+  border-bottom: 1px solid rgba(14, 30, 72, 0.07);
+  font-size: 0.95rem;
+}
+
+.home-brief__points li:last-child { border-bottom: 0; }
+
+.home-brief__panel {
+  position: relative;
+  border-radius: 24px;
+  box-shadow:
+    0 40px 90px -44px rgba(17, 40, 100, 0.34),
+    0 2px 0 rgba(255, 255, 255, 0.9) inset;
+}
+
+/* a hairline of the brand ramp across the top of the panel */
+.home-brief__panel::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 26px;
+  right: 26px;
+  height: 3px;
+  border-radius: 0 0 3px 3px;
+  background: var(--brand-grad, linear-gradient(118deg, #633494, #147bc2 46%, #00aeef));
+}
+
+/* Same for every field in the form, in both places it is rendered. */
+.pform__field :is(input, select, textarea) {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
